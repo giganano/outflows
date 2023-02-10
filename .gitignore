@@ -1,0 +1,11 @@
+
+*.aux
+*.bbl
+*.blg
+*.log
+*.obj
+*.out
+*.sublime-project
+*.sublime-workspace
+
+
