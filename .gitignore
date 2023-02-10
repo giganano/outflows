@@ -7,5 +7,6 @@
 *.out
 *.sublime-project
 *.sublime-workspace
+notebooks/.ipynb_checkpoints/*
 
 
