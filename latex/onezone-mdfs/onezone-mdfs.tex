@@ -145,7 +145,34 @@ e^{-t / \timescale{sfh}}
 }{
 	\timescale{rise}(1 - e^{-t / \timescale{rise}})
 } - \frac{1}{\timescale{sfh}}.
+\label{eq:mddotstar-over-mdotstar}
 \end{align}\end{subequations}
+At this point, it is straightforward to compute the equilibrium alpha element
+abundance for this SFH by plugging equation~\ref{eq:mddotstar-over-mdotstar}
+into equation~\ref{eq:dzdt} and setting~$\dot{Z}_\alpha = 0$.
+This procedure results in the following expression:
+\begin{equation}
+Z_{\alpha,\text{eq}} = \ddfrac{
+	y_\alpha
+}{
+	1 + \eta - r + \frac{
+		e^{-t / \timescale{rise}}
+	}{
+		\timescale{rise}(1 - e^{-t / \timescale{rise}})
+	} - \frac{\tau_\star}{\timescale{sfh}}
+}.
+\label{eq:zalpha-eq}
+\end{equation}
+Equation~\ref{eq:zalpha-eq} indicates that unlike the simpler SFHs like a
+constant or single exponential, the equilibrium abundance is not uniform in
+time.
+Instead, the term depending on~\timescale{rise} is infinite at~$t = 0$,
+increases at early times, and then approaches the solution for a single
+exponential once~$t \gg \timescale{rise}$.
+As a sanity check, equation~\ref{eq:zalpha-eq} indeed reduces to the
+equilibrium abundance for a single exponential SFH found
+by~\citet*{Weinberg2017} if I let~$\timescale{rise} \rightarrow 0$.
+\par
 Plugging this into equation~\ref{eq:dzdt} above yields the following linear
 ODE for~$Z_\alpha$:
 \begin{equation}
@@ -174,13 +201,13 @@ such that the general solution for~$Z_\alpha$ can be expressed as
 Z_\alpha(t) = \exp\left(-\int f(t') dt'\right)\left(
 \int_0^t \exp\left(\int f(t') dt'\right) \frac{y_\alpha}{\tau_\star} dt' + C
 \right),
-\label{eq:za_linear_ode}
+\label{eq:za-linear-ode}
 \end{equation}
 where the constant~$C$ will later be assigned such that the initial
 condition~$Z_\alpha(t = 0) = 0$ is satisfied.
 At this point, it is helpful to zoom in on the integral of~$f(t)$.
-Its term depending on~$\timescale{rise}$ can be integrated with a variable
-substitution:
+Its term depending on~$\timescale{rise}$ can be integrated with a series of
+variable substitutions:
 \begin{subequations}\begin{align}
 \int \frac{
 	e^{-t / \timescale{rise}}
@@ -188,10 +215,12 @@ substitution:
 	\timescale{rise}(1 - e^{-t / \timescale{rise}})
 } dt
 &= \int \frac{e^{-u}}{1 - e^{-u}} du
+\qquad \left(u = \frac{t}{\timescale{rise}};~~du = \frac{1}{\timescale{rise}}
+dt\right)
 \\
-u &= \frac{t}{\timescale{rise}}
+&= \int \frac{dv}{v} \qquad \left(v = 1 - e^{-u};~~dv = e^{-u} du\right)
 \\
-du &= \frac{1}{\timescale{rise}} dt
+&= \ln v
 \\
 &= \ln (1 - e^{-u})
 \\
@@ -201,25 +230,112 @@ du &= \frac{1}{\timescale{rise}} dt
 &= \frac{t}{\timescale{dep}} + \ln (1 - e^{-t / \timescale{rise}}) -
 \frac{t}{\timescale{sfh}}.
 \end{align}\end{subequations}
-Plugging this into equation~\ref{eq:za_linear_ode} above yields the following
-expression for~$Z_\alpha$:
-\begin{subequations}\begin{align}
+Solving equation~\ref{eq:za-linear-ode} amounts to integrating the sum of a
+handful of exponentials with prefactors that depend on~\timescale{rise},
+\timescale{dep}, and~\timescale{sfh} in a non-trivial way.
+The full derivation is attached, and the final solution is given by
+\begin{equation}
 \begin{split}
+Z_\alpha(t) &= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\left(\frac{y_\alpha}{1 + \eta - r}\right)
+\bigg[\frac{
+	\timescale{sfh}
+}{
+	\timescale{sfh} - \timescale{dep}
+} \left(
+1 - \exp\left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right)
+\right) -
+\\
+&\qquad \frac{
+	\timescale{sfh}\timescale{rise}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} \left(e^{-t / \timescale{rise}} -
+\exp\left(-t
+\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}
+\right)
+\right)\bigg].
+\end{split}
+\label{eq:zalpha}
+\end{equation}
+At~$t = 0$, the factor~$1 / (1 - e^{-t / \timescale{rise}})$ is infinite,
+but the factor enclosed in square brackets is zero.
+Therefore, a physical solution exists if and only if the integration
+constant~$C$, included in the full derivation of this expression (see equation
+\ref{eq:zalpha-full}), is equal to zero.
+Because this results in the~$\infty \times 0$ indeterminate form, I can simply
+define the abundance to be zero such that the boundary condition
+of~$Z_\alpha(t = 0) = 0$ is satisfied.
+
+\begin{figure*}
+\centering
+\includegraphics[scale = 0.52]{vartimescales.pdf}
+\includegraphics[scale = 0.52]{varyieldeta.pdf}
+\caption{
+Analytically computed evolution in the oxygen abundance according to equation
+\ref{eq:zalpha}.
+\textbf{Left}: For~$y_\alpha = 0.015$ and~$\eta = 2.5$, each curve denotes a
+different choice of some timescale.
+With black visualizing a fiducial choice of parameters of (\timescale{rise},
+\timescale{sfh},~$\tau_\star$) = (2 Gyr, 6 Gyr, 5 Gyr), crimson shows a short
+rise timescale (i.e.,~$\timescale{rise} = 1$ Gyr), lime green shows a more
+extended SFH (i.e.,~$\timescale{sfh} = 10$ Gyr), and blue shows a higher SFE
+(i.e.,~$\tau_\star = 2$ Gyr).
+\textbf{Right}: For the fiducial choice of timescales in the right-hand panel,
+each curve denotes a different choice of~$y_\alpha$ and~$\eta$ as denoted in
+the legend.
+For each choice of~$y_\alpha$, the value of~$\eta$ is chosen such that the
+ratio~$y_\alpha / (1 + \eta - r)$ is approximately constant, and vice versa in
+the case of the blue line where I choose~$\eta = 0$ and compute the
+corresponding value of~$y_\alpha$.
+}
+\label{fig:analytic-evolution}
+\end{figure*}
+
+The left panel of Fig.~\ref{fig:analytic-evolution} visualizes the evolution of
+the alpha element abundances according to equation~\ref{eq:zalpha} under
+different choices of timescales.
+% A shorter rise timescale has the effect of raising the abundances overall
+\par
+The right panel of Fig.~\ref{fig:analytic-evolution} visualizes the enrichment
+history for the fiducial choice of timescales in the left panel, but with
+different values of~$y_\alpha$ and~$\eta$, selected such that the value of
+$y_\alpha / (1 + \eta - r)$ is approximately constant.
+
+\newpage
+\bibliographystyle{mnras}
+\bibliography{onezone-mdfs}
+
+\newpage
+\noindent
+\textbf{Full Solution to Equation~\ref{eq:za-linear-ode}}
+
+\begin{subequations}\begin{align}
+\begin{split} % a
 Z_\alpha(t) &= \exp\left(
 \frac{-t}{\timescale{dep}} - \ln (1 - e^{-t / \timescale{rise}}) +
 \frac{t}{\timescale{sfh}}
 \right)
 \\
-&\qquad \left(
+&\qquad \left[
 \int_0^t \exp\left(
 \frac{t'}{\timescale{dep}} + \ln (1 - e^{-t / \timescale{rise}}) -
 \frac{t'}{\timescale{sfh}}
 \right)
 \frac{y_\alpha}{\tau_\star} dt' + C
-\right)
+\right]
 \end{split}
 \\
-\begin{split}
+\begin{split} % b
 &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \exp \left(-t\frac{
 	\timescale{sfh} - \timescale{dep}
@@ -227,24 +343,47 @@ Z_\alpha(t) &= \exp\left(
 	\timescale{sfh}\timescale{dep}
 }\right) \frac{y_\alpha}{\tau_\star}
 \\
-&\qquad \left( \int_0^t (1 - e^{-t' / \timescale{rise}}) \exp \left(
+&\qquad \left[ \int_0^t (1 - e^{-t' / \timescale{rise}}) \exp \left(
 t' \frac{\timescale{sfh} - \timescale{dep}}{\timescale{sfh} \timescale{dep}}
-\right)dt' + C
-\right)
+\right)dt' + C\right]
 \end{split}
 \\
-\begin{split}
+\begin{split} % c
 &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \exp \left(-t\frac{
 	\timescale{sfh} - \timescale{dep}
 }{
 	\timescale{sfh}\timescale{dep}
-}\right) \frac{y_\alpha}{\tau_\star} \bigg( \int_0^t
+}\right) \frac{y_\alpha}{\tau_\star}
+\\
+&\qquad \left[ \int_0^t \left(
+\exp\left(t' \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right)
+- \exp\left(
+t' \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+} - \frac{t}{\timescale{rise}}
+\right)
+\right) dt' + C\right]
+\end{split}
+\\
+\begin{split} % d
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\exp \left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \frac{y_\alpha}{\tau_\star} \bigg[ \int_0^t
 \exp\left(t'\frac{
 	\timescale{sfh} - \timescale{dep}
 }{
 	\timescale{sfh}\timescale{dep}
-} \right) dt' +
+} \right) dt' -
 \\
 &\qquad
 \int_0^t \exp\left(t'\frac{
@@ -252,16 +391,16 @@ t' \frac{\timescale{sfh} - \timescale{dep}}{\timescale{sfh} \timescale{dep}}
 	\timescale{sfh}\timescale{dep}
 }{
 	\timescale{sfh}\timescale{dep}\timescale{rise}
-}\right) dt' + C \bigg)
+}\right) dt' + C \bigg]
 \end{split}
 \\
-\begin{split}
+\begin{split} % e
 &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \exp \left(-t\frac{
 	\timescale{sfh} - \timescale{dep}
 }{
 	\timescale{sfh}\timescale{dep}
-}\right) \frac{y_\alpha}{\tau_\star} \bigg(\frac{
+}\right) \frac{y_\alpha}{\tau_\star} \bigg[\frac{
 	\timescale{sfh}\timescale{dep}
 }{
 	\timescale{sfh} - \timescale{dep}
@@ -269,7 +408,7 @@ t' \frac{\timescale{sfh} - \timescale{dep}}{\timescale{sfh} \timescale{dep}}
 	\timescale{sfh} - \timescale{dep}
 }{
 	\timescale{sfh}\timescale{dep}
-}\right) \bigg|_0^t +
+}\right) \bigg|_0^t -
 \\
 &\qquad \frac{
 	\timescale{sfh}\timescale{dep}\timescale{rise}
@@ -283,10 +422,10 @@ t'\frac{
 }{
 	\timescale{sfh}\timescale{dep}\timescale{rise}
 }
-\right)\bigg|_0^t + C \bigg)
+\right)\bigg|_0^t + C \bigg]
 \end{split}
 \\
-\begin{split}
+\begin{split} % f
 &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \exp \left(-t\frac{
 	\timescale{sfh} - \timescale{dep}
@@ -302,7 +441,7 @@ t\frac{
 	\timescale{sfh} - \timescale{dep}
 }{
 	\timescale{sfh}\timescale{dep}
-}\right) - 1\right) +
+}\right) - 1\right) -
 \\
 &\qquad \frac{
 	\timescale{sfh}\timescale{dep}\timescale{rise}
@@ -315,12 +454,12 @@ t\frac{
 	\timescale{sfh}\timescale{dep}
 }{
 	\timescale{sfh}\timescale{dep}\timescale{rise}
-}\right) - 1\right) + 
+}\right) - 1\right)
 \\
-&\qquad C\bigg]
+&\qquad + C\bigg]
 \end{split}
 \\
-\begin{split}
+\begin{split} % g
 &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \left(\frac{y_\alpha}{\tau_\star}\right)
 \bigg[\frac{
@@ -333,7 +472,7 @@ t\frac{
 }{
 	\timescale{sfh}\timescale{dep}
 }\right)
-\right) +
+\right) -
 \\
 &\qquad \frac{
 	\timescale{sfh}\timescale{dep}\timescale{rise}
@@ -351,7 +490,7 @@ t\frac{
 \right) + C\bigg]
 \end{split}
 \\
-\begin{split}
+\begin{split} % h
 &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \left(\frac{y_\alpha}{1 + \eta - r}\right)
 \bigg[\frac{
@@ -364,7 +503,7 @@ t\frac{
 }{
 	\timescale{sfh}\timescale{dep}
 }\right)
-\right) +
+\right) -
 \\
 &\qquad \frac{
 	\timescale{sfh}\timescale{rise}
@@ -379,22 +518,9 @@ t\frac{
 	\timescale{sfh}\timescale{dep}
 }
 \right)
-\right)\bigg].
+\right) + C\bigg].
 \end{split}
+\label{eq:zalpha-full}
 \end{align}\end{subequations}
-At this point, it is now apparent that at~$t = 0$, the exponential factors are
-each equal to 1, and the term in brackets is equal to zero if and only if
-$C = 0$, which then satisfies the boundary condition of~$Z_\alpha(t = 0) = 0$.
-I have therefore omitted the term C in the final equality to arrive at the
-final solution for~$Z_\alpha(t)$.
-I note that the term~$1 / (1 - e^{-t / \timescale{rise}})$ is infinite at
-$t = 0$, and thus any choice of integration constant~$C$ would technically
-satisfy the boundary condition that~$Z_\alpha(t = 0) = 0$, though~$C \neq 0$
-solutions are purely mathematical and the~$C = 0$ solution is physical.
-
-
-\newpage
-\bibliographystyle{mnras}
-\bibliography{onezone-mdfs}
 
 \end{document}
