@@ -1,0 +1,400 @@
+
+\documentclass[12pt]{article}
+\usepackage[margin = 1in]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+% \usepackage{fancyhdr}
+\usepackage[margin = 0cm]{caption}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{natbib}
+\setlength{\bibsep}{0pt}
+\hypersetup{ % all blue links
+	colorlinks		= true,
+	urlcolor 		= blue,
+	linkcolor 		= blue,
+	citecolor 		= blue
+}
+\setcitestyle{aysep={}, yysep={,}}
+\newcommand{\aj}{AJ}
+\newcommand{\aap}{A\&A}
+\newcommand{\aapr}{A\&ARv}
+\newcommand{\apj}{ApJ}
+\newcommand{\apjl}{ApJL}
+\newcommand{\apjs}{ApJS}
+\newcommand{\apss}{Ap\&SS}
+\newcommand{\araa}{ARA\&A}
+\newcommand{\baas}{BAAS}
+\newcommand{\fcp}{Fundamentals Cosmic Phys.}
+\newcommand{\mnras}{MNRAS}
+\newcommand{\nat}{Nature}
+\newcommand{\pasa}{PASA}
+\newcommand{\pasp}{PASP}
+\newcommand{\ddfrac}[2]{\frac{\displaystyle{#1}}{\displaystyle{#2}}}
+\newcommand{\msun}{\ensuremath{\text{M}_\odot}}
+\newcommand{\scinote}[2]{\ensuremath{#1\times10^{#2}}}
+\providecommand{\noopsort}[1]{}
+
+\newcommand{\timescale}[1]{\ensuremath{\tau_\text{#1}}}
+
+\begin{document}
+
+\begin{center}
+\textbf{The Shape and Centroid of Abundance Distributions for Inside-Out Star
+Formation Histories in One-Zone Models}
+\par\null\par
+James W. Johnson
+\par\null\par
+\rule[0.7\baselineskip]{0.5\textwidth}{0.4pt}
+\end{center}
+
+\par\noindent
+\textbf{Analytic solution to~$Z_\alpha(t)$}
+\par\noindent
+The goal in this section is to obtain an analytic expression for the evolution
+of the alpha element\footnote{
+	As usual, an alpha element refers to, e.g., O or Mg. To be exact, it refers
+	to an element whose only statistically significant enrichment source is a
+	metallicity-independent population-averaged yield from massive stars.
+} abundances~$Z_\alpha(t) \equiv M_\alpha / M_\text{g}$ using arguments similar
+to those of~\citet*{Weinberg2017}.
+For the purposes of these analytic approximations, I assume that the star
+formation efficiency (SFE) timescale
+$\tau_\star \equiv M_\text{g} / \dot{M}_\star$ and the outflow mass loading
+factor~$\eta \equiv \dot{M}_\text{out} / \dot{M}_\star$ are both constant in
+time.
+Ultimately, this will be used to compute the metallicity distribution function
+(MDF) according to
+\begin{equation}
+\frac{dN}{dZ_\alpha} = \frac{dN}{dt}/\frac{dZ_\alpha}{dt}
+\propto \frac{\dot{M}_\star(t)}{\dot{Z}_\alpha(t)}.
+\label{dndz}
+\end{equation}
+\par
+For alpha elements,~\citet*{Weinberg2017} express the rate of change of the
+mass present in the ISM as
+\begin{equation}
+\dot{M}_\alpha = y_\alpha \dot{M}_\star - Z_\alpha \dot{M}_\star (1 + \eta - r),
+\label{eq:mdot_alpha}
+\end{equation}
+where~$r$ is a term which accounts for the return of stellar envelopes back to
+the ISM.
+Here I derive~$\dot{Z}_\alpha(t)$ assuming the ``inside-out'' star formation
+history (SFH) from~\citet{Johnson2021}:
+\begin{equation}
+\dot{M}_\star(t) \propto (1 - e^{-t / \timescale{rise}})
+e^{-t / \timescale{sfh}}.
+\label{eq:insideout_sfh}
+\end{equation}
+The physically interesting advantage of this parameterization of the SFH over
+the classic ``linear-times-exponential''~$t e^{-t / \timescale{sfh}}$ form is
+that~$\timescale{rise}$ provides one with some control over how long the SFH is
+increasing independent of~$\timescale{sfh}$.
+\par
+Based on the definition of~$Z_\alpha$, the quotient rule implies that its
+time-derivative can be expressed as
+\begin{subequations}\begin{align}
+\dot{Z}_\alpha &= \frac{
+	M_\text{g} \dot{M}_\alpha - M_\alpha \dot{M}_\text{g}
+}{
+	M_\text{g}^2
+}
+\\
+&= \frac{
+	M_\text{g} (y_\alpha \dot{M}_\star - Z_\alpha \dot{M}_\star (1 + \eta - r))
+	- M_\alpha \ddot{M}_\star \tau_\star
+}{
+	M_\text{g}^2
+}
+\\
+&= y_\alpha \frac{\dot{M}_\star}{M_\text{g}} -
+Z_\alpha \frac{\dot{M}_\star}{M_\text{g}}(1 + \eta - r) -
+Z_\alpha \frac{\ddot{M}_\star}{M_\text{g}} \tau_\star
+\\
+&= \frac{y_\alpha}{\tau_\star} -
+Z_\alpha \left(\frac{1 + \eta - r}{\tau_\star} +
+\frac{\ddot{M}_\star}{\dot{M}_\star}\right).
+\label{eq:dzdt}
+\end{align}\end{subequations}
+The next step is to differentiate the SFH with time to compute
+$\ddot{M}_\star / \dot{M}_\star$. Taking~$A$ to denote the overall normalizing
+factor:
+\begin{subequations}\begin{align}
+\ddot{M}_\star &= \frac{d}{dt}
+A(1 - e^{-t / \timescale{rise}}) e^{-t / \timescale{sfh}}
+\\
+&= A \frac{1}{\timescale{rise}}e^{-t / \timescale{rise}}
+e^{-t / \timescale{sfh}} +
+A(1 - e^{-t / \timescale{rise}}) \frac{-1}{\timescale{sfh}}
+e^{-t / \timescale{sfh}}
+\\
+&= A(1 - e^{-t / \timescale{rise}})e^{-t / \timescale{sfh}}
+\left(\frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise}(1 - e^{-t / \timescale{rise}})
+} - \frac{1}{\timescale{sfh}}
+\right)
+\\
+\implies \frac{\ddot{M}_\star}{\dot{M}_\star} &= \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise}(1 - e^{-t / \timescale{rise}})
+} - \frac{1}{\timescale{sfh}}.
+\end{align}\end{subequations}
+Plugging this into equation~\ref{eq:dzdt} above yields the following linear
+ODE for~$Z_\alpha$:
+\begin{equation}
+\dot{Z}_\alpha + Z_\alpha \left(\frac{1}{\timescale{dep}} +
+\frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise}(1 - e^{-t / \timescale{rise}})
+} - \frac{1}{\timescale{sfh}}\right) = \frac{y_\alpha}{\tau_\star},
+\end{equation}
+where I have substituted for the depletion time, defined as
+$\timescale{dep} \equiv \tau_\star / (1 + \eta - r)$.
+$\timescale{dep}$ quantifies the e-folding timescale on which the ISM would
+decline due to both star formation and mass loading, if present.
+For notational convenience, I define the function~$f(t)$ to denote the
+multiplicative factor on~$Z_\alpha$:
+\begin{equation}
+f(t) \equiv \frac{1}{\timescale{dep}} + \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise}(1 - e^{-t / \timescale{rise}})
+} - \frac{1}{\timescale{sfh}},
+\end{equation}
+such that the general solution for~$Z_\alpha$ can be expressed as
+\begin{equation}
+Z_\alpha(t) = \exp\left(-\int f(t') dt'\right)\left(
+\int_0^t \exp\left(\int f(t') dt'\right) \frac{y_\alpha}{\tau_\star} dt' + C
+\right),
+\label{eq:za_linear_ode}
+\end{equation}
+where the constant~$C$ will later be assigned such that the initial
+condition~$Z_\alpha(t = 0) = 0$ is satisfied.
+At this point, it is helpful to zoom in on the integral of~$f(t)$.
+Its term depending on~$\timescale{rise}$ can be integrated with a variable
+substitution:
+\begin{subequations}\begin{align}
+\int \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise}(1 - e^{-t / \timescale{rise}})
+} dt
+&= \int \frac{e^{-u}}{1 - e^{-u}} du
+\\
+u &= \frac{t}{\timescale{rise}}
+\\
+du &= \frac{1}{\timescale{rise}} dt
+\\
+&= \ln (1 - e^{-u})
+\\
+&= \ln (1 - e^{-t / \timescale{rise}})
+\\
+\implies \int f(t) dt
+&= \frac{t}{\timescale{dep}} + \ln (1 - e^{-t / \timescale{rise}}) -
+\frac{t}{\timescale{sfh}}.
+\end{align}\end{subequations}
+Plugging this into equation~\ref{eq:za_linear_ode} above yields the following
+expression for~$Z_\alpha$:
+\begin{subequations}\begin{align}
+\begin{split}
+Z_\alpha(t) &= \exp\left(
+\frac{-t}{\timescale{dep}} - \ln (1 - e^{-t / \timescale{rise}}) +
+\frac{t}{\timescale{sfh}}
+\right)
+\\
+&\qquad \left(
+\int_0^t \exp\left(
+\frac{t'}{\timescale{dep}} + \ln (1 - e^{-t / \timescale{rise}}) -
+\frac{t'}{\timescale{sfh}}
+\right)
+\frac{y_\alpha}{\tau_\star} dt' + C
+\right)
+\end{split}
+\\
+\begin{split}
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\exp \left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \frac{y_\alpha}{\tau_\star}
+\\
+&\qquad \left( \int_0^t (1 - e^{-t' / \timescale{rise}}) \exp \left(
+t' \frac{\timescale{sfh} - \timescale{dep}}{\timescale{sfh} \timescale{dep}}
+\right)dt' + C
+\right)
+\end{split}
+\\
+\begin{split}
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\exp \left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \frac{y_\alpha}{\tau_\star} \bigg( \int_0^t
+\exp\left(t'\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+} \right) dt' +
+\\
+&\qquad
+\int_0^t \exp\left(t'\frac{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}\timescale{rise}
+}\right) dt' + C \bigg)
+\end{split}
+\\
+\begin{split}
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\exp \left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \frac{y_\alpha}{\tau_\star} \bigg(\frac{
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{sfh} - \timescale{dep}
+} \exp \left(t' \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \bigg|_0^t +
+\\
+&\qquad \frac{
+	\timescale{sfh}\timescale{dep}\timescale{rise}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} \exp\left(
+t'\frac{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}\timescale{rise}
+}
+\right)\bigg|_0^t + C \bigg)
+\end{split}
+\\
+\begin{split}
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\exp \left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \frac{y_\alpha}{\tau_\star} \bigg[\frac{
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{sfh} - \timescale{dep}
+} \left(
+\exp\left(
+t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) - 1\right) +
+\\
+&\qquad \frac{
+	\timescale{sfh}\timescale{dep}\timescale{rise}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} \left(
+\exp\left(t\frac{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}\timescale{rise}
+}\right) - 1\right) + 
+\\
+&\qquad C\bigg]
+\end{split}
+\\
+\begin{split}
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\left(\frac{y_\alpha}{\tau_\star}\right)
+\bigg[\frac{
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{sfh} - \timescale{dep}
+} \left(
+1 - \exp\left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right)
+\right) +
+\\
+&\qquad \frac{
+	\timescale{sfh}\timescale{dep}\timescale{rise}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} \left(e^{-t / \timescale{rise}} -
+\exp\left(-t
+\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}
+\right)
+\right) + C\bigg]
+\end{split}
+\\
+\begin{split}
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\left(\frac{y_\alpha}{1 + \eta - r}\right)
+\bigg[\frac{
+	\timescale{sfh}
+}{
+	\timescale{sfh} - \timescale{dep}
+} \left(
+1 - \exp\left(-t\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right)
+\right) +
+\\
+&\qquad \frac{
+	\timescale{sfh}\timescale{rise}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} \left(e^{-t / \timescale{rise}} -
+\exp\left(-t
+\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}
+\right)
+\right)].
+\end{split}
+\end{align}\end{subequations}
+At this point, it is now apparent that at~$t = 0$, the exponential factors are
+each equal to 1, and the term in brackets is equal to zero if and only if
+$C = 0$, which then satisfies the boundary condition of~$Z_\alpha(t = 0) = 0$.
+I have therefore omitted the term C in the final equality to arrive at the
+final solution for~$Z_\alpha(t)$.
+I note that the term~$1 / (1 - e^{-t / \timescale{rise}})$ is infinite at
+$t = 0$, and thus any choice of integration constant~$C$ would technically
+satisfy the boundary condition that~$Z_\alpha(t = 0) = 0$, though~$C \neq 0$
+solutions are purely mathematical and the~$C = 0$ solution is physical.
+
+
+\newpage
+\bibliographystyle{mnras}
+\bibliography{onezone-mdfs}
+
+\end{document}
