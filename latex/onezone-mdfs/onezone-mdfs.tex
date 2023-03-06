@@ -40,6 +40,9 @@
 \providecommand{\noopsort}[1]{}
 
 \newcommand{\timescale}[1]{\ensuremath{\tau_\text{#1}}}
+\newcommand{\harmonic}[2]{\ensuremath{\bar{\tau}_\text{[#1,#2]}}}
+\newcommand{\hharmonic}[3]{\ensuremath{\bar{\tau}_\text{[#1,#2,#3]}}}
+\renewcommand{\tilde}[1]{\ensuremath{\widetilde{#1}}}
 
 \begin{document}
 
@@ -267,6 +270,25 @@ Z_\alpha(t) &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \end{split}
 \label{eq:zalpha}
 \end{equation}
+Adopting the harmonic timescale notation~$\harmonic{X}{Y} = \timescale{Y}
+\timescale{X} / (\timescale{Y} - \timescale{X})$ of~\citet*{Weinberg2017}
+simplifies the expression:
+\begin{equation}
+\begin{split}
+Z_\alpha(t) &= \frac{1}{1 - e^{-t / \timescale{rise}}} \left( \frac{
+	y_\alpha
+}{
+	1 + \eta - r
+}\right) \bigg[
+\frac{\harmonic{dep}{sfh}}{\timescale{dep}}
+\left(1 - e^{-t / \harmonic{dep}{sfh}}\right) -
+\\
+&\qquad \frac{\hharmonic{dep}{rise}{sfh}}{\timescale{dep}}
+\left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right)
+\bigg]
+\end{split}
+\end{equation}
+\par
 At~$t = 0$, the factor~$1 / (1 - e^{-t / \timescale{rise}})$ is infinite,
 but the factor enclosed in square brackets is zero.
 Therefore, a physical solution exists if and only if the integration
@@ -523,4 +545,220 @@ t\frac{
 \label{eq:zalpha-full}
 \end{align}\end{subequations}
 
+\newpage
+\noindent
+\textbf{Time-Derivative of~$Z_\alpha(t)$}
+\par\noindent
+Taking the time-derivative of equation~\ref{eq:zalpha} first and foremost
+requires product rule.
+It is helpful to split this process up into pieces:
+\begin{subequations}\begin{align}
+\frac{d}{dt} (1 - e^{-t / \timescale{rise}})^{-1} &=
+-(1 - e^{-t / \timescale{rise}})^{-2}\frac{d}{dt}e^{-t / \timescale{rise}}
+\\
+&= \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} (1 - e^{-t / \timescale{rise}})^2
+}.
+\end{align}\end{subequations}
+To save space, I define the function~$g(t)$ to denote the term in square
+brackets in equation~\ref{eq:zalpha}.
+Its time derivative:
+\begin{subequations}\begin{align}
+\begin{split} % a
+\dot{g}(t) &= \frac{\timescale{sfh}}{\timescale{sfh} - \timescale{dep}}
+\exp \left( -t \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right)\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+} - 
+\\
+&\qquad \frac{
+	\timescale{sfh}\timescale{rise}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} \bigg(
+\frac{-1}{\timescale{rise}} e^{-t / \timescale{rise}} +
+\\
+&\qquad
+\exp \left( -t \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}
+\right)
+\frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}
+\bigg)
+\end{split}
+\\
+\begin{split} % b
+&= \frac{1}{\timescale{dep}}\exp\left( -t \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) + \frac{
+	\timescale{sfh}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} e^{-t / \timescale{rise}} -
+\\
+&\qquad \frac{
+	\timescale{rise}\timescale{sfh} - \timescale{rise}\timescale{dep}
+}{
+	\timescale{sfh}\timescale{rise}\timescale{dep} - \timescale{dep}^2
+	\timescale{rise} - \timescale{sfh}\timescale{dep}^2
+} \exp \left( -t \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}
+\right)
+\end{split}
+\\
+\begin{split} % c
+&= \exp\left(-t \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \bigg[
+\frac{1}{\timescale{dep}} - \frac{
+	\timescale{rise}\timescale{sfh} - \timescale{rise}\timescale{dep}
+}{
+	\timescale{sfh}\timescale{rise}\timescale{dep} - \timescale{dep}^2
+	\timescale{rise} - \timescale{sfh}\timescale{dep}^2
+} +
+\\
+&\qquad \frac{
+	\timescale{sfh}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} \exp \left(t \frac{
+	\timescale{rise}\timescale{sfh} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{rise}\timescale{sfh}\timescale{dep}
+}\right) \bigg]
+\end{split}
+\\
+\begin{split} % d
+&= \exp\left(-t \frac{
+	\timescale{sfh} - \timescale{dep}
+}{
+	\timescale{sfh}\timescale{dep}
+}\right) \frac{
+	\timescale{sfh}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+}
+\\
+&\qquad \left[\exp\left(t \frac{
+	\timescale{rise}\timescale{sfh} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+}{
+	\timescale{rise}\timescale{sfh}\timescale{dep}
+}\right)
+- 1\right].
+\end{split}
+\end{align}\end{subequations}
+At this point, it simplifies notation to define
+\begin{equation}
+\bar{\tau}_\text{[dep,sfh,rise]} \equiv \frac{
+	\timescale{rise}\timescale{sfh}\timescale{dep}
+}{
+	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+	\timescale{sfh}\timescale{dep}
+} = \left( \frac{1}{\timescale{dep}} - \frac{1}{\timescale{sfh}} -
+\frac{1}{\timescale{rise}}\right)^{-1},
+\end{equation}
+which is reminiscent of the harmonic timescales~$\bar{\tau}_\text{[X,Y]}$ seen
+in~\citet*{Weinberg2017}, but for three timescales instead of two.
+Adopting this notation yields the following expression for~$\dot{g}(t)$:
+\begin{equation}
+\begin{split}
+\dot{g}(t) &= \frac{
+	\bar{\tau}_\text{[dep,rise,sfh]}
+}{
+	\timescale{rise}\timescale{dep}
+} e^{-t / \bar{\tau}_\text{[dep,sfh]}} \left(e^{t /
+\bar{\tau}_\text{[dep,rise,sfh]}} - 1\right)
+\\
+&= \frac{
+	\bar{\tau}_\text{[dep,rise,sfh]}
+}{
+	\timescale{rise}\timescale{dep}
+} \left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right)
+\end{split}
+\end{equation}
+
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
