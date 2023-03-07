@@ -675,7 +675,7 @@ Its time derivative:
 \end{align}\end{subequations}
 At this point, it simplifies notation to define
 \begin{equation}
-\bar{\tau}_\text{[dep,sfh,rise]} \equiv \frac{
+\hharmonic{dep}{sfh}{rise} \equiv \frac{
 	\timescale{rise}\timescale{sfh}\timescale{dep}
 }{
 	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
@@ -683,24 +683,118 @@ At this point, it simplifies notation to define
 } = \left( \frac{1}{\timescale{dep}} - \frac{1}{\timescale{sfh}} -
 \frac{1}{\timescale{rise}}\right)^{-1},
 \end{equation}
-which is reminiscent of the harmonic timescales~$\bar{\tau}_\text{[X,Y]}$ seen
+which is reminiscent of the harmonic timescales~$\harmonic{X}{Y}$ seen
 in~\citet*{Weinberg2017}, but for three timescales instead of two.
 Adopting this notation yields the following expression for~$\dot{g}(t)$:
 \begin{equation}
 \begin{split}
 \dot{g}(t) &= \frac{
-	\bar{\tau}_\text{[dep,rise,sfh]}
+	\hharmonic{dep}{rise}{sfh}
 }{
 	\timescale{rise}\timescale{dep}
-} e^{-t / \bar{\tau}_\text{[dep,sfh]}} \left(e^{t /
-\bar{\tau}_\text{[dep,rise,sfh]}} - 1\right)
+} e^{-t / \harmonic{dep}{sfh}} \left(e^{t /
+\hharmonic{dep}{rise}{sfh}} - 1\right)
 \\
 &= \frac{
-	\bar{\tau}_\text{[dep,rise,sfh]}
+	\hharmonic{dep}{rise}{sfh}
 }{
 	\timescale{rise}\timescale{dep}
-} \left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right)
+} \left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right).
 \end{split}
+\end{equation}
+I can now write the full expression for~$\dot{Z}_\alpha(t)$:
+\begin{subequations}\begin{align}
+\dot{Z}_\alpha(t) &= \left(\frac{y_\alpha}{1 + \eta - r}\right)
+\left[
+\frac{e^{-t / \timescale{rise}}}{
+	\timescale{rise} (1 - e^{-t / \timescale{rise}})^2
+} g(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \dot{g}(t)
+\right]
+\\
+&= \left(\frac{y_\alpha}{1 + \eta - r}\right)
+\frac{1}{1 - e^{-t / \timescale{rise}}} \left[
+\dot{g}(t) + \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} (1 - e^{-t / \timescale{rise}})
+} g(t)
+\right],
+\end{align}\end{subequations}
+and an expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
+\begin{subequations}\begin{align}
+\frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} &= \ddfrac{
+	\dot{g}(t) + \frac{
+		e^{-t / \timescale{rise}}
+	}{
+		\timescale{rise} (1 - e^{-t / \timescale{rise}})
+	} g(t)
+}{
+	g(t)
+}
+\\
+&= \frac{\dot{g}(t)}{g(t)} + \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} (1 - e^{-t / \timescale{rise}})
+}.
+\end{align}\end{subequations}
+Expanding on $\dot{g}(t) / g(t)$:
+\begin{subequations}\begin{align}
+\frac{\dot{g}(t)}{g(t)} &= \left(\frac{g(t)}{\dot{g}(t)}\right)^{-1}
+\\
+&= \left[\ddfrac{
+	\frac{
+		\harmonic{dep}{sfh}
+	}{
+		\timescale{dep}
+	} \left(1 - e^{-t / \harmonic{dep}{sfh}}\right) -
+	\frac{
+		\hharmonic{dep}{rise}{sfh}
+	}{
+		\timescale{dep}
+	} \left(e^{-t / \timescale{rise}} -
+	e^{-t / \harmonic{dep}{sfh}}\right)
+}{
+	\frac{
+		\hharmonic{dep}{rise}{sfh}
+	}{
+		\timescale{rise}\timescale{dep}
+	}
+	\left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
+	\right)
+}\right]^{-1}
+\\
+&= \frac{1}{\timescale{rise}}\left[1 -
+\frac{
+	\harmonic{dep}{sfh}
+}{
+	\hharmonic{dep}{rise}{sfh}
+}\left(
+\frac{
+	1 - e^{-t / \harmonic{dep}{sfh}}
+}{
+	e^{-t / \timescale{rise} - e^{-t / \harmonic{dep}{sfh}}}
+}
+\right)
+\right]^{-1},
+\end{align}\end{subequations}
+and therefore the final expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
+\begin{equation}
+\frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} = \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} (1 - e^{-t / \timescale{rise}})
+} + \frac{1}{\timescale{rise}} \left[
+1 - \frac{
+	\harmonic{dep}{sfh}
+}{
+	\hharmonic{dep}{rise}{sfh}
+}\left(\frac{
+	1 - e^{-t / \harmonic{dep}{sfh}}
+}{
+	e^{-t / \timescale{rise} - e^{-t / \harmonic{dep}{sfh}}}
+}\right)
+\right]^{-1}
 \end{equation}
 
 \end{document}
