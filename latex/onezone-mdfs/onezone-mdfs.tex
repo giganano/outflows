@@ -764,7 +764,7 @@ Expanding on $\dot{g}(t) / g(t)$:
 	\right)
 }\right]^{-1}
 \\
-&= \frac{1}{\timescale{rise}}\left[1 -
+&= \frac{1}{\timescale{rise}}\left[
 \frac{
 	\harmonic{dep}{sfh}
 }{
@@ -773,10 +773,9 @@ Expanding on $\dot{g}(t) / g(t)$:
 \frac{
 	1 - e^{-t / \harmonic{dep}{sfh}}
 }{
-	e^{-t / \timescale{rise} - e^{-t / \harmonic{dep}{sfh}}}
+	e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
 }
-\right)
-\right]^{-1},
+\right) - 1\right]^{-1},
 \end{align}\end{subequations}
 and therefore the final expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
 \begin{equation}
@@ -785,16 +784,15 @@ and therefore the final expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
 }{
 	\timescale{rise} (1 - e^{-t / \timescale{rise}})
 } + \frac{1}{\timescale{rise}} \left[
-1 - \frac{
+\frac{
 	\harmonic{dep}{sfh}
 }{
 	\hharmonic{dep}{rise}{sfh}
 }\left(\frac{
 	1 - e^{-t / \harmonic{dep}{sfh}}
 }{
-	e^{-t / \timescale{rise} - e^{-t / \harmonic{dep}{sfh}}}
-}\right)
-\right]^{-1}
+	e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
+}\right) - 1\right]^{-1}
 \end{equation}
 
 \end{document}
