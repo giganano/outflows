@@ -39,6 +39,7 @@
 \newcommand{\scinote}[2]{\ensuremath{#1\times10^{#2}}}
 \providecommand{\noopsort}[1]{}
 
+\newcommand{\ah}{\ensuremath{\text{[$\alpha$/H]}}}
 \newcommand{\timescale}[1]{\ensuremath{\tau_\text{#1}}}
 \newcommand{\harmonic}[2]{\ensuremath{\bar{\tau}_\text{[#1,#2]}}}
 \newcommand{\hharmonic}[3]{\ensuremath{\bar{\tau}_\text{[#1,#2,#3]}}}
@@ -56,28 +57,68 @@ James W. Johnson
 \end{center}
 
 \par\noindent
+The goal here is to obtain an analytic or parametric expression for the
+metallicity distribution function (MDF) given the ``inside-out'' star formation
+history (SFH) from~\citet{Johnson2021}:
+\begin{equation}
+\dot{M}_\star(t) \propto (1 - e^{-t / \timescale{rise}})
+e^{-t / \timescale{sfh}}.
+\label{eq:insideout_sfh}
+\end{equation}
+The physically interesting advantage of this parameterization over the classic
+``linear-times-exponential''~$t e^{-t / \timescale{sfh}}$ form is that the
+rise timescale~\timescale{rise}~gives one some control over how long the SFH is
+increasing independent of~\timescale{sfh}.
+In the interest of analytic/parametric solutions, I assume that the star
+formation efficiency (SFE) timescale~$\tau_\star \equiv M_\text{g} /
+\dot{M}_\star$ and the outflow mass loading factor~$\eta \equiv
+\dot{M}_\text{out} / \dot{M}_\star$ are both constant in time.
+\par
+In the interest of simplicity, I have so far focused on alpha elements with
+negligible yields from Type Ia supernovae (e.g., O and Mg).
+Provided a solution for the abundance evolution~$Z_\alpha(t)$, the MDF can be
+expressed according to
+\begin{equation}
+\frac{dN}{dZ_\alpha} = \frac{dN}{dt} \bigg/ \frac{dZ_\alpha}{dt}
+\propto \frac{\dot{M}_\star}{\dot{Z}_\alpha}.
+\label{eq:dndz}
+\end{equation}
+Therefore, I will need not only~$Z_\alpha(t)$ but its time-derivative as well.
+The MDF in~\ah~can conversely be expressed as:
+\begin{equation}
+\frac{dN}{d\ah} = \frac{dN}{dZ_\alpha} \bigg/ \frac{d\ah}{dZ_\alpha},
+\end{equation}
+where substituting the conventional notation~$\ah \equiv \log_{10}(Z_\alpha /
+Z_{\alpha,\odot})$ then yields
+\begin{equation}
+\frac{dN}{d\ah} = \ln 10 \left(\frac{Z_\alpha}{Z_{\alpha,\odot}}\right)
+\frac{dN}{dZ_\alpha}
+\propto \frac{\dot{M}_\star}{\dot{Z}_\alpha / Z_\alpha},
+\label{eq:dndlogz}
+\end{equation}
+where I have neglected the normalizing prefactors~$\ln 10$ and the solar
+alpha abundance~$Z_{\alpha,\odot}$ as the final term is a proportionality which
+will be re-normalized anyway.
+\par
+Given an analytic or parametric expression for the MDF, the position of its
+maximum can be determined by taking the second derivative~$d^2 N / d Z_\alpha$
+or~$d^2 N / d \ah^2$ and setting it equal to zero.
+This procedure will produce a family of solutions for regions of parameter
+space in which there is a meaningful maximum in the predicted MDF.
+In other cases, the MDF will be monotonically rising with both~$Z_\alpha$ and
+time, and the position of the maximum can be reasonably approximated as the
+value of~$Z_\alpha$ at the present-day predicted by the model.
+With these expressions, I can identify which parameters have the most power
+over determining the centroid of the MDF, which I can then anchor to the
+observed metallicity gradient in the Galaxy as the observational benchmark to
+construct parameter choices for models with no mass loading (i.e.,~$\eta = 0$).
+
+\par\null\par\noindent
 \textbf{Analytic solution to~$Z_\alpha(t)$}
 \par\noindent
-The goal in this section is to obtain an analytic expression for the evolution
-of the alpha element\footnote{
-	As usual, an alpha element refers to, e.g., O or Mg. To be exact, it refers
-	to an element whose only statistically significant enrichment source is a
-	metallicity-independent population-averaged yield from massive stars.
-} abundances~$Z_\alpha(t) \equiv M_\alpha / M_\text{g}$ using arguments similar
-to those of~\citet*{Weinberg2017}.
-For the purposes of these analytic approximations, I assume that the star
-formation efficiency (SFE) timescale
-$\tau_\star \equiv M_\text{g} / \dot{M}_\star$ and the outflow mass loading
-factor~$\eta \equiv \dot{M}_\text{out} / \dot{M}_\star$ are both constant in
-time.
-Ultimately, this will be used to compute the metallicity distribution function
-(MDF) according to
-\begin{equation}
-\frac{dN}{dZ_\alpha} = \frac{dN}{dt}/\frac{dZ_\alpha}{dt}
-\propto \frac{\dot{M}_\star(t)}{\dot{Z}_\alpha(t)}.
-\label{dndz}
-\end{equation}
-\par
+The expression for~$\dot{M}_\star$ is given by the assumption of equation
+\ref{eq:insideout_sfh}, so now I must solve for~$Z_\alpha(t)$ using arguments
+similar to those of~\citet*{Weinberg2017}.
 For alpha elements,~\citet*{Weinberg2017} express the rate of change of the
 mass present in the ISM as
 \begin{equation}
@@ -86,17 +127,6 @@ mass present in the ISM as
 \end{equation}
 where~$r$ is a term which accounts for the return of stellar envelopes back to
 the ISM.
-Here I derive~$\dot{Z}_\alpha(t)$ assuming the ``inside-out'' star formation
-history (SFH) from~\citet{Johnson2021}:
-\begin{equation}
-\dot{M}_\star(t) \propto (1 - e^{-t / \timescale{rise}})
-e^{-t / \timescale{sfh}}.
-\label{eq:insideout_sfh}
-\end{equation}
-The physically interesting advantage of this parameterization of the SFH over
-the classic ``linear-times-exponential''~$t e^{-t / \timescale{sfh}}$ form is
-that~$\timescale{rise}$ provides one with some control over how long the SFH is
-increasing independent of~$\timescale{sfh}$.
 \par
 Based on the definition of~$Z_\alpha$, the quotient rule implies that its
 time-derivative can be expressed as
@@ -159,7 +189,7 @@ Z_{\alpha,\text{eq}} = \ddfrac{
 	y_\alpha
 }{
 	1 + \eta - r + \frac{
-		e^{-t / \timescale{rise}}
+		\tau_\star e^{-t / \timescale{rise}}
 	}{
 		\timescale{rise}(1 - e^{-t / \timescale{rise}})
 	} - \frac{\tau_\star}{\timescale{sfh}}
@@ -268,7 +298,6 @@ Z_\alpha(t) &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \right)
 \right)\bigg].
 \end{split}
-\label{eq:zalpha}
 \end{equation}
 Adopting the harmonic timescale notation~$\harmonic{X}{Y} = \timescale{Y}
 \timescale{X} / (\timescale{Y} - \timescale{X})$ of~\citet*{Weinberg2017}
@@ -287,6 +316,7 @@ Z_\alpha(t) &= \frac{1}{1 - e^{-t / \timescale{rise}}} \left( \frac{
 \left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right)
 \bigg]
 \end{split}
+\label{eq:zalpha}
 \end{equation}
 \par
 At~$t = 0$, the factor~$1 / (1 - e^{-t / \timescale{rise}})$ is infinite,
@@ -332,6 +362,150 @@ The right panel of Fig.~\ref{fig:analytic-evolution} visualizes the enrichment
 history for the fiducial choice of timescales in the left panel, but with
 different values of~$y_\alpha$ and~$\eta$, selected such that the value of
 $y_\alpha / (1 + \eta - r)$ is approximately constant.
+\par\null\par\noindent
+\textbf{The Time-Derivative of~$Z_\alpha(t)$}
+\par\noindent
+The differentiate~$Z_\alpha(t)$ with time, it compactifies notation to define
+some function~$g(t)$ denoting the term in square brackets in equation
+\ref{eq:zalpha}:
+\begin{equation}
+g(t) \equiv \frac{\harmonic{dep}{sfh}}{\timescale{dep}}
+\left(1 - e^{-t / \harmonic{dep}{sfh}}\right) -
+\frac{\hharmonic{dep}{rise}{sfh}}{\timescale{dep}}
+\left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right),
+\label{eq:g}
+\end{equation}
+such that the expression for~$Z_\alpha$ reduces to
+\begin{equation}
+Z_\alpha(t) = \frac{1}{1 - e^{-t / \timescale{rise}}}
+\left(\frac{y_\alpha}{1 + \eta - r}\right) g(t),
+\end{equation}
+and its time-derivative can then be obtained with product-rule:
+\begin{subequations}\begin{align}
+\dot{Z}_\alpha(t) &= \left(\frac{y_\alpha}{1 + \eta - r}\right)\left[
+\frac{
+	-e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
+} g(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \dot{g}(t)
+\right]
+\label{eq:zdotalpha}
+\\
+&= \frac{1}{1 - e^{-t / \timescale{rise}}}
+\left(\frac{y_\alpha}{1 + \eta - r}\right) g(t)
+\left[
+\frac{
+	-e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+} + \frac{\dot{g}(t)}{g(t)}\right]
+\\
+\implies \frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} &=
+\frac{\dot{g}(t)}{g(t)} - \frac{
+	-e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+}.
+\label{eq:zdotalpha_over_zalpha}
+\end{align}\end{subequations}
+The time-derivative of~$g(t)$ is straight-forward:
+\begin{subequations}\begin{align}
+\begin{split}
+\dot{g}(t) &= \frac{\harmonic{dep}{sfh}}{\timescale{dep}}
+\left(0 - e^{-t / \harmonic{dep}{sfh}} \frac{-1}{\harmonic{dep}{sfh}}\right) -
+\\
+&\qquad \frac{\hharmonic{dep}{rise}{sfh}}{\timescale{dep}}
+\left(e^{-t / \timescale{rise}}\frac{-1}{\timescale{rise}} -
+e^{-t / \harmonic{dep}{sfh}} \frac{-1}{\harmonic{dep}{sfh}}\right)
+\end{split}
+\\
+&= \frac{e^{-t / \harmonic{dep}{sfh}}}{\timescale{dep}} +
+\frac{\hharmonic{dep}{rise}{sfh}}{\timescale{dep}}
+\left(\frac{e^{-t / \timescale{rise}}}{\timescale{rise}} -
+\frac{e^{-t / \harmonic{dep}{sfh}}}{\harmonic{dep}{sfh}}\right)
+\label{eq:gdot}
+\\
+\implies \frac{\dot{g}(t)}{g(t)} &= \ddfrac{
+	e^{-t / \harmonic{dep}{sfh}} + \hharmonic{dep}{rise}{sfh}
+	\left(\frac{e^{-t / \timescale{rise}}}{\timescale{rise}} -
+	\frac{e^{-t / \harmonic{dep}{sfh}}}{\harmonic{dep}{sfh}}\right)
+}{
+	\harmonic{dep}{sfh}\left(1 - e^{-t / \harmonic{dep}{sfh}}\right) -
+	\hharmonic{dep}{rise}{sfh}\left(e^{-t / \timescale{rise}} -
+	e^{-t / \harmonic{dep}{sfh}}\right)
+}.
+\label{eq:gdot_over_g}
+\end{align}\end{subequations}
+Between equations~\ref{eq:zdotalpha},~\ref{eq:zdotalpha_over_zalpha},
+\ref{eq:gdot}, and~\ref{eq:gdot_over_g}, the full solution
+to~$\dot{Z}_\alpha(t)$ and~$\dot{Z}_\alpha(t) / Z_\alpha(t)$ is specified.
+
+\par\null\par\noindent
+\textbf{The Second Time-Derivative of~$Z_\alpha(t)$}
+\par\noindent
+Differentiating~$\dot{Z}_\alpha(t)$ with time follows from
+equation~\ref{eq:zdotalpha}:
+\begin{subequations}\begin{align}
+\begin{split}
+\ddot{Z}_\alpha(t) &= \left(\frac{y_\alpha}{1 + \eta - r}\right)\Bigg[
+\left(\frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^2
+} + \frac{
+	2e^{-2t / \timescale{rise}}
+}{
+	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^3
+}\right)g(t) -
+\\
+&\qquad \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+} \dot{g}(t) + \frac{
+	-e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
+} \dot{g}(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \ddot{g}(t) \Bigg]
+\end{split}
+\\
+\begin{split}
+&= \left(\frac{y_\alpha}{1 + \eta - r}\right) \Bigg[
+\left(\frac{
+	e^{-t / \timescale{rise}}
+}{
+	\left(1 - e^{-t / \timescale{rise}}\right)^2
+} + \frac{
+	2e^{-2t / \timescale{rise}}
+}{
+	\left(1 - e^{-t / \timescale{rise}}\right)^3
+}\right) \frac{g(t)}{\timescale{rise}^2} -
+\\
+&\qquad \left(\frac{
+	2e^{-t / \timescale{rise}} + e^{-2t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
+}\right) \dot{g}(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \ddot{g}(t)
+\Bigg],
+\end{split}
+\end{align}\end{subequations}
+and differentiating~$\dot{g}(t)$ with time follows from
+equation~\ref{eq:gdot}:
+\begin{equation}
+\ddot{g}(t) = \frac{
+	-e^{-t / \harmonic{dep}{sfh}}
+}{
+	\timescale{dep}\harmonic{dep}{sfh}
+} - \frac{\hharmonic{dep}{rise}{sfh}}{\timescale{dep}}\left(\frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise}^2
+} - \frac{
+	e^{-t / \harmonic{dep}{sfh}}
+}{
+	\harmonic{dep}{sfh}^2
+}\right)
+\end{equation}
 
 \newpage
 \bibliographystyle{mnras}
@@ -547,310 +721,309 @@ t\frac{
 
 \newpage
 \noindent
-\textbf{Time-Derivative of~$Z_\alpha(t)$}
-\par\noindent
-Taking the time-derivative of equation~\ref{eq:zalpha} first and foremost
-requires product rule.
-It is helpful to split this process up into pieces:
+\textbf{Useful Identities}
 \begin{subequations}\begin{align}
-\frac{d}{dt} (1 - e^{-t / \timescale{rise}})^{-1} &=
--(1 - e^{-t / \timescale{rise}})^{-2}\frac{d}{dt}e^{-t / \timescale{rise}}
+\frac{d}{dt}\left(1 - e^{-t / \timescale{rise}}\right)^{-1} &=
+-\left(1 - e^{-t / \timescale{rise}}\right)^{-2}
+\frac{d}{dt}\left(1 - e^{-t / \timescale{rise}}\right)
+\\
+&= \frac{-1}{\left(1 - e^{-t / \timescale{rise}}\right)^2}
+\left(0 - e^{-t / \timescale{rise}}\left(\frac{-t}{\timescale{rise}}\right)
+\right)
 \\
 &= \frac{
-	e^{-t / \timescale{rise}}
+	-e^{-t / \timescale{rise}}
 }{
-	\timescale{rise} (1 - e^{-t / \timescale{rise}})^2
-}.
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
+}
 \end{align}\end{subequations}
-To save space, I define the function~$g(t)$ to denote the term in square
-brackets in equation~\ref{eq:zalpha}.
-Its time derivative:
 \begin{subequations}\begin{align}
-\begin{split} % a
-\dot{g}(t) &= \frac{\timescale{sfh}}{\timescale{sfh} - \timescale{dep}}
-\exp \left( -t \frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-}\right)\frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-} - 
-\\
-&\qquad \frac{
-	\timescale{sfh}\timescale{rise}
-}{
-	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
-	\timescale{sfh}\timescale{dep}
-} \bigg(
-\frac{-1}{\timescale{rise}} e^{-t / \timescale{rise}} +
-\\
-&\qquad
-\exp \left( -t \frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-}
-\right)
-\frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-}
-\bigg)
-\end{split}
-\\
-\begin{split} % b
-&= \frac{1}{\timescale{dep}}\exp\left( -t \frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-}\right) + \frac{
-	\timescale{sfh}
-}{
-	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
-	\timescale{sfh}\timescale{dep}
-} e^{-t / \timescale{rise}} -
-\\
-&\qquad \frac{
-	\timescale{rise}\timescale{sfh} - \timescale{rise}\timescale{dep}
-}{
-	\timescale{sfh}\timescale{rise}\timescale{dep} - \timescale{dep}^2
-	\timescale{rise} - \timescale{sfh}\timescale{dep}^2
-} \exp \left( -t \frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-}
-\right)
-\end{split}
-\\
-\begin{split} % c
-&= \exp\left(-t \frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-}\right) \bigg[
-\frac{1}{\timescale{dep}} - \frac{
-	\timescale{rise}\timescale{sfh} - \timescale{rise}\timescale{dep}
-}{
-	\timescale{sfh}\timescale{rise}\timescale{dep} - \timescale{dep}^2
-	\timescale{rise} - \timescale{sfh}\timescale{dep}^2
-} +
-\\
-&\qquad \frac{
-	\timescale{sfh}
-}{
-	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
-	\timescale{sfh}\timescale{dep}
-} \exp \left(t \frac{
-	\timescale{rise}\timescale{sfh} - \timescale{dep}\timescale{rise} -
-	\timescale{sfh}\timescale{dep}
-}{
-	\timescale{rise}\timescale{sfh}\timescale{dep}
-}\right) \bigg]
-\end{split}
-\\
-\begin{split} % d
-&= \exp\left(-t \frac{
-	\timescale{sfh} - \timescale{dep}
-}{
-	\timescale{sfh}\timescale{dep}
-}\right) \frac{
-	\timescale{sfh}
-}{
-	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
-	\timescale{sfh}\timescale{dep}
-}
-\\
-&\qquad \left[\exp\left(t \frac{
-	\timescale{rise}\timescale{sfh} - \timescale{dep}\timescale{rise} -
-	\timescale{sfh}\timescale{dep}
-}{
-	\timescale{rise}\timescale{sfh}\timescale{dep}
-}\right)
-- 1\right].
-\end{split}
-\end{align}\end{subequations}
-At this point, it simplifies notation to define
-\begin{equation}
-\hharmonic{dep}{sfh}{rise} \equiv \frac{
-	\timescale{rise}\timescale{sfh}\timescale{dep}
-}{
-	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
-	\timescale{sfh}\timescale{dep}
-} = \left( \frac{1}{\timescale{dep}} - \frac{1}{\timescale{sfh}} -
-\frac{1}{\timescale{rise}}\right)^{-1},
-\end{equation}
-which is reminiscent of the harmonic timescales~$\harmonic{X}{Y}$ seen
-in~\citet*{Weinberg2017}, but for three timescales instead of two.
-Adopting this notation yields the following expression for~$\dot{g}(t)$:
-\begin{equation}
 \begin{split}
-\dot{g}(t) &= \frac{
-	\hharmonic{dep}{rise}{sfh}
+\frac{d}{dt}\left(\frac{
+	-e^{-t / \timescale{rise}}
 }{
-	\timescale{rise}\timescale{dep}
-} e^{-t / \harmonic{dep}{sfh}} \left(e^{t /
-\hharmonic{dep}{rise}{sfh}} - 1\right)
+	\left(1 - e^{-t / \timescale{rise}}\right)^2
+}\right) &= \frac{1}{(1 - e^{-t / \timescale{rise}})^4}\bigg[
+\left(1 - e^{-t / \timescale{rise}}\right)^2
+\left(-e^{-t / \timescale{rise}}\right)
+\left(-1 / \timescale{rise}\right) +
+\\
+&\qquad e^{-t / \timescale{rise}}
+2\left(1 - e^{-t / \timescale{rise}}\right)
+\left(0 - e^{-t / \timescale{rise}}\left(-1 / \timescale{rise}\right)\right)
+\bigg]
+\end{split}
 \\
 &= \frac{
-	\hharmonic{dep}{rise}{sfh}
-}{
-	\timescale{rise}\timescale{dep}
-} \left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right).
-\end{split}
-\end{equation}
-I can now write the full expression for~$\dot{Z}_\alpha(t)$:
-\begin{subequations}\begin{align}
-\dot{Z}_\alpha(t) &= \left(\frac{y_\alpha}{1 + \eta - r}\right)
-\left[
-\frac{e^{-t / \timescale{rise}}}{
-	\timescale{rise} (1 - e^{-t / \timescale{rise}})^2
-} g(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \dot{g}(t)
-\right]
-\\
-&= \left(\frac{y_\alpha}{1 + \eta - r}\right)
-\frac{1}{1 - e^{-t / \timescale{rise}}} \left[
-\dot{g}(t) + \frac{
 	e^{-t / \timescale{rise}}
+	\left(1 - e^{-t / \timescale{rise}}\right)^2 +
+	2e^{-2t / \timescale{rise}}
+	\left(1 - e^{-t / \timescale{rise}}\right)
 }{
-	\timescale{rise} (1 - e^{-t / \timescale{rise}})
-} g(t)
-\right],
-\end{align}\end{subequations}
-and an expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
-\begin{subequations}\begin{align}
-\frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} &= \ddfrac{
-	\dot{g}(t) + \frac{
-		e^{-t / \timescale{rise}}
-	}{
-		\timescale{rise} (1 - e^{-t / \timescale{rise}})
-	} g(t)
-}{
-	g(t)
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^4
 }
 \\
-&= \frac{\dot{g}(t)}{g(t)} + \frac{
+&= \frac{
 	e^{-t / \timescale{rise}}
 }{
-	\timescale{rise} (1 - e^{-t / \timescale{rise}})
-}.
-\end{align}\end{subequations}
-Expanding on $\dot{g}(t) / g(t)$:
-\begin{subequations}\begin{align}
-\frac{\dot{g}(t)}{g(t)} &= \left(\frac{g(t)}{\dot{g}(t)}\right)^{-1}
-\\
-&= \left[\ddfrac{
-	\frac{
-		\harmonic{dep}{sfh}
-	}{
-		\timescale{dep}
-	} \left(1 - e^{-t / \harmonic{dep}{sfh}}\right) -
-	\frac{
-		\hharmonic{dep}{rise}{sfh}
-	}{
-		\timescale{dep}
-	} \left(e^{-t / \timescale{rise}} -
-	e^{-t / \harmonic{dep}{sfh}}\right)
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
+} + \frac{
+	2 e^{-2t / \timescale{rise}}
 }{
-	\frac{
-		\hharmonic{dep}{rise}{sfh}
-	}{
-		\timescale{rise}\timescale{dep}
-	}
-	\left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
-	\right)
-}\right]^{-1}
-\\
-&= \frac{1}{\timescale{rise}}\left[
-\frac{
-	\harmonic{dep}{sfh}
-}{
-	\hharmonic{dep}{rise}{sfh}
-}\left(
-\frac{
-	1 - e^{-t / \harmonic{dep}{sfh}}
-}{
-	e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^3
 }
-\right) - 1\right]^{-1},
 \end{align}\end{subequations}
-and therefore the final expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
-\begin{equation}
-\frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} = \frac{
-	e^{-t / \timescale{rise}}
-}{
-	\timescale{rise} (1 - e^{-t / \timescale{rise}})
-} + \frac{1}{\timescale{rise}} \left[
-\frac{
-	\harmonic{dep}{sfh}
-}{
-	\hharmonic{dep}{rise}{sfh}
-}\left(\frac{
-	1 - e^{-t / \harmonic{dep}{sfh}}
-}{
-	e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
-}\right) - 1\right]^{-1}
-\end{equation}
 
 \end{document}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+% \textbf{Time-Derivative of~$Z_\alpha(t)$}
+% \par\noindent
+% Taking the time-derivative of equation~\ref{eq:zalpha} first and foremost
+% requires product rule.
+% It is helpful to split this process up into pieces:
+% \begin{subequations}\begin{align}
+% \frac{d}{dt} (1 - e^{-t / \timescale{rise}})^{-1} &=
+% -(1 - e^{-t / \timescale{rise}})^{-2}\frac{d}{dt}e^{-t / \timescale{rise}}
+% \\
+% &= \frac{
+% 	e^{-t / \timescale{rise}}
+% }{
+% 	\timescale{rise} (1 - e^{-t / \timescale{rise}})^2
+% }.
+% \end{align}\end{subequations}
+% To save space, I define the function~$g(t)$ to denote the term in square
+% brackets in equation~\ref{eq:zalpha}.
+% Its time derivative:
+% \begin{subequations}\begin{align}
+% \begin{split} % a
+% \dot{g}(t) &= \frac{\timescale{sfh}}{\timescale{sfh} - \timescale{dep}}
+% \exp \left( -t \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% }\right)\frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% } - 
+% \\
+% &\qquad \frac{
+% 	\timescale{sfh}\timescale{rise}
+% }{
+% 	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+% 	\timescale{sfh}\timescale{dep}
+% } \bigg(
+% \frac{-1}{\timescale{rise}} e^{-t / \timescale{rise}} +
+% \\
+% &\qquad
+% \exp \left( -t \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% }
+% \right)
+% \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% }
+% \bigg)
+% \end{split}
+% \\
+% \begin{split} % b
+% &= \frac{1}{\timescale{dep}}\exp\left( -t \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% }\right) + \frac{
+% 	\timescale{sfh}
+% }{
+% 	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+% 	\timescale{sfh}\timescale{dep}
+% } e^{-t / \timescale{rise}} -
+% \\
+% &\qquad \frac{
+% 	\timescale{rise}\timescale{sfh} - \timescale{rise}\timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{rise}\timescale{dep} - \timescale{dep}^2
+% 	\timescale{rise} - \timescale{sfh}\timescale{dep}^2
+% } \exp \left( -t \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% }
+% \right)
+% \end{split}
+% \\
+% \begin{split} % c
+% &= \exp\left(-t \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% }\right) \bigg[
+% \frac{1}{\timescale{dep}} - \frac{
+% 	\timescale{rise}\timescale{sfh} - \timescale{rise}\timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{rise}\timescale{dep} - \timescale{dep}^2
+% 	\timescale{rise} - \timescale{sfh}\timescale{dep}^2
+% } +
+% \\
+% &\qquad \frac{
+% 	\timescale{sfh}
+% }{
+% 	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+% 	\timescale{sfh}\timescale{dep}
+% } \exp \left(t \frac{
+% 	\timescale{rise}\timescale{sfh} - \timescale{dep}\timescale{rise} -
+% 	\timescale{sfh}\timescale{dep}
+% }{
+% 	\timescale{rise}\timescale{sfh}\timescale{dep}
+% }\right) \bigg]
+% \end{split}
+% \\
+% \begin{split} % d
+% &= \exp\left(-t \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{dep}
+% }\right) \frac{
+% 	\timescale{sfh}
+% }{
+% 	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+% 	\timescale{sfh}\timescale{dep}
+% }
+% \\
+% &\qquad \left[\exp\left(t \frac{
+% 	\timescale{rise}\timescale{sfh} - \timescale{dep}\timescale{rise} -
+% 	\timescale{sfh}\timescale{dep}
+% }{
+% 	\timescale{rise}\timescale{sfh}\timescale{dep}
+% }\right)
+% - 1\right].
+% \end{split}
+% \end{align}\end{subequations}
+% At this point, it simplifies notation to define
+% \begin{equation}
+% \hharmonic{dep}{sfh}{rise} \equiv \frac{
+% 	\timescale{rise}\timescale{sfh}\timescale{dep}
+% }{
+% 	\timescale{sfh}\timescale{rise} - \timescale{dep}\timescale{rise} -
+% 	\timescale{sfh}\timescale{dep}
+% } = \left( \frac{1}{\timescale{dep}} - \frac{1}{\timescale{sfh}} -
+% \frac{1}{\timescale{rise}}\right)^{-1},
+% \end{equation}
+% which is reminiscent of the harmonic timescales~$\harmonic{X}{Y}$ seen
+% in~\citet*{Weinberg2017}, but for three timescales instead of two.
+% Adopting this notation yields the following expression for~$\dot{g}(t)$:
+% \begin{equation}
+% \begin{split}
+% \dot{g}(t) &= \frac{
+% 	\hharmonic{dep}{rise}{sfh}
+% }{
+% 	\timescale{rise}\timescale{dep}
+% } e^{-t / \harmonic{dep}{sfh}} \left(e^{t /
+% \hharmonic{dep}{rise}{sfh}} - 1\right)
+% \\
+% &= \frac{
+% 	\hharmonic{dep}{rise}{sfh}
+% }{
+% 	\timescale{rise}\timescale{dep}
+% } \left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}\right).
+% \end{split}
+% \end{equation}
+% I can now write the full expression for~$\dot{Z}_\alpha(t)$:
+% \begin{subequations}\begin{align}
+% \dot{Z}_\alpha(t) &= \left(\frac{y_\alpha}{1 + \eta - r}\right)
+% \left[
+% \frac{e^{-t / \timescale{rise}}}{
+% 	\timescale{rise} (1 - e^{-t / \timescale{rise}})^2
+% } g(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \dot{g}(t)
+% \right]
+% \\
+% &= \left(\frac{y_\alpha}{1 + \eta - r}\right)
+% \frac{1}{1 - e^{-t / \timescale{rise}}} \left[
+% \dot{g}(t) + \frac{
+% 	e^{-t / \timescale{rise}}
+% }{
+% 	\timescale{rise} (1 - e^{-t / \timescale{rise}})
+% } g(t)
+% \right],
+% \end{align}\end{subequations}
+% and an expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
+% \begin{subequations}\begin{align}
+% \frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} &= \ddfrac{
+% 	\dot{g}(t) + \frac{
+% 		e^{-t / \timescale{rise}}
+% 	}{
+% 		\timescale{rise} (1 - e^{-t / \timescale{rise}})
+% 	} g(t)
+% }{
+% 	g(t)
+% }
+% \\
+% &= \frac{\dot{g}(t)}{g(t)} + \frac{
+% 	e^{-t / \timescale{rise}}
+% }{
+% 	\timescale{rise} (1 - e^{-t / \timescale{rise}})
+% }.
+% \end{align}\end{subequations}
+% Expanding on $\dot{g}(t) / g(t)$:
+% \begin{subequations}\begin{align}
+% \frac{\dot{g}(t)}{g(t)} &= \left(\frac{g(t)}{\dot{g}(t)}\right)^{-1}
+% \\
+% &= \left[\ddfrac{
+% 	\frac{
+% 		\harmonic{dep}{sfh}
+% 	}{
+% 		\timescale{dep}
+% 	} \left(1 - e^{-t / \harmonic{dep}{sfh}}\right) -
+% 	\frac{
+% 		\hharmonic{dep}{rise}{sfh}
+% 	}{
+% 		\timescale{dep}
+% 	} \left(e^{-t / \timescale{rise}} -
+% 	e^{-t / \harmonic{dep}{sfh}}\right)
+% }{
+% 	\frac{
+% 		\hharmonic{dep}{rise}{sfh}
+% 	}{
+% 		\timescale{rise}\timescale{dep}
+% 	}
+% 	\left(e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
+% 	\right)
+% }\right]^{-1}
+% \\
+% &= \frac{1}{\timescale{rise}}\left[
+% \frac{
+% 	\harmonic{dep}{sfh}
+% }{
+% 	\hharmonic{dep}{rise}{sfh}
+% }\left(
+% \frac{
+% 	1 - e^{-t / \harmonic{dep}{sfh}}
+% }{
+% 	e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
+% }
+% \right) - 1\right]^{-1},
+% \end{align}\end{subequations}
+% and therefore the final expression for~$\dot{Z}_\alpha(t) / Z_\alpha(t)$:
+% \begin{equation}
+% \frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} = \frac{
+% 	e^{-t / \timescale{rise}}
+% }{
+% 	\timescale{rise} (1 - e^{-t / \timescale{rise}})
+% } + \frac{1}{\timescale{rise}} \left[
+% \frac{
+% 	\harmonic{dep}{sfh}
+% }{
+% 	\hharmonic{dep}{rise}{sfh}
+% }\left(\frac{
+% 	1 - e^{-t / \harmonic{dep}{sfh}}
+% }{
+% 	e^{-t / \timescale{rise}} - e^{-t / \harmonic{dep}{sfh}}
+% }\right) - 1\right]^{-1}
+% \end{equation}
 
