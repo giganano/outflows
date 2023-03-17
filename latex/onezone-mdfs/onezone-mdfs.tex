@@ -40,6 +40,7 @@
 \providecommand{\noopsort}[1]{}
 
 \newcommand{\ah}{\ensuremath{\text{[$\alpha$/H]}}}
+\newcommand{\mh}{\ensuremath{\text{[M/H]}}}
 \newcommand{\timescale}[1]{\ensuremath{\tau_\text{#1}}}
 \newcommand{\harmonic}[2]{\ensuremath{\bar{\tau}_\text{[#1,#2]}}}
 \newcommand{\hharmonic}[3]{\ensuremath{\bar{\tau}_\text{[#1,#2,#3]}}}
@@ -57,11 +58,112 @@ James W. Johnson
 \end{center}
 
 \par\noindent
-The goal here is to obtain an analytic or parametric expression for the
-metallicity distribution function (MDF) given the ``inside-out'' star formation
-history (SFH) from~\citet{Johnson2021}:
+The motivating question is the origin of the Galactic abundance gradient in the
+context of Galactic winds.
+Galactic chemical evolution (GCE) models like that of~\citet{Johnson2021}
+invoke strong mass loading to explain the observed abundances with yields
+predicted by stellar evolution models.
+Consequently, each Galactic region quickly reaches some equilibrium abundance
+where metal production by young stars is balanced by losses to outflows, and
+the gradient arises out of a decrease in the equilibrium abundance with
+increasing radius.
+However, in models like that of~\citet*{Minchev2013, Minchev2014} and
+\citet{Spitoni2019}, the authors neglect mass loading in the outflowing
+material, and therefore the equilibrium abundance does not vary with radius.
+Both classes of models successfully reproduce the observed gradient, but this
+is by construction in the~\citet{Johnson2021} models.
+This begs the question as to which parameter choices must be made in order to
+successfully reproduce this empirical result in the latter class of models.
+\par
+To this end, here I derive analytic and parametric expressions for the
+metallicity distribution function (MDF) given a set of choices of GCE model
+parameters.
+The MDF in the metal mass fraction~$Z$ can be expressed as:
 \begin{equation}
-\dot{M}_\star(t) \propto (1 - e^{-t / \timescale{rise}})
+\frac{dN}{dZ} = \frac{dN}{dt} \bigg/ \frac{dZ}{dt}
+\propto \frac{\dot{M}_\star}{\dot{Z}},
+\label{eq:dndz}
+\end{equation}
+where~$\dot{M}_\star$ is the star formation rate (SFR).
+In general,~$\dot{M}_\star$ and~$\dot{Z}$ will be parametric functions of time.
+As a consequence of the abundance gradient, the mode of the MDF shifts from
+metal-rich to metal-poor with increasing radius
+\citep[see, e.g.,][]{Hayden2015}.
+Therefore, it is also interesting to estimate the position of the maximum in
+the MDF by taking its derivative and setting it equal to zero:
+\begin{subequations}\begin{align}
+\frac{d^2N}{dZ^2} &= \frac{d}{dZ} \left(\frac{dN}{dZ}\right)
+\\
+&= \frac{1}{\dot{Z}} \frac{d}{dt} \left(\frac{dN}{dZ}\right)
+\\
+&\propto \frac{1}{\dot{Z}} \frac{d}{dt}
+\left(\frac{\dot{M}_\star}{\dot{Z}}\right)
+\\
+&= \frac{1}{\dot{Z}} \left(\frac{
+	\dot{Z}\ddot{M}_\star - \ddot{Z}\dot{M}_\star
+}{
+	\dot{Z}^2
+}\right)
+\\
+&= \frac{\dot{M}_\star}{\dot{Z}^2}
+\left(\frac{\ddot{M}_\star}{\dot{M}_\star} - \frac{\ddot{Z}}{\dot{Z}}\right).
+\label{eq:d2ndz2}
+\end{align}\end{subequations}
+By setting the above expression equal to zero, it is apparent that maxima in the
+MDF in~$Z$ occurs when
+\begin{equation}
+\frac{\ddot{M}_\star}{\dot{M}_\star} = \frac{\ddot{Z}}{\dot{Z}}.
+\label{eq:zmdf_maxima_criterion}
+\end{equation}
+\par
+In practice, however, abundances are quantified logarithmically.
+It is therefore also interesting to compute the MDF in~\mh,\footnote{
+	I adopt standard notation where~$\mh \equiv \log_{10}(Z / Z_/\odot) -
+	\log_{10}(X / X_\odot)$ where~$Z_\odot$ is the metal mass fraction of the
+	sun and~$X$ and~$X_\odot$ are the corresponding hydrogen mass fractions.
+	However, since hydrogen mass fractions do not vary much (especially when
+	scalled logarithmically), here I assume that~$\log_{10}(X / X_\odot)
+	\approx 0$ and therefore~$\mh \approx \log_{10}(Z / Z_\odot)$.
+} which is straight-forward given the derivations already written out above.
+The MDF in~\mh~itself:
+\begin{equation}
+\frac{dN}{d\mh} = \ln 10 \left(\frac{Z}{Z_\odot}\right) \frac{dN}{dZ}
+\propto \frac{\dot{M}_\star}{\dot{Z} / Z},
+\label{eq:dndmh}
+\end{equation}
+and its derivative:
+\begin{subequations}\begin{align}
+\frac{d^2N}{d\mh^2} &= \frac{d}{d\mh} \left(\frac{dN}{d\mh}\right)
+\\
+&= \ln 10 \left(\frac{Z}{Z_\odot}\right) \frac{d}{dZ}
+\left(\ln 10 \frac{Z}{Z_\odot} \frac{dN}{dZ}\right)
+\\
+&= \left(\frac{\ln 10}{Z_\odot}\right)^2 Z\frac{d}{dZ}
+\left(Z\frac{dN}{dZ}\right)
+\\
+&= \left(\frac{\ln 10}{Z_\odot}\right)^2
+Z\left(\frac{dN}{dZ} + Z\frac{d^2N}{dZ^2}\right)
+\\
+&= \left(\frac{\ln 10}{Z_\odot}\right)^2 \left(Z\frac{dN}{dZ} +
+Z^2 \frac{d^2N}{dZ^2}\right)
+\\
+&\propto \frac{\dot{M}_\star}{\dot{Z} / Z} +
+\frac{\dot{M}_\star}{(\dot{Z} / Z)^2}
+\left(\frac{\ddot{M}_\star}{\dot{M}_\star} - \frac{\ddot{Z}}{\dot{Z}}\right).
+\label{eq:d2ndmh2}
+\end{align}\end{subequations}
+By setting equation~\ref{eq:d2ndmh2} equal to zero, it then follows that maxima
+in the MDF in~\mh~occur when
+\begin{equation}
+\frac{\ddot{M}_\star}{\dot{M}_\star} = \frac{\ddot{Z}}{\dot{Z}} -
+\frac{\dot{Z}}{Z}.
+\label{eq:mhmdf_maxima_criterion}
+\end{equation}
+\par
+For the remainder of this document, I derive solutions to the above expressions
+for the ``inside-out'' star formation history (SFH) from~\citet{Johnson2021}:
+\begin{equation}
+\dot{M}_\star(t) \propto \left(1 - e^{-t / \timescale{rise}}\right)
 e^{-t / \timescale{sfh}}.
 \label{eq:insideout_sfh}
 \end{equation}
@@ -73,45 +175,9 @@ In the interest of analytic/parametric solutions, I assume that the star
 formation efficiency (SFE) timescale~$\tau_\star \equiv M_\text{g} /
 \dot{M}_\star$ and the outflow mass loading factor~$\eta \equiv
 \dot{M}_\text{out} / \dot{M}_\star$ are both constant in time.
-\par
-In the interest of simplicity, I have so far focused on alpha elements with
-negligible yields from Type Ia supernovae (e.g., O and Mg).
-Provided a solution for the abundance evolution~$Z_\alpha(t)$, the MDF can be
-expressed according to
-\begin{equation}
-\frac{dN}{dZ_\alpha} = \frac{dN}{dt} \bigg/ \frac{dZ_\alpha}{dt}
-\propto \frac{\dot{M}_\star}{\dot{Z}_\alpha}.
-\label{eq:dndz}
-\end{equation}
-Therefore, I will need not only~$Z_\alpha(t)$ but its time-derivative as well.
-The MDF in~\ah~can conversely be expressed as:
-\begin{equation}
-\frac{dN}{d\ah} = \frac{dN}{dZ_\alpha} \bigg/ \frac{d\ah}{dZ_\alpha},
-\end{equation}
-where substituting the conventional notation~$\ah \equiv \log_{10}(Z_\alpha /
-Z_{\alpha,\odot})$ then yields
-\begin{equation}
-\frac{dN}{d\ah} = \ln 10 \left(\frac{Z_\alpha}{Z_{\alpha,\odot}}\right)
-\frac{dN}{dZ_\alpha}
-\propto \frac{\dot{M}_\star}{\dot{Z}_\alpha / Z_\alpha},
-\label{eq:dndlogz}
-\end{equation}
-where I have neglected the normalizing prefactors~$\ln 10$ and the solar
-alpha abundance~$Z_{\alpha,\odot}$ as the final term is a proportionality which
-will be re-normalized anyway.
-\par
-Given an analytic or parametric expression for the MDF, the position of its
-maximum can be determined by taking the second derivative~$d^2 N / d Z_\alpha$
-or~$d^2 N / d \ah^2$ and setting it equal to zero.
-This procedure will produce a family of solutions for regions of parameter
-space in which there is a meaningful maximum in the predicted MDF.
-In other cases, the MDF will be monotonically rising with both~$Z_\alpha$ and
-time, and the position of the maximum can be reasonably approximated as the
-value of~$Z_\alpha$ at the present-day predicted by the model.
-With these expressions, I can identify which parameters have the most power
-over determining the centroid of the MDF, which I can then anchor to the
-observed metallicity gradient in the Galaxy as the observational benchmark to
-construct parameter choices for models with no mass loading (i.e.,~$\eta = 0$).
+In the interest of simplicity, I also focus on alpha elements with negligible
+yields from Type Ia supernovae (e.g., O and Mg), and I adjust my notation
+accordingly from~$Z$ to~$Z_\alpha$ and~\mh~to~\ah~hereafter.
 
 \par\null\par\noindent
 \textbf{Analytic solution to~$Z_\alpha(t)$}
@@ -125,8 +191,13 @@ mass present in the ISM as
 \dot{M}_\alpha = y_\alpha \dot{M}_\star - Z_\alpha \dot{M}_\star (1 + \eta - r),
 \label{eq:mdot_alpha}
 \end{equation}
-where~$r$ is a term which accounts for the return of stellar envelopes back to
-the ISM.
+where~$y_\alpha$ is a population-averaged alpha element yield from massive
+stars, assumed to be ejected immediately after a stellar population forms.
+This assumption is valid due to the short lifetimes of massive stars compared
+to the relevant evolutionary timescales of the Milky Way.
+$r$ is a term which accounts for the return of stellar envelopes back to
+the ISM ($r \approx 0.4$ for a~\citealt{Kroupa2001} IMF;
+\citealp*{Weinberg2017}).
 \par
 Based on the definition of~$Z_\alpha$, the quotient rule implies that its
 time-derivative can be expressed as
@@ -199,9 +270,11 @@ Z_{\alpha,\text{eq}} = \ddfrac{
 Equation~\ref{eq:zalpha-eq} indicates that unlike the simpler SFHs like a
 constant or single exponential, the equilibrium abundance is not uniform in
 time.
-Instead, the term depending on~\timescale{rise} is infinite at~$t = 0$,
-increases at early times, and then approaches the solution for a single
-exponential once~$t \gg \timescale{rise}$.
+Instead, the term in the denominator depending on~\timescale{rise} is infinite
+at~$t = 0$.
+Therefore, the equilibrium abundance is zero at~$t = 0$, increases at early
+times, and then approaches the solution for a single exponential
+once~$t \gg \timescale{rise}$.
 As a sanity check, equation~\ref{eq:zalpha-eq} indeed reduces to the
 equilibrium abundance for a single exponential SFH found
 by~\citet*{Weinberg2017} if I let~$\timescale{rise} \rightarrow 0$.
@@ -389,7 +462,6 @@ and its time-derivative can then be obtained with product-rule:
 	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
 } g(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \dot{g}(t)
 \right]
-\label{eq:zdotalpha}
 \\
 &= \frac{1}{1 - e^{-t / \timescale{rise}}}
 \left(\frac{y_\alpha}{1 + \eta - r}\right) g(t)
@@ -399,10 +471,11 @@ and its time-derivative can then be obtained with product-rule:
 }{
 	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
 } + \frac{\dot{g}(t)}{g(t)}\right]
+\label{eq:zdotalpha}
 \\
 \implies \frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)} &=
 \frac{\dot{g}(t)}{g(t)} - \frac{
-	-e^{-t / \timescale{rise}}
+	e^{-t / \timescale{rise}}
 }{
 	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
 }.
@@ -443,60 +516,94 @@ to~$\dot{Z}_\alpha(t)$ and~$\dot{Z}_\alpha(t) / Z_\alpha(t)$ is specified.
 \par\null\par\noindent
 \textbf{The Second Time-Derivative of~$Z_\alpha(t)$}
 \par\noindent
-Differentiating~$\dot{Z}_\alpha(t)$ with time follows from
-equation~\ref{eq:zdotalpha}:
+Differentating~$\dot{Z}_\alpha(t)$ with time follows from
+equation~\ref{eq:zdotalpha}, though it simlifies things somewhat to instead
+start from equation~\ref{eq:zdotalpha_over_zalpha}:
 \begin{subequations}\begin{align}
-\begin{split}
-\ddot{Z}_\alpha(t) &= \left(\frac{y_\alpha}{1 + \eta - r}\right)\Bigg[
-\left(\frac{
+\ddot{Z}_\alpha(t) &= \frac{d}{dt} \left[Z_\alpha(t) \left(
+\frac{\dot{g}(t)}{g(t)} - \frac{
 	e^{-t / \timescale{rise}}
 }{
-	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^2
-} + \frac{
-	2e^{-2t / \timescale{rise}}
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+}\right)\right]
+\\
+&= \dot{Z}_\alpha(t) \left(\frac{\dot{g}(t)}{g(t)} - \frac{
+	e^{-t / \timescale{rise}}
 }{
-	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^3
-}\right)g(t) -
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+}\right) + Z_\alpha(t) \frac{d}{dt} \left(\frac{\dot{g}(t)}{g(t)} - \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+}\right)
+\\
+\begin{split}
+&= Z_\alpha(t) \Bigg[
+\left(\frac{\dot{g}(t)}{g(t)} - \frac{
+	e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+}\right)^2 + \frac{
+	g(t) \ddot{g}(t) - \dot{g}(t)^2
+}{
+	g(t)^2
+} -
 \\
 &\qquad \frac{
 	e^{-t / \timescale{rise}}
 }{
-	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
-} \dot{g}(t) + \frac{
-	-e^{-t / \timescale{rise}}
-}{
-	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
-} \dot{g}(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \ddot{g}(t) \Bigg]
+	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^2
+}
+\Bigg]
 \end{split}
+\end{align}
 \\
+\begin{align}
 \begin{split}
-&= \left(\frac{y_\alpha}{1 + \eta - r}\right) \Bigg[
-\left(\frac{
+&= Z_\alpha(t) \Bigg[
+\left(\frac{\dot{g}(t)}{g(t)}\right)^2 - \frac{
+	2 e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+}\left(\frac{\dot{g}(t)}{g(t)}\right) + \frac{
+	e^{-2t / \timescale{rise}}
+}{
+	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^2
+} +
+\\
+&\qquad \frac{\ddot{g}(t)}{g(t)} -
+\left(\frac{\dot{g}(t)}{g(t)}\right)^2 + \frac{
 	e^{-t / \timescale{rise}}
 }{
-	\left(1 - e^{-t / \timescale{rise}}\right)^2
-} + \frac{
-	2e^{-2t / \timescale{rise}}
-}{
-	\left(1 - e^{-t / \timescale{rise}}\right)^3
-}\right) \frac{g(t)}{\timescale{rise}^2} -
-\\
-&\qquad \left(\frac{
-	2e^{-t / \timescale{rise}} + e^{-2t / \timescale{rise}}
-}{
-	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
-}\right) \dot{g}(t) + \frac{1}{1 - e^{-t / \timescale{rise}}} \ddot{g}(t)
-\Bigg],
+	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^2
+}
+\Bigg]
 \end{split}
+\\
+\implies \frac{\ddot{Z}_\alpha(t)}{Z_\alpha(t)} &= \left[\frac{
+	e^{-t / \timescale{rise}} + e^{-2t / \timescale{rise}}
+}{
+	\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^2
+} - \frac{
+	2 e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+} \left(\frac{\dot{g}(t)}{g(t)}\right) +
+\frac{\ddot{g}(t)}{g(t)}
+\right],
+\label{eq:zdotdotalpha_over_zalpha}
 \end{align}\end{subequations}
-and differentiating~$\dot{g}(t)$ with time follows from
-equation~\ref{eq:gdot}:
+and~$\ddot{g}(t)$ follows from differentiating equation~\ref{eq:gdot}:
 \begin{equation}
 \ddot{g}(t) = \frac{
 	-e^{-t / \harmonic{dep}{sfh}}
 }{
 	\timescale{dep}\harmonic{dep}{sfh}
-} - \frac{\hharmonic{dep}{rise}{sfh}}{\timescale{dep}}\left(\frac{
+} - \frac{
+	\hharmonic{dep}{rise}{sfh}
+}{
+	\timescale{dep}
+} \left(\frac{
 	e^{-t / \timescale{rise}}
 }{
 	\timescale{rise}^2
@@ -504,8 +611,56 @@ equation~\ref{eq:gdot}:
 	e^{-t / \harmonic{dep}{sfh}}
 }{
 	\harmonic{dep}{sfh}^2
-}\right)
+}\right).
+\label{eq:gdotdot}
 \end{equation}
+Combining equation~\ref{eq:zdotdotalpha_over_zalpha} with equation
+\ref{eq:zdotalpha_over_zalpha} yields the expression for~$\ddot{Z}_\alpha(t) /
+\dot{Z}_\alpha(t)$ needed for the MDF optimization criterion (equation
+\ref{eq:mhmdf_maxima_criterion}):
+\begin{subequations}\begin{align}
+\frac{\ddot{Z}_\alpha(t)}{\dot{Z}_\alpha(t)} &=
+\frac{\ddot{Z}_\alpha(t)}{Z_\alpha(t)}
+\left(\frac{\dot{Z}_\alpha(t)}{Z_\alpha(t)}\right)^{-1}
+\\
+&= \ddfrac{
+	\frac{
+		e^{-t / \timescale{rise}} + e^{-2t / \timescale{rise}}
+	}{
+		\timescale{rise}^2 \left(1 - e^{-t / \timescale{rise}}\right)^2
+	} - \frac{
+		2 e^{-t / \timescale{rise}}
+	}{
+		\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+	} \left(\frac{\dot{g}(t)}{g(t)}\right) +
+	\frac{\ddot{g}(t)}{g(t)}
+}{
+	\frac{\dot{g}(t)}{g(t)} - \frac{
+		e^{-t / \timescale{rise}}
+	}{
+		\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)
+	}
+}.
+\label{eq:zdotdotalpha_over_zdotalpha}
+\end{align}\end{subequations}
+This expression does not simplify any further, or at least not in a way that is
+useful.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \bibliographystyle{mnras}
@@ -719,6 +874,25 @@ t\frac{
 \label{eq:zalpha-full}
 \end{align}\end{subequations}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \noindent
 \textbf{Useful Identities}
@@ -728,7 +902,7 @@ t\frac{
 \frac{d}{dt}\left(1 - e^{-t / \timescale{rise}}\right)
 \\
 &= \frac{-1}{\left(1 - e^{-t / \timescale{rise}}\right)^2}
-\left(0 - e^{-t / \timescale{rise}}\left(\frac{-t}{\timescale{rise}}\right)
+\left(0 - e^{-t / \timescale{rise}}\left(\frac{-1}{\timescale{rise}}\right)
 \right)
 \\
 &= \frac{
@@ -737,6 +911,45 @@ t\frac{
 	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
 }
 \end{align}\end{subequations}
+
+\par\null\par
+\begin{center}
+\rule[0.7\baselineskip]{0.5\textwidth}{0.4pt}
+\end{center}
+
+\begin{subequations}\begin{align}
+\frac{d}{dt} \left(\frac{
+	e^{-t / \timescale{rise}}
+}{
+	1 - e^{-t / \timescale{rise}}
+}\right) &= \frac{
+	\left(1 - e^{-t / \timescale{rise}}\right) e^{-t / \timescale{rise}}
+	\left(-1 / \timescale{rise}\right) -
+	e^{-t / \timescale{rise}} \left(-e^{-t / \timescale{rise}}
+	\left(-1 / \timescale{rise}\right)\right)
+}{
+	\left(1 - e^{-t / \timescale{rise}}\right)^2
+}
+\\
+&= \frac{
+	-e^{-t / \timescale{rise}} + e^{-2t / \timescale{rise}} -
+	e^{-2t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
+}
+\\
+&= \frac{
+	-e^{-t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
+}
+\end{align}\end{subequations}
+
+\par\null\par
+\begin{center}
+\rule[0.7\baselineskip]{0.5\textwidth}{0.4pt}
+\end{center}
+
 \begin{subequations}\begin{align}
 \begin{split}
 \frac{d}{dt}\left(\frac{
@@ -764,11 +977,21 @@ t\frac{
 }
 \\
 &= \frac{
-	e^{-t / \timescale{rise}}
+	e^{-t / \timescale{rise}} \left(1 - e^{-t / \timescale{rise}}\right) +
+	2e^{-2t / \timescale{rise}}
 }{
-	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^2
-} + \frac{
-	2 e^{-2t / \timescale{rise}}
+	\timescale{rise}\left(1 - e^{-t / \timescale{rise}}\right)^3
+}
+\\
+&= \frac{
+	e^{-t / \timescale{rise}} - e^{-2t / \timescale{rise}} +
+	2e^{-2t / \timescale{rise}}
+}{
+	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^3
+}
+\\
+&= \frac{
+	e^{-t / \timescale{rise}} + e^{-2t / \timescale{rise}}
 }{
 	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^3
 }
