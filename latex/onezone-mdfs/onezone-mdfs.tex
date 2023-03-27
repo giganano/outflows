@@ -44,15 +44,17 @@
 \newcommand{\timescale}[1]{\ensuremath{\tau_\text{#1}}}
 \newcommand{\harmonic}[2]{\ensuremath{\bar{\tau}_\text{[#1,#2]}}}
 \newcommand{\hharmonic}[3]{\ensuremath{\bar{\tau}_\text{[#1,#2,#3]}}}
+\newcommand{\vice}{\textsc{VICE}}
 \renewcommand{\tilde}[1]{\ensuremath{\widetilde{#1}}}
 
 \begin{document}
 
 \begin{center}
-\textbf{The Shape and Centroid of Abundance Distributions for Inside-Out Star
-Formation Histories in One-Zone Models}
+{\Large \textbf{The Shape and Centroid of Abundance Distributions in One-Zone
+Models of Galactic Chemical Evolution}
 \par\null\par
 James W. Johnson
+}
 \par\null\par
 \rule[0.7\baselineskip]{0.5\textwidth}{0.4pt}
 \end{center}
@@ -74,7 +76,10 @@ Both classes of models successfully reproduce the observed gradient, but this
 is by construction in the~\citet{Johnson2021} models.
 This begs the question as to which parameter choices must be made in order to
 successfully reproduce this empirical result in the latter class of models.
-\par
+
+\par\null\par\noindent
+{\large \textbf{Generic MDF Optimization Criteria}}
+\par\noindent
 To this end, here I derive analytic and parametric expressions for the
 metallicity distribution function (MDF) given a set of choices of GCE model
 parameters.
@@ -98,7 +103,9 @@ the MDF by taking its derivative and setting it equal to zero:
 \\
 &\propto \frac{1}{\dot{Z}} \frac{d}{dt}
 \left(\frac{\dot{M}_\star}{\dot{Z}}\right)
+\end{align}
 \\
+\begin{align}
 &= \frac{1}{\dot{Z}} \left(\frac{
 	\dot{Z}\ddot{M}_\star - \ddot{Z}\dot{M}_\star
 }{
@@ -159,34 +166,24 @@ in the MDF in~\mh~occur when
 \frac{\dot{Z}}{Z}.
 \label{eq:mhmdf_maxima_criterion}
 \end{equation}
-\par
-For the remainder of this document, I derive solutions to the above expressions
-for the ``inside-out'' star formation history (SFH) from~\citet{Johnson2021}:
-\begin{equation}
-\dot{M}_\star(t) \propto \left(1 - e^{-t / \timescale{rise}}\right)
-e^{-t / \timescale{sfh}}.
-\label{eq:insideout_sfh}
-\end{equation}
-The physically interesting advantage of this parameterization over the classic
-``linear-times-exponential''~$t e^{-t / \timescale{sfh}}$ form is that the
-rise timescale~\timescale{rise}~gives one some control over how long the SFH is
-increasing independent of~\timescale{sfh}.
-In the interest of analytic/parametric solutions, I assume that the star
-formation efficiency (SFE) timescale~$\tau_\star \equiv M_\text{g} /
-\dot{M}_\star$ and the outflow mass loading factor~$\eta \equiv
-\dot{M}_\text{out} / \dot{M}_\star$ are both constant in time.
-In the interest of simplicity, I also focus on alpha elements with negligible
-yields from Type Ia supernovae (e.g., O and Mg), and I adjust my notation
-accordingly from~$Z$ to~$Z_\alpha$ and~\mh~to~\ah~hereafter.
+Solving this equation will first yield a time at which the maximum is produced,
+which can then be converted into metallicity by evaluating~$Z(t)$ at the
+derived time.
 
 \par\null\par\noindent
-\textbf{Analytic solution to~$Z_\alpha(t)$}
+{\large \textbf{Enrichment Rates}}
 \par\noindent
-The expression for~$\dot{M}_\star$ is given by the assumption of equation
-\ref{eq:insideout_sfh}, so now I must solve for~$Z_\alpha(t)$ using arguments
-similar to those of~\citet*{Weinberg2017}.
-For alpha elements,~\citet*{Weinberg2017} express the rate of change of the
-mass present in the ISM as
+In the interest of analytic/parametric solutions, I assume throughout this
+document that the star formation efficiency (SFE) timescale
+$\tau_\star \equiv M_\text{gas} / \dot{M}_\star$ and the outflow mass loading
+factor~$\eta \equiv \dot{M}_\text{out} / \dot{M}_\star$ are both fixed in time.
+In the intereset of simplicity, I also focus on alpha elements with negligible
+yields from asymptotic giant branch stars and Type Ia supernovae (e.g., O and
+Mg), and I adjust my notation accordingly from~$Z$ to~$Z_\alpha$
+and~\mh~to~\ah~hereafter.
+\par
+From~\citet*{Weinberg2017}, the enrichment rate of alpha elements can be
+expressed as
 \begin{equation}
 \dot{M}_\alpha = y_\alpha \dot{M}_\star - Z_\alpha \dot{M}_\star (1 + \eta - r),
 \label{eq:mdot_alpha}
@@ -221,8 +218,426 @@ Z_\alpha \frac{\ddot{M}_\star}{M_\text{g}} \tau_\star
 \\
 &= \frac{y_\alpha}{\tau_\star} -
 Z_\alpha \left(\frac{1 + \eta - r}{\tau_\star} +
-\frac{\ddot{M}_\star}{\dot{M}_\star}\right).
+\frac{\ddot{M}_\star}{\dot{M}_\star}\right),
 \label{eq:dzdt}
+\end{align}\end{subequations}
+which yields the following linear ODE for~$Z_\alpha(t)$:
+\begin{equation}
+\dot{Z}_\alpha + Z_\alpha\left(\frac{1}{\timescale{dep}} +
+\frac{\ddot{M}_\star}{M_\star}\right) = \frac{y_\alpha}{\tau_\star},
+\label{eq:generic-ode}
+\end{equation}
+where I have substituted in for the depletion time~$\timescale{dep} \equiv
+\tau_\star / (1 + \eta - r)$.
+The depletion time quantifies the e-folding timescale on which the interstellar
+medium (ISM) gas would be deplete due to star formation and outflows in the
+absence of gas accretion.
+With accretion, however, it describes a timescale on which the ISM fully
+recycles; that is, a single fluid element will be either incorporated into new
+stars or ejected in an outflow on average within one depletion time.
+\par
+Equation~\ref{eq:dzdt} can also be used to derive the equilibrium abundance,
+at which metal production is balanced by depletion onto new stars and losses to
+outflows.
+$\dot{Z}_\alpha = 0$ at the equilibrium abundance by definition, and solving
+for~$Z_\alpha$ is trivial:
+\begin{equation}
+Z_{\alpha,\text{eq}} = \ddfrac{y_\alpha}{
+	1 + \eta - r + \tau_\star \frac{\ddot{M}_\star}{\dot{M}_\star}
+}.
+\end{equation}
+\par
+Denoting~$f(t)$ as the multiplicative prefactor on~$Z_\alpha$ in equation
+\ref{eq:generic-ode}, which may or may not vary with time for a given
+parameterization of the SFH, the solution to~$Z(t)$ can be expressed as:
+\begin{subequations}\begin{align}
+Z_\alpha(t) &= \left(
+\exp\left(-\int f(t') dt'\right) \left(\int_0^t \exp\left(\int f(t') dt'\right)
+\frac{y_\alpha}{\tau_\star}dt' + C\right)
+\right)
+\label{eq:generic-ode-solution}
+\\
+f(t) &= \frac{1}{\timescale{dep}} + \frac{\ddot{M}_\star}{\dot{M}_\star},
+\label{eq:f}
+\end{align}\end{subequations}
+where the integration constant~$C$ should be assigned such that the initial
+condition~$Z_\alpha(t = 0) = 0$ is satisfied.
+The generic procedure for optimizing the MDF given a choice of GCE parameters
+is as follows:
+\begin{enumerate}
+
+	\item Differentiate the SFH with time to obtain and expression
+	for~$\ddot{M}_\star / \dot{M}_\star$.
+
+	\item Plug~$\ddot{M}_\star / \dot{M}_\star$ into equation~\ref{eq:f} and
+	solve equation~\ref{eq:generic-ode-solution} for~$Z_\alpha(t)$.
+	Ensure that the integration constant~$C$ is chosen such
+	that~$Z_\alpha(t = 0) = 0$.
+
+	\item Differentiate~$Z_\alpha(t)$ with time to obtain an expression
+	for~$\dot{Z}_\alpha(t)$.
+	If optimizing the distribution in~\ah, differentiate with time once more
+	and additionally obtain the expression
+	for~$\ddot{Z}_\alpha(t) / \dot{Z}_\alpha(t)$.
+
+	\item Solve equation~\ref{eq:zmdf_maxima_criterion} and/or
+	equation~\ref{eq:mhmdf_maxima_criterion} to obtain the time at which the
+	maximum in the MDF occurs.
+	Depending on the nature of the expression, this solution may be numerical
+	as opposed to analytic.
+
+	\item Plug the time into the previously derived expression for~$Z_\alpha(t)$
+	and compute~\ah~if optimizing the distribution in~\ah.
+
+\end{enumerate}
+
+\par\null\par\noindent
+{\large \textbf{Exponential SFHs}}
+\par\noindent
+Here I derive the solution to mode(\ah) for an exponential SFH.
+The solution for a constant SFH then follows by letting the e-folding timescale
+of the SFH~$\timescale{sfh} \rightarrow \infty$.
+The first step is to differentiate the SFH with time; taking~$A$ to denote
+the overall normalization:
+\begin{subequations}\begin{align}
+\ddot{M}_\star &= \frac{d}{dt} A e^{-t / \timescale{sfh}}
+\\
+&= \frac{-A}{\timescale{sfh}} e^{-t / \timescale{sfh}}
+\\
+\implies \frac{\ddot{M}_\star}{\dot{M}_\star} &= \frac{-1}{\timescale{sfh}}.
+\end{align}\end{subequations}
+As previously shown in~\citet*{Weinberg2017}, it then follows that the
+equilibrium abundance for an exponential SFH is given by
+\begin{equation}
+Z_{\alpha,\text{eq}} = \frac{y_\alpha}{
+	1 + \eta - r - \tau_\star / \timescale{sfh}
+}.
+\label{eq:zeq-expsfh}
+\end{equation}
+\par
+At this point, it is helpful to adopt the harmonic timescale notation from
+\citet*{Weinberg2017}
+\begin{equation}
+\harmonic{X}{Y} \equiv \left(\frac{1}{\timescale{X}} -
+\frac{1}{\timescale{Y}}\right)^{-1} = \frac{
+	\timescale{Y}\timescale{X}
+}{
+	\timescale{Y} - \timescale{X}
+}
+\end{equation}
+which arises when integrating exponentials depending on multiple timescales.
+$f(t)$ for an exponential SFH can then be denoted as~$f(t) = 1 /
+\harmonic{dep}{sfh}$, and equation~\ref{eq:generic-ode} then becomes:
+\begin{subequations}\begin{align}
+Z_\alpha(t) &= \exp\left(-\int \frac{1}{\harmonic{dep}{sfh}}dt'\right)
+\left(
+\int_0^t \exp\left(\int \frac{1}{\harmonic{dep}{sfh}}dt'\right)
+\frac{y_\alpha}{\tau_\star} dt' + C
+\right)
+% intermediate steps written out here but commented out.
+% \\
+% &= \frac{y_\alpha}{\tau_\star} e^{-t / \harmonic{dep}{sfh}} \left(
+% \int_0^t e^{t' / \harmonic{dep}{sfh}} dt' + C \right)
+% \\
+% &= \frac{y_\alpha}{\tau_\star} e^{-t / \harmonic{dep}{sfh}} \left(
+% \harmonic{dep}{sfh} e^{t' / \harmonic{dep}{sfh}} \Bigg|_0^t + C
+% \right)
+% \\
+% &= \frac{y_\alpha}{\tau_\star} e^{-t / \harmonic{dep}{sfh}}
+% \left(
+% \harmonic{dep}{sfh} \left(e^{t / \harmonic{dep}{sfh}} - 1\right) + C\right)
+% \\
+% &= y_\alpha \frac{\harmonic{dep}{sfh}}{\tau_\star} \left(1 -
+% e^{-t / \harmonic{dep}{sfh}} + Ce^{-t / \harmonic{dep}{sfh}}\right)
+% \\
+% &= y_\alpha \frac{\timescale{sfh}\timescale{dep}}{
+% 	\tau_\star\left(\timescale{sfh} - \timescale{dep}\right)
+% } \left(1 - e^{-t / \harmonic{dep}{sfh}} + Ce^{-t / \harmonic{dep}{sfh}}\right)
+\\
+&= \frac{y_\alpha}{1 + \eta - r - \tau_\star / \timescale{sfh}}
+\left(1 - e^{-t / \harmonic{dep}{sfh}}\right)
+\\
+&= Z_{\alpha,\text{eq}}\left(1 - e^{-t / \harmonic{dep}{sfh}}\right).
+\end{align}\end{subequations}
+In this case, the integration constant~$C = 0$.
+The first and second time-derivatives of~$Z_\alpha(t)$ then follow trivially:
+\begin{subequations}\begin{align}
+\dot{Z}_\alpha(t) &= \frac{Z_{\alpha, \text{eq}}}{\harmonic{dep}{sfh}}
+e^{-t / \harmonic{dep}{sfh}}
+\\
+\ddot{Z}_\alpha(t) &= \frac{-Z_{\alpha, \text{eq}}}{\harmonic{dep}{sfh}^2}
+e^{-t / \harmonic{dep}{sfh}}.
+\end{align}\end{subequations}
+Plugging these expressions into the~$Z_\alpha$ MDF optimization criterion
+(equation~\ref{eq:zmdf_maxima_criterion}) results in the following expression:
+\begin{equation}
+\frac{1}{\timescale{sfh}} = \frac{1}{\harmonic{dep}{sfh}},
+\end{equation}
+an expression which does not depend on time.
+This form of SFH therefore cannot produce a maximum in~$dN / dZ_\alpha$, though
+I show below that the opposite is the case for~$dN / d\ah$.
+\par
+Plugging these expressions into the~\ah~MDF optimization criterion (equation
+\ref{eq:mhmdf_maxima_criterion}) then yields the following expression for the
+time at which the maximum in the MDF occurs:
+\begin{subequations}\begin{align}
+\frac{1}{\timescale{sfh}} &= \frac{1}{\harmonic{dep}{sfh}} +
+\frac{1}{\harmonic{dep}{sfh}} \left(\frac{
+	e^{-t / \harmonic{dep}{sfh}}
+}{
+	1 - e^{-t / \harmonic{dep}{sfh}}
+}\right)
+\\
+% intermediate steps to the solution simply commented out here
+% \implies \frac{\harmonic{dep}{sfh}}{\timescale{sfh}} &= 1 + \frac{
+% 	e^{-t / \harmonic{dep}{sfh}}
+% }{
+% 	1 - e^{-t / \harmonic{dep}{sfh}}
+% }
+% \\
+% &= \frac{
+% 	1 - e^{-t / \harmonic{dep}{sfh}} + e^{-t / \harmonic{dep}{sfh}}
+% }{
+% 	1 - e^{-t / \harmonic{dep}{sfh}}
+% }
+% \\
+% &= \frac{1}{1 - e^{-t / \harmonic{dep}{sfh}}}
+% \\
+% \implies 1 - e^{-t / \harmonic{dep}{sfh}} &= \frac{\timescale{sfh}}{
+% 	\harmonic{dep}{sfh}
+% } 
+% \\
+% &= \frac{\timescale{sfh}}{\timescale{dep}} - 1
+% \\
+% \implies e^{-t / \harmonic{dep}{sfh}} &= 2 - \frac{\timescale{sfh}}{
+% 	\timescale{dep}
+% }
+% \\
+\implies t &= -\harmonic{dep}{sfh} \ln \left( 2 -
+\frac{\timescale{sfh}}{\timescale{dep}}\right).
+\end{align}\end{subequations}
+Evaluation~$Z_\alpha(t)$ at this time yields
+\begin{subequations}\begin{align}
+Z_\alpha(t_\text{max}) &= Z_{\alpha,\text{eq}} \left(
+1 - e^{\ln \left(2 - \timescale{sfh} / \timescale{dep}\right)}
+\right)
+% \\
+% &= Z_{\alpha,\text{eq}} \left(1 - 2 + \frac{\timescale{sfh}}{\timescale{dep}}
+% \right)
+\\
+&= Z_{\alpha,\text{eq}} \left(\frac{\timescale{sfh}}{\timescale{dep}} -
+1\right).
+\end{align}\end{subequations}
+At this point we can assert that a true turnover in the MDF will occur if and
+only if~$Z(t_\text{max}) < Z_{\alpha,\text{eq}}$, because the ISM will never
+reach a super-equilibrium abundance given this smooth SFH.
+If~$Z(t_\text{max}) > Z_{\alpha,\text{eq}}$, then the mode of the~\ah~MDF
+instead coincides with a sharp cutoff at the metallicity of the present day,
+which may be arbitrarily close to or significantly below the equilibrium
+abundance.
+The assertion that~$Z(t_\text{max}) < Z_{\alpha,\text{eq}}$ leads to the
+following condition which, if satisfied, means a true turnover in the~\ah~MDF
+will be produced for a given choice of GCE parameters:
+\begin{subequations}\begin{align}
+\frac{\timescale{sfh}}{\timescale{dep}} - 1 &< 1
+\\
+\implies \timescale{sfh} &< 2\timescale{dep}.
+\label{eq:mode-ah-expsfh-criterion}
+\end{align}\end{subequations}
+It may be tempting to also assert that~$Z_{\alpha,\text{eq}} > 0$, though close
+inspection of equation~\ref{eq:zeq-expsfh} indicates
+that~$Z_{\alpha,\text{eq}} < 0$ simply corresponds to cases in
+which~$\timescale{sfh} < \timescale{dep}$.
+In these cases, the prefactor~$\timescale{sfh} / \timescale{dep} - 1$ is also
+negative, and therefore the position of the peak is positive.
+\par
+Finally, solving for the position of the peak in the~\ah~MDF yields
+\begin{equation}
+\ah_\text{max} = \log_{10}\left[
+\frac{Z_{\alpha,\text{eq}}}{Z_{\alpha,\odot}}
+\left(\frac{\timescale{sfh}}{\timescale{dep}} - 1\right)
+\right].
+\label{eq:mode-ah-expsfh}
+\end{equation}
+When~$\timescale{sfh} = \timescale{dep}$,~$\ah_\text{max}$ reaches
+an~$\infty \times 0$ indeterminate form.
+I find the appropriate expression for mode(\ah) in this instance by taking
+the limit:
+\begin{subequations}\begin{align}
+\lim_{\timescale{sfh} \rightarrow \timescale{dep}} \ah_\text{max}
+&= \lim_{\timescale{sfh} \rightarrow \timescale{dep}} \log_{10}
+\left[\frac{Z_{\alpha,\text{eq}}}{Z_{\alpha,\odot}}
+\left(\frac{\timescale{sfh}}{\timescale{dep}} - 1\right)\right]
+\\
+&= \log_{10} \lim_{\timescale{sfh} \rightarrow \timescale{dep}} \left[
+\frac{y_\alpha}{
+	Z_{\alpha,\odot} \left(1 + \eta - r - \tau_\star / \timescale{sfh}\right)
+}
+\left(\frac{\timescale{sfh} - \timescale{dep}}{\timescale{dep}}\right)
+\right]
+\\
+% &= \log_{10} \lim_{\timescale{sfh} \rightarrow \timescale{dep}} \left[
+% \frac{y_\alpha}{
+% 	Z_{\alpha,\odot}\left(1 + \eta - r\right)
+% 	\left(1 - \timescale{dep} / \timescale{sfh}\right)
+% }
+% \left(\frac{\timescale{sfh} - \timescale{dep}}{\timescale{dep}}\right)
+% \right]
+% \\
+% &= \log_{10} \left[
+% \frac{y_\alpha}{
+% 	Z_{\alpha,\odot}\left(1 + \eta - r\right)
+% }
+% \lim_{\timescale{sfh} \rightarrow \timescale{dep}}
+% \left(
+% \frac{
+% 	\timescale{sfh} - \timescale{dep}
+% }{
+% 	\timescale{dep} - \timescale{dep}^2 / \timescale{sfh}
+% }
+% \right)
+% \right]
+% \\
+% &= \log_{10} \left[
+% \frac{y_\alpha}{
+% 	Z_{\alpha,\odot}(1 + \eta - r)
+% }
+% \lim_{\timescale{sfh} \rightarrow \timescale{dep}}
+% \left(
+% \frac{1}{
+% 	\timescale{dep}^2 / \timescale{sfh}^2
+% }
+% \right)
+% \right] (\text{LH})
+% \\
+&= \log_{10} \left[
+\frac{y_\alpha}{
+	Z_{\alpha,\odot} \left(1 + \eta - r\right)
+}
+\right],
+\end{align}\end{subequations}
+which is, perhaps coincidentally, equivalent to the equilibrium~\ah~abundance
+for a constant SFH.
+We therefore arrive at the full piece-wise solution for mode(\ah):
+\begin{equation}
+\text{mode}(\ah) = \begin{cases}
+\ah(t = t_\text{final}) & (\timescale{sfh} > 2\timescale{dep}~\text{or}~
+t_\text{max} > 13.2~\text{Gyr})
+\\
+\null
+\\
+\log_{10} \left[
+\ddfrac{y_\alpha}{
+	Z_{\alpha,\odot} \left(1 + \eta - r\right)
+}
+\right] & (\timescale{sfh} = \timescale{dep})
+\\
+\null
+\\
+\log_{10}\left[
+\ddfrac{Z_{\alpha,\text{eq}}}{Z_{\alpha,\odot}}
+\left(\ddfrac{\timescale{sfh}}{\timescale{dep}} - 1\right)
+\right] & (\text{otherwise}).
+\end{cases}
+\label{eq:mode-ah-expsfh-piecewise}
+\end{equation}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.55]{mode_oh.pdf}
+\includegraphics[scale = 0.55]{mode_oh_versus_tausfh.pdf}
+\caption{
+	[$\alpha$/H] distributions and the associated mode for a handful of choices
+	of~$\timescale{sfh}$ for a given~$\timescale{dep}$.
+	For these models I adopt~$\tau_\star$ = 2 Gyr and~$\eta = 0$ with
+	yields and solar abundances appropriate for oxygen ($y_\alpha = 0.005$,
+	$Z_{\alpha,\odot} = 0.00572$ based on~\citealt{Asplund2009}).
+	E-folding timescales of the SFH are chosen such that they are a
+	round-number multiple of the depletion time, color-coded according to the
+	legend.
+	We mark the position of mode(\ah) computed according to equation
+	\ref{eq:mode-ah-expsfh-piecewise} in solid lines, while the~\ah~MDFs
+	computed with~\vice~are shown in the dotted lines.
+}
+\label{fig:mode-ah-expsfh}
+\end{figure}
+
+\par\null\par\noindent
+{\large \textbf{Constant SFHs}}
+\par\noindent
+The solutions for a constant SFH can be derived from the soluations for an
+exponential SFH by simply taking the limit
+as~$\timescale{sfh} \rightarrow \infty$.
+Interestingly, this violates the condition that~$\timescale{sfh} <
+2\timescale{dep}$, indicating immediately that this form of an SFH will always
+produce an MDF with a sharp cutoff as opposed to a true turnover.
+No further calculations are necessary.
+
+
+% \par
+% For the remainder of this document, I derive solutions to the above expressions
+% for the ``inside-out'' star formation history (SFH) from~\citet{Johnson2021}:
+% \begin{equation}
+% \dot{M}_\star(t) \propto \left(1 - e^{-t / \timescale{rise}}\right)
+% e^{-t / \timescale{sfh}}.
+% \label{eq:insideout_sfh}
+% \end{equation}
+% The physically interesting advantage of this parameterization over the classic
+% ``linear-times-exponential''~$t e^{-t / \timescale{sfh}}$ form is that the
+% rise timescale~\timescale{rise}~gives one some control over how long the SFH is
+% increasing independent of~\timescale{sfh}.
+% In the interest of analytic/parametric solutions, I assume that the star
+% formation efficiency (SFE) timescale~$\tau_\star \equiv M_\text{g} /
+% \dot{M}_\star$ and the outflow mass loading factor~$\eta \equiv
+% \dot{M}_\text{out} / \dot{M}_\star$ are both constant in time.
+% In the interest of simplicity, I also focus on alpha elements with negligible
+% yields from Type Ia supernovae (e.g., O and Mg), and I adjust my notation
+% accordingly from~$Z$ to~$Z_\alpha$ and~\mh~to~\ah~hereafter.
+
+\par\null\par\noindent
+\textbf{Analytic solution to~$Z_\alpha(t)$}
+\par\noindent
+The expression for~$\dot{M}_\star$ is given by the assumption of equation
+\ref{eq:insideout_sfh}, so now I must solve for~$Z_\alpha(t)$ using arguments
+similar to those of~\citet*{Weinberg2017}.
+For alpha elements,~\citet*{Weinberg2017} express the rate of change of the
+mass present in the ISM as
+% \begin{equation}
+% \dot{M}_\alpha = y_\alpha \dot{M}_\star - Z_\alpha \dot{M}_\star (1 + \eta - r),
+% \label{eq:mdot_alpha}
+% \end{equation}
+% where~$y_\alpha$ is a population-averaged alpha element yield from massive
+% stars, assumed to be ejected immediately after a stellar population forms.
+% This assumption is valid due to the short lifetimes of massive stars compared
+% to the relevant evolutionary timescales of the Milky Way.
+% $r$ is a term which accounts for the return of stellar envelopes back to
+% the ISM ($r \approx 0.4$ for a~\citealt{Kroupa2001} IMF;
+% \citealp*{Weinberg2017}).
+\par
+Based on the definition of~$Z_\alpha$, the quotient rule implies that its
+time-derivative can be expressed as
+\begin{subequations}\begin{align}
+\dot{Z}_\alpha &= \frac{
+	M_\text{g} \dot{M}_\alpha - M_\alpha \dot{M}_\text{g}
+}{
+	M_\text{g}^2
+}
+\\
+&= \frac{
+	M_\text{g} (y_\alpha \dot{M}_\star - Z_\alpha \dot{M}_\star (1 + \eta - r))
+	- M_\alpha \ddot{M}_\star \tau_\star
+}{
+	M_\text{g}^2
+}
+\\
+&= y_\alpha \frac{\dot{M}_\star}{M_\text{g}} -
+Z_\alpha \frac{\dot{M}_\star}{M_\text{g}}(1 + \eta - r) -
+Z_\alpha \frac{\ddot{M}_\star}{M_\text{g}} \tau_\star
+\\
+&= \frac{y_\alpha}{\tau_\star} -
+Z_\alpha \left(\frac{1 + \eta - r}{\tau_\star} +
+\frac{\ddot{M}_\star}{\dot{M}_\star}\right).
+% \label{eq:dzdt}
 \end{align}\end{subequations}
 The next step is to differentiate the SFH with time to compute
 $\ddot{M}_\star / \dot{M}_\star$. Taking~$A$ to denote the overall normalizing
