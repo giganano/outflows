@@ -5,10 +5,10 @@ BIBCOMPILER := bibtex
 all: onezone-mdfs.pdf
 
 onezone-mdfs.pdf: onezone-mdfs.tex onezone-mdfs.bib
-	$(TEXCOMPILER) $(basename $@)
-	$(BIBCOMPILER) $(basename $@)
-	$(TEXCOMPILER) $(basename $@)
-	$(TEXCOMPILER) $(basename $@)
+	@ $(TEXCOMPILER) $(basename $@)
+	@ $(BIBCOMPILER) $(basename $@)
+	@ $(TEXCOMPILER) $(basename $@)
+	@ $(TEXCOMPILER) $(basename $@)
 
 .PHONY: clean
 clean:

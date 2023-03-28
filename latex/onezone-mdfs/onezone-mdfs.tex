@@ -224,7 +224,7 @@ Z_\alpha \left(\frac{1 + \eta - r}{\tau_\star} +
 which yields the following linear ODE for~$Z_\alpha(t)$:
 \begin{equation}
 \dot{Z}_\alpha + Z_\alpha\left(\frac{1}{\timescale{dep}} +
-\frac{\ddot{M}_\star}{M_\star}\right) = \frac{y_\alpha}{\tau_\star},
+\frac{\ddot{M}_\star}{\dot{M}_\star}\right) = \frac{y_\alpha}{\tau_\star},
 \label{eq:generic-ode}
 \end{equation}
 where I have substituted in for the depletion time~$\timescale{dep} \equiv
@@ -383,9 +383,9 @@ time at which the maximum in the MDF occurs:
 \begin{subequations}\begin{align}
 \frac{1}{\timescale{sfh}} &= \frac{1}{\harmonic{dep}{sfh}} +
 \frac{1}{\harmonic{dep}{sfh}} \left(\frac{
-	e^{-t / \harmonic{dep}{sfh}}
+	e^{-t_\text{max} / \harmonic{dep}{sfh}}
 }{
-	1 - e^{-t / \harmonic{dep}{sfh}}
+	1 - e^{-t_\text{max} / \harmonic{dep}{sfh}}
 }\right)
 \\
 % intermediate steps to the solution simply commented out here
@@ -413,7 +413,7 @@ time at which the maximum in the MDF occurs:
 % 	\timescale{dep}
 % }
 % \\
-\implies t &= -\harmonic{dep}{sfh} \ln \left( 2 -
+\implies t_\text{max} &= -\harmonic{dep}{sfh} \ln \left( 2 -
 \frac{\timescale{sfh}}{\timescale{dep}}\right).
 \end{align}\end{subequations}
 Evaluation~$Z_\alpha(t)$ at this time yields
@@ -547,8 +547,10 @@ t_\text{max} > 13.2~\text{Gyr})
 \includegraphics[scale = 0.55]{mode_oh.pdf}
 \includegraphics[scale = 0.55]{mode_oh_versus_tausfh.pdf}
 \caption{
-	[$\alpha$/H] distributions and the associated mode for a handful of choices
-	of~$\timescale{sfh}$ for a given~$\timescale{dep}$.
+	The dependence of mode(\ah) on the e-folding timescale of an exponential
+	SFH~\timescale{sfh}.
+	\textbf{Left}:~\ah~distributions and the associated mode for a handful of
+	choices of~$\timescale{sfh}$ for a given~$\timescale{dep}$.
 	For these models I adopt~$\tau_\star$ = 2 Gyr and~$\eta = 0$ with
 	yields and solar abundances appropriate for oxygen ($y_\alpha = 0.005$,
 	$Z_{\alpha,\odot} = 0.00572$ based on~\citealt{Asplund2009}).
@@ -558,6 +560,8 @@ t_\text{max} > 13.2~\text{Gyr})
 	We mark the position of mode(\ah) computed according to equation
 	\ref{eq:mode-ah-expsfh-piecewise} in solid lines, while the~\ah~MDFs
 	computed with~\vice~are shown in the dotted lines.
+	\textbf{Right}: mode(\ah) as a function of~\timescale{sfh} for a handful of
+	choices of~$\tau_\star$ and~$\eta$.
 }
 \label{fig:mode-ah-expsfh}
 \end{figure}
@@ -572,6 +576,79 @@ Interestingly, this violates the condition that~$\timescale{sfh} <
 2\timescale{dep}$, indicating immediately that this form of an SFH will always
 produce an MDF with a sharp cutoff as opposed to a true turnover.
 No further calculations are necessary.
+
+\par\null\par\noindent
+{\large \textbf{Linear-Exponential SFHs}}
+\par\noindent
+The solution for a linear-exponential SFH~$\dot{M}_\star \propto t e^{-t /
+\timescale{sfh}}$ is somewhat more complicated.
+Denoting the normalization of the SFH as~$A$:
+\begin{subequations}\begin{align}
+\ddot{M}_\star &= \frac{d}{dt} Ate^{-t / \timescale{sfh}}
+\\
+&= Ae^{-t / \timescale{sfh}} - A\frac{t}{\timescale{sfh}}
+e^{-t / \timescale{sfh}}
+\\
+&= Ate^{-t / \timescale{sfh}} \left(\frac{1}{t} - \frac{1}{\timescale{sfh}}
+\right)
+\\
+\implies \frac{\ddot{M}_\star}{\dot{M}_\star} &= \frac{1}{t} -
+\frac{1}{\timescale{sfh}}
+\\
+\implies f(t) &= \frac{1}{\timescale{dep}} +
+\frac{\ddot{M}_\star}{\dot{M}_\star} = \frac{1}{t} +
+\frac{1}{\harmonic{dep}{sfh}},
+\end{align}\end{subequations}
+and now solving for the integral of~$f(t)$
+\begin{subequations}\begin{align}
+\int f(t) dt &= \int \left(\frac{1}{t} + \frac{1}{\harmonic{dep}{sfh}}\right) dt
+\\
+&= \ln t + \frac{t}{\harmonic{dep}{sfh}}
+\end{align}\end{subequations}
+yields the following expression for~$Z_\alpha(t)$:
+\begin{subequations}\begin{align}
+Z_\alpha(t) &= \frac{1}{t}e^{-t / \harmonic{dep}{sfh}} \left[
+\frac{y_\alpha}{\tau_\star} \int_0^t t' e^{t' / \harmonic{dep}{sfh}} dt' + C
+\right]
+\\
+&= \frac{1}{t}e^{-t / \harmonic{dep}{sfh}} \left[
+\frac{y_\alpha}{\tau_\star}\left(
+\harmonic{dep}{sfh}^2 + e^{t / \harmonic{dep}{sfh}} \left(\harmonic{dep}{sfh}
+t - \harmonic{dep}{sfh}^2\right)
+\right) + C\right]
+\\
+&= \frac{y_\alpha}{\tau_\star} \left[
+\harmonic{dep}{sfh} + \frac{\harmonic{dep}{sfh}^2}{t}
+\left(e^{-t / \harmonic{dep}{sfh}} - 1\right)
+\right],
+\end{align}\end{subequations}
+where I have substituted~$C = 0$ into the final equality to satisfy the
+boundary condition that~$Z_\alpha(t = 0) = 0$.
+The first and second time-derivatives then follow:
+\begin{subequations}\begin{align}
+\dot{Z}_\alpha(t) &= \frac{y_\alpha}{\tau_\star} \left[
+\frac{-\harmonic{dep}{sfh}^2}{t^2} \left(e^{-t / \harmonic{dep}{sfh}} - 1\right)
+- \frac{\harmonic{dep}{sfh}}{t} e^{-t / \harmonic{dep}{sfh}}
+\right]
+\\
+\ddot{Z}_\alpha(t) &= \frac{y_\alpha}{\tau_\star} \left[
+\frac{2\harmonic{dep}{sfh}^2}{t^3} \left(e^{-t / \harmonic{dep}{sfh}} - 1\right)
++ e^{-t / \harmonic{dep}{sfh}} \left(\frac{2\harmonic{dep}{sfh}}{t^2} +
+\frac{1}{t}\right)
+\right]
+\end{align}\end{subequations}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 % \par
@@ -1410,6 +1487,31 @@ t\frac{
 }{
 	\timescale{rise} \left(1 - e^{-t / \timescale{rise}}\right)^3
 }
+\end{align}\end{subequations}
+
+% \par\null\par
+% \begin{center}
+% \rule[0.7\baselineskip]{0.5\textwidth}{0.4pt}
+% \end{center}
+\newpage
+
+\begin{subequations}\begin{align}
+\int_0^t t' e^{\alpha t'} dt' &= \int_0^t \frac{\partial}{\partial \alpha}
+e^{\alpha t'} dt'
+\\
+&= \frac{\partial}{\partial \alpha} \int_0^t e^{\alpha t'} dt'
+\\
+&= \frac{\partial}{\partial \alpha} \left[
+\frac{1}{\alpha} e^{\alpha t'} \Bigg|_0^t\right]
+\\
+&= \frac{\partial}{\partial \alpha} \left[
+\frac{1}{\alpha} \left(e^{\alpha t} - 1\right)\right]
+\\
+&= \frac{-1}{\alpha^2} \left(e^{\alpha t} - 1\right) +
+\frac{1}{\alpha} te^{\alpha t}
+\\
+&= \frac{1}{\alpha^2} + e^{\alpha t} \left(\frac{t}{\alpha} -
+\frac{1}{\alpha^2}\right)
 \end{align}\end{subequations}
 
 \end{document}
