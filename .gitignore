@@ -9,4 +9,6 @@
 *.sublime-workspace
 notebooks/.ipynb_checkpoints/*
 
+# too large for GitHub
+./data/Leung2023.csv
 

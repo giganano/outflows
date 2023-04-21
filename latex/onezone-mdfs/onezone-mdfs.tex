@@ -389,30 +389,30 @@ time at which the maximum in the MDF occurs:
 }\right)
 \\
 % intermediate steps to the solution simply commented out here
-% \implies \frac{\harmonic{dep}{sfh}}{\timescale{sfh}} &= 1 + \frac{
-% 	e^{-t / \harmonic{dep}{sfh}}
-% }{
-% 	1 - e^{-t / \harmonic{dep}{sfh}}
-% }
-% \\
-% &= \frac{
-% 	1 - e^{-t / \harmonic{dep}{sfh}} + e^{-t / \harmonic{dep}{sfh}}
-% }{
-% 	1 - e^{-t / \harmonic{dep}{sfh}}
-% }
-% \\
-% &= \frac{1}{1 - e^{-t / \harmonic{dep}{sfh}}}
-% \\
-% \implies 1 - e^{-t / \harmonic{dep}{sfh}} &= \frac{\timescale{sfh}}{
-% 	\harmonic{dep}{sfh}
-% } 
-% \\
-% &= \frac{\timescale{sfh}}{\timescale{dep}} - 1
-% \\
-% \implies e^{-t / \harmonic{dep}{sfh}} &= 2 - \frac{\timescale{sfh}}{
-% 	\timescale{dep}
-% }
-% \\
+\implies \frac{\harmonic{dep}{sfh}}{\timescale{sfh}} &= 1 + \frac{
+	e^{-t / \harmonic{dep}{sfh}}
+}{
+	1 - e^{-t / \harmonic{dep}{sfh}}
+}
+\\
+&= \frac{
+	1 - e^{-t / \harmonic{dep}{sfh}} + e^{-t / \harmonic{dep}{sfh}}
+}{
+	1 - e^{-t / \harmonic{dep}{sfh}}
+}
+\\
+&= \frac{1}{1 - e^{-t / \harmonic{dep}{sfh}}}
+\\
+\implies 1 - e^{-t / \harmonic{dep}{sfh}} &= \frac{\timescale{sfh}}{
+	\harmonic{dep}{sfh}
+} 
+\\
+&= \frac{\timescale{sfh}}{\timescale{dep}} - 1
+\\
+\implies e^{-t / \harmonic{dep}{sfh}} &= 2 - \frac{\timescale{sfh}}{
+	\timescale{dep}
+}
+\\
 \implies t_\text{max} &= -\harmonic{dep}{sfh} \ln \left( 2 -
 \frac{\timescale{sfh}}{\timescale{dep}}\right).
 \end{align}\end{subequations}
