@@ -1,3 +1,6 @@
 
-__all__ = ["analytic"]
+__all__ = ["analytic", "plots", "simulations"]
 from . import analytic
+from . import plots
+from . import simulations
+
