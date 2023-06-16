@@ -77,9 +77,12 @@ class diskmodel(vice.milkyway):
 		else:
 			Nstars = 2 * int(MAX_SF_RADIUS / zone_width * END_TIME / self.dt *
 				self.n_stars)
-		self.migration.stars = migration.diskmigration(self.annuli,
-			N = Nstars, mode = migration_mode,
-			filename = "%s_analogdata.out" % (name))
+		# self.migration.stars = migration.diskmigration(self.annuli,
+		# 	N = Nstars, mode = migration_mode,
+		# 	filename = "%s_analogdata.out" % (name))
+		self.migration.stars = migration.gaussian_migration(self.annuli,
+			zone_width = zone_width,
+			filename = "%s_analogdata.out" % (self.name))
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width)
 		self.mode = "sfr"
