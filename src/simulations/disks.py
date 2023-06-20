@@ -14,9 +14,10 @@ if vice.version[:2] < (1, 2):
 	raise RuntimeError("""VICE version >= 1.2.0 is required to produce \
 Johnson et al. (2021) figures. Current: %s""" % (vice.__version__))
 else: pass
-from vice.yields.presets import JW20
+# from vice.yields.presets import JW20
+from . import yields
 from vice.toolkit import hydrodisk
-vice.yields.sneia.settings['fe'] *= 10**0.1
+# vice.yields.sneia.settings['fe'] *= 10**0.1
 from .._globals import END_TIME, MAX_SF_RADIUS, ZONE_WIDTH
 from . import migration
 from . import models
@@ -82,10 +83,14 @@ class diskmodel(vice.milkyway):
 		# 	filename = "%s_analogdata.out" % (name))
 		self.migration.stars = migration.gaussian_migration(self.annuli,
 			zone_width = zone_width,
-			filename = "%s_analogdata.out" % (self.name))
+			filename = "%s_analogdata.out" % (self.name),
+			post_process = self.simple)
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width)
 		self.mode = "sfr"
+		if spec == "subequilibrium":
+			for i in range(self.n_zones): self.zones[i].eta = 0
+		else: pass
 		radial_gas_velocity *= _SECONDS_PER_GYR_
 		radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
 		for i in range(self.n_zones):
@@ -100,11 +105,11 @@ class diskmodel(vice.milkyway):
 					self.migration.gas[i][j] = 0
 
 
-
 	def run(self, *args, **kwargs):
 		out = super().run(*args, **kwargs)
 		self.migration.stars.close_file()
 		return out
+
 
 	@classmethod
 	def from_config(cls, config, **kwargs):
@@ -169,10 +174,11 @@ class star_formation_history:
 		while (i + 1) * zone_width < max_radius:
 			self._radii.append((i + 0.5) * zone_width)
 			self._evol.append({
-					"static": 		models.static,
-					"insideout": 	models.insideout,
-					"lateburst": 	models.lateburst,
-					"outerburst": 	models.outerburst
+					"static": 			models.static,
+					"insideout": 		models.insideout,
+					"lateburst": 		models.lateburst,
+					"outerburst": 		models.outerburst,
+					"subequilibrium":	models.subequilibrium
 				}[spec.lower()]((i + 0.5) * zone_width))
 			i += 1
 
