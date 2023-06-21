@@ -52,6 +52,7 @@ def plot_evolution(axes):
 		sigma_sfr = [_ / area for _ in  zone.history["sfr"]]
 		sigma_in = [_ / area for _ in zone.history["ifr"]]
 		sigma_gas = [_ / area for _ in zone.history["mgas"]]
+		taustar = [gas / sfr * 1.e-9 for gas, sfr in zip(sigma_gas, sigma_sfr)]
 		oh = zone.history["[o/h]"]
 		feh = zone.history["[fe/h]"]
 		ofe = zone.history["[o/fe]"]
@@ -68,8 +69,7 @@ def plot_evolution(axes):
 		axes[7].plot(time,
 			zdot_flow(zone, output.zones["zone%d" % (zone_idx + 1)]),
 			**kwargs)
-		# axes[7].plot(time[:-1], velocity_comparison(radius, zone,
-		# 	output.zones["zone%d" % (zone_idx + 1)]), **kwargs)
+		axes[8].plot(time, taustar, **kwargs)
 
 	for i, lookback in enumerate(_LOOKBACK_TIMES_):
 		oh = []
@@ -116,65 +116,17 @@ def zdot_flow(zone_output, outer_neighbor):
 	return rates
 
 
-# def velocity_comparison(radius, zone_output, outer_neighbor):
-# 	values = []
-# 	for i in range(len(zone_output.history["time"]) - 1):
-# 		if zone_output.history["sfr"][i]:
-# 			taustar = 1.e-9 * (zone_output.history["mgas"][i] / 
-# 				zone_output.history["sfr"][i])
-# 		else:
-# 			taustar = float("inf")
-# 		eta = zone_output.history["eta_0"][i]
-# 		r = zone_output.history["r_eff"][i]
-# 		mdotstar = zone_output.history["sfr"][i]
-# 		mddotstar = (zone_output.history["sfr"][i + 1] - mdotstar) / (
-# 			zone_output.history["time"][1] - zone_output.history["time"][0])
-# 		if mdotstar:
-# 			deriv = mddotstar / mdotstar
-# 		else:
-# 			deriv = float("inf")
-# 		if zone_output.history["z(o)"][i]:
-# 			yieldratio = zone_output.ccsne_yields["o"] / (taustar *
-# 				zone_output.history["z(o)"][i])
-# 		else:
-# 			yieldratio = float("nan")
-# 		a = (1 + eta - r) / taustar + deriv - yieldratio
-
-# 		area = np.pi * ((radius + _ZONE_WIDTH_)**2 - radius**2)
-# 		area_outer = np.pi * ((radius + 2 * _ZONE_WIDTH_)**2 -
-# 			(radius + _ZONE_WIDTH_)**2)
-# 		sigma_g = zone_output.history["mgas"][i] / area
-# 		sigma_outer = outer_neighbor.history["mgas"][i] / area_outer
-# 		dlnsigmag_dr = (sigma_outer - sigma_g) / (sigma_g * _ZONE_WIDTH_)
-# 		if zone_output.history["z(o)"][i]:
-# 			dlnz_dr = (outer_neighbor.history["z(o)"][i] -
-# 				zone_output.history["z(o)"][i]) / (
-# 				zone_output.history["z(o)"][i] * _ZONE_WIDTH_)
-# 		else:
-# 			dlnz_dr = float("nan")
-# 		b = (1 / radius + dlnsigmag_dr + dlnz_dr)**(-1)
-
-# 		vg = float(sys.argv[3]) * _KPC_PER_KM_ * _SECONDS_PER_GYR_
-
-# 		if abs(vg) > abs(a * b):
-# 			values.append(abs(vg) - abs(a * b))
-# 		else:
-# 			values.append(float("nan"))
-
-# 	return values
-
-
 def setup_axes():
 	plt.clf()
 	fig = plt.figure(figsize = (15, 15))
 	axes = []
-	for i in range(8):
+	for i in range(9):
 		axes.append(fig.add_subplot(331 + i))
-		if i < 4 or i == 7:
+		if i < 4 or i >= 7:
 			axes[i].set_xlabel(r"Time [Gyr]")
 			axes[i].set_xlim([0, 13.2])
 		else: pass
-		if i < 3: axes[i].set_yscale("log")
+		if i < 3 or i == 8: axes[i].set_yscale("log")
 	axes[0].set_ylabel(r"$\dot{\Sigma}_\star$ [M$_\odot$ kpc$^{-2}$ yr$^{-1}$]")
 	axes[1].set_ylabel(
 		r"$\dot{\Sigma}_\text{in}$ [M$_\odot$ kpc$^{-2}$ yr$^{-1}$]")
@@ -188,7 +140,7 @@ def setup_axes():
 	axes[6].set_ylabel(r"$dN_\star/d$[O/H]")
 	axes[7].set_xlabel(r"Time [Gyr]")
 	axes[7].set_ylabel(r"$\dot{Z}_\text{O,flow} / Z_\text{O}$ [Gyr$^{-1}$]")
-	# axes[7].set_ylabel(r"Flows are overpowering sink if $>$ 0")
+	axes[8].set_ylabel(r"$\tau_\star$ [Gyr]")
 	return axes
 
 

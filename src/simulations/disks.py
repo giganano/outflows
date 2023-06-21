@@ -88,8 +88,23 @@ class diskmodel(vice.milkyway):
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width)
 		self.mode = "sfr"
+		# for i in range(self.n_zones):
+		# 	inner = i * zone_width
+		# 	self.zones[i].tau_star = 2 * m.exp((inner + zone_width / 2) / 8)
+		# 	self.zones[i].schmidt = True
+		# 	self.zones[i].MgSchmidt = (1.e9 * self.zones[i].tau_star *
+		# 		self.zones[i].func.surface_density._evol[i].norm / m.e *
+		# 		m.pi * ((inner + zone_width)**2 - inner**2))
+		# 	eta = (vice.yields.ccsne.settings['o'] /
+		# 		vice.solar_z['o'] * 10**(0.06 * (inner + zone_width / 2 - 8))
+		# 		- 0.6 + self.zones[i].tau_star /
+		# 		self.zones[i].func.surface_density._evol[i].timescale)
+		# 	self.zones[i].eta = eta if eta >= 0 else 0
 		if spec == "subequilibrium":
 			for i in range(self.n_zones): self.zones[i].eta = 0
+			for elem in self.zones[0].elements:
+				vice.yields.ccsne.settings[elem] /= 3
+				vice.yields.sneia.settings[elem] /= 3
 		else: pass
 		radial_gas_velocity *= _SECONDS_PER_GYR_
 		radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
@@ -171,14 +186,15 @@ class star_formation_history:
 		self._evol = []
 		i = 0
 		max_radius = 20 # kpc, defined by ``vice.milkyway`` object.
-		while (i + 1) * zone_width < max_radius:
+		while (i + 1) * zone_width <= max_radius:
 			self._radii.append((i + 0.5) * zone_width)
 			self._evol.append({
-					"static": 			models.static,
-					"insideout": 		models.insideout,
-					"lateburst": 		models.lateburst,
-					"outerburst": 		models.outerburst,
-					"subequilibrium":	models.subequilibrium
+					"static": 				models.static,
+					"insideout": 			models.insideout,
+					"lateburst": 			models.lateburst,
+					"outerburst": 			models.outerburst,
+					"subequilibrium":		models.subequilibrium,
+					"simple-exponential":	models.simple_exponential
 				}[spec.lower()]((i + 0.5) * zone_width))
 			i += 1
 
