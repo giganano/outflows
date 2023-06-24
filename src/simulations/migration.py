@@ -188,17 +188,17 @@ class gaussian_migration:
 				pass
 			return zone
 		else: 
-			# if self.post_process:
-			if time < self.end_time:
-				return zone
+			if self.post_process:
+				if time < self.end_time:
+					return zone
+				else:
+					R = Rform + self.dR
+					return int((R / self.zone_width))
 			else:
-				R = Rform + self.dR
+				# Interpolate between Rform and Rfinal at current time
+				R = self.interpolator(Rform, Rform + self.dR, tform, time)
+				# return int((R / self.zone_width) - 0.5) # ??? reason for -0.5?
 				return int((R / self.zone_width))
-			# else:
-			# 	# Interpolate between Rform and Rfinal at current time
-			# 	R = self.interpolator(Rform, Rform + self.dR, tform, time)
-			# 	# return int((R / self.zone_width) - 0.5) # ??? reason for -0.5?
-			# 	return int((R / self.zone_width))
 
 	def close_file(self):
 		r"""
