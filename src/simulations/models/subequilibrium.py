@@ -9,14 +9,14 @@ class subequilibrium(exponential):
 
 	def __init__(self, radius, dt = 0.01, dr = 0.1):
 		taustar0 = 2
-		yieldsolar = vice.yields.ccsne.settings['o'] / vice.solar_z['o']
 		N = 1.5
 		Rg = 4
 		grad = -0.06
-		super().__init__(radius,
-			timescale = taustar0 / yieldsolar * m.exp(
-				(N - 1) * radius / Rg + (radius - 8) * grad * m.log(10))
-			)
+		ralpha = -(grad * m.log(10))**(-1)
+		tausfh = taustar0 * vice.solar_z['o'] / vice.yields.ccsne.settings['o']
+		tausfh *= m.exp((N - 1) * radius / Rg)
+		tausfh *= m.exp((radius - 8) / ralpha)
+		super().__init__(radius, timescale = tausfh)
 		self.norm *= normalize(self, gradient, radius, dt = dt, dr = dr)
 
 

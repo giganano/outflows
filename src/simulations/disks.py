@@ -81,13 +81,26 @@ class diskmodel(vice.milkyway):
 		# self.migration.stars = migration.diskmigration(self.annuli,
 		# 	N = Nstars, mode = migration_mode,
 		# 	filename = "%s_analogdata.out" % (name))
+			# for elem in self.zones[0].elements:
+			# 	vice.yields.ccsne.settings['o'] /= 2
+			# 	vice.yields.sneia.settings['o'] /= 2
 		self.migration.stars = migration.gaussian_migration(self.annuli,
 			zone_width = zone_width,
 			filename = "%s_analogdata.out" % (self.name),
 			post_process = self.simple)
 		self.evolution = star_formation_history(spec = spec,
-			zone_width = zone_width)
+			zone_width = zone_width, timestep = self.zones[0].dt)
 		self.mode = "sfr"
+		if spec == "simple-exponential":
+			for i in range(self.n_zones):
+				self.zones[i].eta = 0
+				radius = ZONE_WIDTH * (i + 0.5)
+				# print(radius)
+				self.zones[i].tau_star = 2 * m.exp(radius / 6)
+				self.zones[i].schmidt = True
+				self.zones[i].MgSchmidt = (self.zones[i].tau_star *
+					self.zones[i].func.surface_density._evol[i].norm / m.e *
+					1.e9)
 		# for i in range(self.n_zones):
 		# 	inner = i * zone_width
 		# 	self.zones[i].tau_star = 2 * m.exp((inner + zone_width / 2) / 8)
@@ -100,12 +113,12 @@ class diskmodel(vice.milkyway):
 		# 		- 0.6 + self.zones[i].tau_star /
 		# 		self.zones[i].func.surface_density._evol[i].timescale)
 		# 	self.zones[i].eta = eta if eta >= 0 else 0
-		if spec == "subequilibrium":
-			for i in range(self.n_zones): self.zones[i].eta = 0
-			for elem in self.zones[0].elements:
-				vice.yields.ccsne.settings[elem] /= 3
-				vice.yields.sneia.settings[elem] /= 3
-		else: pass
+		# if spec == "subequilibrium":
+		# 	for i in range(self.n_zones): self.zones[i].eta = 0
+		# 	for elem in self.zones[0].elements:
+		# 		vice.yields.ccsne.settings[elem] /= 3
+		# 		vice.yields.sneia.settings[elem] /= 3
+		# else: pass
 		radial_gas_velocity *= _SECONDS_PER_GYR_
 		radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
 		for i in range(self.n_zones):
@@ -181,7 +194,7 @@ class star_formation_history:
 			Simulation time in Gyr.
 	"""
 
-	def __init__(self, spec = "static", zone_width = 0.1):
+	def __init__(self, spec = "static", zone_width = 0.1, timestep = 0.01):
 		self._radii = []
 		self._evol = []
 		i = 0
@@ -195,7 +208,8 @@ class star_formation_history:
 					"outerburst": 			models.outerburst,
 					"subequilibrium":		models.subequilibrium,
 					"simple-exponential":	models.simple_exponential
-				}[spec.lower()]((i + 0.5) * zone_width))
+				}[spec.lower()]((i + 0.5) * zone_width, dr = zone_width,
+					dt = timestep))
 			i += 1
 
 	def __call__(self, radius, time):
