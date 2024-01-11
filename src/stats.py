@@ -29,9 +29,9 @@ def skewnormal_estimate_mode(a, mean, std):
 	return mean + std * factor
 
 
-def skewnormal_mode_sample(sample, bins = np.linspace(-3, 2, 1001)):
+def skewnormal_mode_sample(sample, bins = np.linspace(-3, 2, 1001), **kwargs):
 	centers = [(a + b) / 2 for a, b in zip(bins[:-1], bins[1:])]
-	dist, _ = np.histogram(sample, bins = bins, density = True)
+	dist, _ = np.histogram(sample, bins = bins, density = True, **kwargs)
 	opt, cov = curve_fit(skewnormal, centers, dist, p0 = [1, 0, 1])
 	return skewnormal_estimate_mode(opt[0], opt[1], opt[2])
 
