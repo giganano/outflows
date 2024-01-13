@@ -40,7 +40,7 @@ if __name__ == "__main__":
 	line1 = ax.plot([-1, -2], [-1, -2], c = named_colors()["black"],
 		linestyle = "-", label = r"$\eta$")[0]
 	line2 = ax.plot([-1, -2], [-1, -2], c = named_colors()["black"],
-		linestyle = ":", label = r"$\mu_\text{flow}$")[0]
+		linestyle = ":", label = r"$-\mu_\text{flow}$")[0]
 	kwargs = {
 		"loc": mpl_loc("lower right"),
 		"handlelength": 1.5,
