@@ -85,11 +85,11 @@ class diskmodel(vice.milkyway):
 			# 	vice.yields.ccsne.settings['o'] /= 2
 			# 	vice.yields.sneia.settings['o'] /= 2
 		for i in range(self.n_zones):
+			# self.zones[i].eta = 0
 			radius = ZONE_WIDTH * (i + 0.5)
 			eta = vice.yields.ccsne.settings['o'] / vice.solar_z['o']
 			eta *= m.exp(0.06 * (radius - 8) * m.log(10))
 			eta -= 0.6
-			# print(radius, eta)
 			if eta > 0:
 				self.zones[i].eta = eta
 			else:
