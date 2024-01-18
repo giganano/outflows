@@ -260,6 +260,17 @@ class modified_exponential(exponential):
 				type(value)))
 
 
+class sinusoid:
+
+	def __init__(self, amplitude = 1, period = 1, phase = 0):
+		self.amplitude = amplitude
+		self.period = period
+		self.phase = phase
+
+	def __call__(self, time):
+		return self.amplitude * m.sin(2 * m.pi * time / self.period + self.phase)
+
+
 class gaussian:
 
 	r"""

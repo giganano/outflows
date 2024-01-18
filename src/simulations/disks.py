@@ -16,6 +16,7 @@ Johnson et al. (2021) figures. Current: %s""" % (vice.__version__))
 else: pass
 # from vice.yields.presets import JW20
 from . import yields
+from .sfe import sfe, sfe_oscil
 from vice.toolkit import hydrodisk
 # vice.yields.sneia.settings['fe'] *= 10**0.1
 from .._globals import END_TIME, MAX_SF_RADIUS, ZONE_WIDTH
@@ -78,12 +79,14 @@ class diskmodel(vice.milkyway):
 		else:
 			Nstars = 2 * int(MAX_SF_RADIUS / zone_width * END_TIME / self.dt *
 				self.n_stars)
+
 		# self.migration.stars = migration.diskmigration(self.annuli,
 		# 	N = Nstars, mode = migration_mode,
 		# 	filename = "%s_analogdata.out" % (name))
 			# for elem in self.zones[0].elements:
 			# 	vice.yields.ccsne.settings['o'] /= 2
 			# 	vice.yields.sneia.settings['o'] /= 2
+
 		for i in range(self.n_zones):
 			# self.zones[i].eta = 0
 			radius = ZONE_WIDTH * (i + 0.5)
@@ -94,6 +97,17 @@ class diskmodel(vice.milkyway):
 				self.zones[i].eta = eta
 			else:
 				self.zones[i].eta = 0
+
+		for i in range(self.n_zones):
+			rmin = ZONE_WIDTH * i
+			area = m.pi * ((rmin + ZONE_WIDTH)**2 - rmin**2)
+			if spec == "SFEoscil":
+				spec = "insideout"
+				self.zones[i].tau_star = sfe_oscil(area, mode = "sfr",
+					amplitude = 0.5, period = 2)
+			else:
+				self.zones[i].tau_star = sfe(area, mode = "sfr")
+
 		self.migration.stars = migration.gaussian_migration(self.annuli,
 			zone_width = zone_width,
 			filename = "%s_analogdata.out" % (self.name),
@@ -101,16 +115,18 @@ class diskmodel(vice.milkyway):
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width, timestep = self.zones[0].dt)
 		self.mode = "sfr"
-		if spec == "simple-exponential" or spec == "subequilibrium":
-			for i in range(self.n_zones):
-				self.zones[i].eta = 0
-				radius = ZONE_WIDTH * (i + 0.5)
-				# print(radius)
-				self.zones[i].tau_star = 2 * m.exp(radius / 6)
-				self.zones[i].schmidt = True
-				self.zones[i].MgSchmidt = (self.zones[i].tau_star *
-					self.zones[i].func.surface_density._evol[i].norm / m.e *
-					1.e9)
+
+		# if spec == "simple-exponential" or spec == "subequilibrium":
+		# 	for i in range(self.n_zones):
+		# 		self.zones[i].eta = 0
+		# 		radius = ZONE_WIDTH * (i + 0.5)
+		# 		# print(radius)
+		# 		self.zones[i].tau_star = 2 * m.exp(radius / 6)
+		# 		self.zones[i].schmidt = True
+		# 		self.zones[i].MgSchmidt = (self.zones[i].tau_star *
+		# 			self.zones[i].func.surface_density._evol[i].norm / m.e *
+		# 			1.e9)
+
 		# for i in range(self.n_zones):
 		# 	inner = i * zone_width
 		# 	self.zones[i].tau_star = 2 * m.exp((inner + zone_width / 2) / 8)
@@ -129,6 +145,7 @@ class diskmodel(vice.milkyway):
 		# 		vice.yields.ccsne.settings[elem] /= 3
 		# 		vice.yields.sneia.settings[elem] /= 3
 		# else: pass
+		
 		radial_gas_velocity *= _SECONDS_PER_GYR_
 		radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
 		for i in range(self.n_zones):
@@ -214,6 +231,7 @@ class star_formation_history:
 			self._evol.append({
 					"static": 				models.static,
 					"insideout": 			models.insideout,
+					"sfroscil": 			models.SFRoscil,
 					"lateburst": 			models.lateburst,
 					"outerburst": 			models.outerburst,
 					"subequilibrium":		models.subequilibrium,

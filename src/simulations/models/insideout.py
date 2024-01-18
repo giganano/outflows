@@ -3,7 +3,7 @@ This file declares the time-dependence of the star formation history at a
 given radius in the fiducial inside-out model from Johnson et al. (2021).
 """
 
-from .utils import modified_exponential, get_bin_number, interpolate
+from .utils import modified_exponential, get_bin_number, interpolate, sinusoid
 from .normalize import normalize
 from .gradient import gradient
 import math as m
@@ -76,6 +76,19 @@ class insideout(modified_exponential):
 		else:
 			return interpolate(radii[-2], timescales[-2], radii[-1],
 				timescales[-1], radius)
+
+
+class SFRoscil(insideout, sinusoid):
+
+	def __init__(self, radius, dt = 0.01, dr = 0.1, amplitude = 0.5, period = 2,
+		phase = 0):
+		sinusoid.__init__(self, amplitude = amplitude, period = period,
+			phase = phase)
+		insideout.__init__(self, radius, dt = dt, dr = dr)
+
+	def __call__(self, time):
+		return insideout.__call__(self, time) * (
+			1 + sinusoid.__call__(self, time))
 
 
 def _read_sanchez_data():
