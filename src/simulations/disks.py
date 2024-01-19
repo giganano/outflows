@@ -22,7 +22,7 @@ from vice.toolkit import hydrodisk
 from .._globals import END_TIME, MAX_SF_RADIUS, ZONE_WIDTH
 from . import migration
 from . import models
-from .models.utils import get_bin_number, interpolate
+from .models.utils import get_bin_number, interpolate, gaussian
 from .models.gradient import gradient
 import math as m
 import sys
@@ -146,18 +146,33 @@ class diskmodel(vice.milkyway):
 		# 		vice.yields.sneia.settings[elem] /= 3
 		# else: pass
 		
+		# # CONSTANT GAS VELOCITY
+		# radial_gas_velocity *= _SECONDS_PER_GYR_
+		# radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
+		# for i in range(self.n_zones):
+		# 	for j in range(self.n_zones):
+		# 		if i - 1 == j:
+		# 			# normalized to 10 Myr time interval
+		# 			numerator = radial_gas_velocity**2 * 0.01**2
+		# 			numerator -= 2 * i * zone_width * radial_gas_velocity * 0.01
+		# 			denominator = zone_width**2 * (2 * i + 1)
+		# 			self.migration.gas[i][j] = numerator / denominator
+		# 		else:
+		# 			self.migration.gas[i][j] = 0
+
+		# VARIABLE GAS VELOCITY
 		radial_gas_velocity *= _SECONDS_PER_GYR_
 		radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
 		for i in range(self.n_zones):
 			for j in range(self.n_zones):
 				if i - 1 == j:
 					# normalized to 10 Myr time interval
-					numerator = radial_gas_velocity**2 * 0.01**2
-					numerator -= 2 * i * zone_width * radial_gas_velocity * 0.01
-					denominator = zone_width**2 * (2 * i + 1)
-					self.migration.gas[i][j] = numerator / denominator
+					self.migration.gas[i][j] = variable_gas_velocity_migration(
+						i * zone_width, radial_gas_velocity)
 				else:
 					self.migration.gas[i][j] = 0
+
+
 
 
 	def run(self, *args, **kwargs):
@@ -196,6 +211,24 @@ class diskmodel(vice.milkyway):
 		model.setup_nthreads = config.setup_nthreads
 		model.nthreads = config.nthreads
 		return model
+
+
+class variable_gas_velocity_migration(gaussian):
+
+	def __init__(self, radius, baseline, zone_width = 0.1,
+		mean = 6.5, amplitude = 1, std = 1):
+		self.radius = radius
+		self.baseline = baseline
+		self.zone_width = zone_width
+		super().__init__(mean = mean, amplitude = amplitude, std = std)
+
+	def __call__(self, time):
+		# normalized to a 10 Myr time interval
+		vgas = self.baseline * (1 + super().__call__(time))
+		numerator = vgas**2 * 0.01**2
+		numerator -= 2 * self.radius * vgas * 0.01
+		denominator = (self.radius + self.zone_width)**2 - self.radius**2
+		return numerator / denominator
 
 
 class star_formation_history:
