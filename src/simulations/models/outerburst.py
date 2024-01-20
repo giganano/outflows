@@ -3,7 +3,7 @@ This file declares the time-dependence of the star formation history at a
 given radius in the outerburst model from Johnson et al. (2021).
 """
 
-from .utils import modified_exponential, gaussian
+from .utils import modified_exponential, gaussian, skewnormal
 from .lateburst import _BURST_TIME_, lateburst
 from .insideout import _TAU_RISE_, insideout
 from .normalize import normalize
@@ -16,26 +16,43 @@ _RADIUS_ = 6 # radius in kpc beyond which there is a late starburst
 def burst_amplitude(radius):
 	if radius > 4:
 		testval = m.exp((radius - 4) / 6) - 1
-		if testval > 1.5:
-			return 1.5
-		else:
-			return testval
+		# if testval > 2: testval = 2
+		if testval > 3: testval = 3
+		return testval
 	else:
 		return 0
 
-class outerburst(modified_exponential, gaussian):
+# class outerburst(modified_exponential, gaussian):
+
+# 	def __init__(self, radius, dt = 0.01, dr = 0.1):
+# 		modified_exponential.__init__(self,
+# 			timescale = insideout.timescale(radius),
+# 			rise = 2)
+# 		gaussian.__init__(self, mean = 8, amplitude = burst_amplitude(radius),
+# 			std = 0.75)
+# 		self._prefactor = 1
+# 		self._prefactor = normalize(self, gradient, radius, dt = dt, dr = dr)
+
+# 	def __call__(self, time):
+# 		return self._prefactor * modified_exponential.__call__(self, time) * (
+# 			1 + gaussian.__call__(self, time))
+
+class outerburst(modified_exponential, skewnormal):
 
 	def __init__(self, radius, dt = 0.01, dr = 0.1):
 		modified_exponential.__init__(self,
 			timescale = insideout.timescale(radius),
 			rise = 2)
-		gaussian.__init__(self, mean = 7, amplitude = burst_amplitude(radius))
+		skewnormal.__init__(self, mean = 7, amplitude = burst_amplitude(radius),
+			# std = 1, skewness = 2)
+			std = 1.5, skewness = 3)
 		self._prefactor = 1
 		self._prefactor = normalize(self, gradient, radius, dt = dt, dr = dr)
 
 	def __call__(self, time):
 		return self._prefactor * modified_exponential.__call__(self, time) * (
-			1 + gaussian.__call__(self, time))
+			1 + skewnormal.__call__(self, time))
+
 
 
 # class outerburst(lateburst, insideout):

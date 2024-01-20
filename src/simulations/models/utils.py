@@ -18,6 +18,7 @@ gaussian : object
 	A Gaussian in an arbitrary x-coordinate.
 """
 
+from scipy.stats import skewnorm
 import math as m
 import numbers
 
@@ -366,4 +367,15 @@ class gaussian:
 		else:
 			raise TypeError("Std must be a real number. Got: %s" % (
 				type(value)))
+
+
+class skewnormal(gaussian):
+
+	def __init__(self, skewness = 0, **kwargs):
+		super().__init__(**kwargs)
+		self.skewness = skewness
+
+	def __call__(self, x):
+		return self.amplitude / self.std * skewnorm.pdf(
+			(x - self.mean) / self.std, self.skewness)
 
