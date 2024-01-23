@@ -71,11 +71,15 @@ underscores. (Default: \"fe_o\")""",
 		type = int,
 		default = 1)
 
-	parser.add_argument("--radial-gas-velocity",
-		help = """The velocity of radially flowing gas in km/s, negative for \
-an inawrd flow. (Default: 0)""",
-		type = float,
-		default = 0)
+	parser.add_argument("--radial-gas-flows",
+		help = "Includes radial gas flows in the model.",
+		action = "store_true")
+
+# 	parser.add_argument("--radial-gas-velocity",
+# 		help = """The velocity of radially flowing gas in km/s, negative for \
+# an inawrd flow. (Default: 0)""",
+# 		type = float,
+# 		default = 0)
 
 	return parser
 
@@ -96,11 +100,12 @@ def model(args):
 		elements = args.elements.split('_'),
 		setup_nthreads = args.setup_nthreads,
 		nthreads = args.nthreads,
-		radial_gas_velocity = args.radial_gas_velocity
+		# radial_gas_velocity = args.radial_gas_velocity
 	)
 	kwargs = dict(
 		name = args.name,
-		spec = args.evolution
+		spec = args.evolution,
+		radial_gas_flows = args.radial_gas_flows
 	)
 	if args.migration == "post-process":
 		kwargs["simple"] = True

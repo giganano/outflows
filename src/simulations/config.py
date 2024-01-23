@@ -43,7 +43,6 @@ class config:
 			"bins": 					[-3 + 0.01 * i for i in range(601)],
 			"setup_nthreads": 			1,
 			"nthreads": 				1,
-			"radial_gas_velocity": 		0
 		}
 		for i in kwargs.keys(): defaults[i] = kwargs[i]
 		self.timestep_size = 			defaults["timestep_size"]
@@ -53,7 +52,6 @@ class config:
 		self.bins = 					defaults["bins"]
 		self.setup_nthreads = 			defaults["setup_nthreads"]
 		self.nthreads = 				defaults["nthreads"]
-		self.radial_gas_velocity = 		defaults["radial_gas_velocity"]
 
 	@property
 	def timestep_size(self):

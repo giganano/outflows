@@ -17,7 +17,9 @@ else: pass
 # from vice.yields.presets import JW20
 from . import yields
 from .sfe import sfe, sfe_oscil
+from .gasflows import radial_gas_velocity_profile
 from vice.toolkit import hydrodisk
+from vice.toolkit.interpolation import interp_scheme_1d
 # vice.yields.sneia.settings['fe'] *= 10**0.1
 from .._globals import END_TIME, MAX_SF_RADIUS, ZONE_WIDTH
 from . import migration
@@ -29,6 +31,27 @@ import sys
 
 _SECONDS_PER_GYR_ = 3.1536e16
 _KPC_PER_KM_ = 3.24e-17
+
+
+def eta_function(radius):
+	etasun = vice.yields.ccsne.settings['o'] / vice.solar_z['o'] - 0.6
+	return etasun * m.exp(-0.062 * m.log(10) * (radius - 8))
+	# return 0
+
+def molecular_tau_star(time):
+	return 2 * ((0.5 + time) / 13.7)**0.5
+
+def sfe_function(time, sigma_sfr):
+	mol = molecular_tau_star(time)
+	N = plaw_index(time, sigma_sfr)
+	return mol * (sigma_sfr * mol / 1e8)**(1 / N - 1)
+
+def plaw_index(time, sigma_sfr):
+	mol = molecular_tau_star(time)
+	if sigma_sfr > 1e8 / mol:
+		return 1
+	else:
+		return 1.5
 
 
 class diskmodel(vice.milkyway):
@@ -71,9 +94,10 @@ class diskmodel(vice.milkyway):
 
 	def __init__(self, zone_width = 0.1, name = "diskmodel", spec = "static",
 		verbose = True, migration_mode = "diffusion",
-		radial_gas_velocity = 0, **kwargs):
+		radial_gas_flows = False, dt = 0.01, **kwargs):
 		super().__init__(zone_width = zone_width, name = name,
 			verbose = verbose, **kwargs)
+		self.dt = dt
 		if self.zone_width <= 0.2 and self.dt <= 0.02 and self.n_stars >= 6:
 			Nstars = 3102519
 		else:
@@ -87,20 +111,22 @@ class diskmodel(vice.milkyway):
 			# 	vice.yields.ccsne.settings['o'] /= 2
 			# 	vice.yields.sneia.settings['o'] /= 2
 
-		for i in range(self.n_zones):
+		# for i in range(self.n_zones):
 			# self.zones[i].eta = 0
-			radius = ZONE_WIDTH * (i + 0.5)
-			eta = vice.yields.ccsne.settings['o'] / vice.solar_z['o']
-			eta *= m.exp(0.06 * (radius - 8) * m.log(10))
-			eta -= 0.6
-			if eta > 0:
-				self.zones[i].eta = eta
-			else:
-				self.zones[i].eta = 0
+			# radius = ZONE_WIDTH * (i + 0.5)
+			# eta = vice.yields.ccsne.settings['o'] / vice.solar_z['o']
+			# eta *= m.exp(0.06 * (radius - 8) * m.log(10))
+			# eta -= 0.6
+			# if eta > 0:
+			# 	self.zones[i].eta = eta
+			# else:
+			# 	self.zones[i].eta = 0
+		for i in range(self.n_zones):
+			self.zones[i].eta = eta_function(zone_width * (i + 0.5))
 
 		for i in range(self.n_zones):
-			rmin = ZONE_WIDTH * i
-			area = m.pi * ((rmin + ZONE_WIDTH)**2 - rmin**2)
+			rmin = zone_width * i
+			area = m.pi * ((rmin + zone_width)**2 - rmin**2)
 			if spec == "SFEoscil":
 				spec = "insideout"
 				self.zones[i].tau_star = sfe_oscil(area, mode = "sfr",
@@ -115,6 +141,45 @@ class diskmodel(vice.milkyway):
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width, timestep = self.zones[0].dt)
 		self.mode = "sfr"
+
+		if radial_gas_flows:
+			vgas_engine = radial_gas_velocity_profile(
+				self.evolution, eta_function, lambda r: 0.7, sfe_function,
+				plaw_index)
+			vgas_all = []
+			times = [self.dt * i for i in range(int(END_TIME / self.dt) + 10)]
+			for i in range(len(times)):
+				radii, vgas = vgas_engine(i * self.dt) # in kpc/Gyr
+				vgas_all.append(vgas)
+			gas_matrix_elements = []
+			for i in range(self.n_zones):
+				yvals = []
+				vgas = [row[i] for row in vgas_all]
+				for j in range(len(times)):
+					# normalized to a 10 Myr time interval
+					# don't turn on the flow until this many timesteps have passed
+					if j > 100:
+						numerator = vgas[j]**2 * 0.01**2
+						numerator -= 2 * i * zone_width * vgas[j] * 0.01
+						denominator = zone_width**2 * (2 * i + 1)
+						yvals.append(numerator / denominator)
+						if yvals[-1] > 1:
+							print(i, j, "%.5f" % (yvals[-1]), "%.2e" % (vgas[j]))
+							# quit()
+					else:
+						yvals.append(0)
+				gas_matrix_elements.append(interp_scheme_1d(times, yvals))
+			for i in range(self.n_zones):
+				for j in range(self.n_zones):
+					if i - 1 == j:
+						self.migration.gas[i][j] = gas_matrix_elements[i]
+					else:
+						self.migration.gas[i][j] = 0
+		else:
+			for i in range(self.n_zones):
+				for j in range(self.n_zones):
+					self.migration.gas[i][j] = 0
+
 
 		# if spec == "simple-exponential" or spec == "subequilibrium":
 		# 	for i in range(self.n_zones):
@@ -147,18 +212,18 @@ class diskmodel(vice.milkyway):
 		# else: pass
 		
 		# CONSTANT GAS VELOCITY
-		radial_gas_velocity *= _SECONDS_PER_GYR_
-		radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
-		for i in range(self.n_zones):
-			for j in range(self.n_zones):
-				if i - 1 == j:
-					# normalized to 10 Myr time interval
-					numerator = radial_gas_velocity**2 * 0.01**2
-					numerator -= 2 * i * zone_width * radial_gas_velocity * 0.01
-					denominator = zone_width**2 * (2 * i + 1)
-					self.migration.gas[i][j] = numerator / denominator
-				else:
-					self.migration.gas[i][j] = 0
+		# radial_gas_velocity *= _SECONDS_PER_GYR_
+		# radial_gas_velocity *= _KPC_PER_KM_ # vrad now in kpc / Gyr
+		# for i in range(self.n_zones):
+		# 	for j in range(self.n_zones):
+		# 		if i - 1 == j:
+		# 			# normalized to 10 Myr time interval
+		# 			numerator = radial_gas_velocity**2 * 0.01**2
+		# 			numerator -= 2 * i * zone_width * radial_gas_velocity * 0.01
+		# 			denominator = zone_width**2 * (2 * i + 1)
+		# 			self.migration.gas[i][j] = numerator / denominator
+		# 		else:
+		# 			self.migration.gas[i][j] = 0
 
 		# # VARIABLE GAS VELOCITY
 		# radial_gas_velocity *= _SECONDS_PER_GYR_
@@ -202,9 +267,8 @@ class diskmodel(vice.milkyway):
 		model : ``diskmodel``
 			The ``diskmodel`` object with the proper settings.
 		"""
-		model = cls(zone_width = config.zone_width, 
-			radial_gas_velocity = config.radial_gas_velocity, **kwargs)
-		model.dt = config.timestep_size
+		model = cls(zone_width = config.zone_width, dt = config.timestep_size,
+			**kwargs)
 		model.n_stars = config.star_particle_density
 		model.bins = config.bins
 		model.elements = config.elements
