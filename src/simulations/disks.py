@@ -26,17 +26,20 @@ from . import migration
 from . import models
 from .models.utils import get_bin_number, interpolate, gaussian, skewnormal
 from .models.gradient import gradient
+import warnings
 import math as m
 import sys
+import os
 
 _SECONDS_PER_GYR_ = 3.1536e16
 _KPC_PER_KM_ = 3.24e-17
 
 
 def eta_function(radius):
-	etasun = vice.yields.ccsne.settings['o'] / vice.solar_z['o'] - 0.6
-	return etasun * m.exp(-0.062 * m.log(10) * (radius - 8))
+	# etasun = vice.yields.ccsne.settings['o'] / vice.solar_z['o'] - 0.6
+	# return etasun * m.exp(0.062 * m.log(10) * (radius - 8))
 	# return 0
+	return 1
 
 def molecular_tau_star(time):
 	return 2 * ((0.5 + time) / 13.7)**0.5
@@ -158,14 +161,24 @@ class diskmodel(vice.milkyway):
 				for j in range(len(times)):
 					# normalized to a 10 Myr time interval
 					# don't turn on the flow until this many timesteps have passed
-					if j > 100:
+					if j > 10:
+						radius = i * zone_width
 						numerator = vgas[j]**2 * 0.01**2
-						numerator -= 2 * i * zone_width * vgas[j] * 0.01
-						denominator = zone_width**2 * (2 * i + 1)
-						yvals.append(numerator / denominator)
-						if yvals[-1] > 1:
-							print(i, j, "%.5f" % (yvals[-1]), "%.2e" % (vgas[j]))
-							# quit()
+						numerator -= 2 * radius * vgas[j] * 0.01
+						denominator = 2 * radius * zone_width + zone_width**2
+						areafrac = numerator / denominator
+						if areafrac * self.dt / 0.01 > 1:
+							warnings.warn("""\
+Area fraction larger than 1. Consider comparing results with different \
+timestep sizes to assess the impact of numerical artifacts.""")
+							areafrac = 0.01 / self.dt - 1.e-9
+						elif areafrac < 0:
+							areafrac = 1e-9
+						else: pass
+						yvals.append(areafrac)
+						# if yvals[-1] * self.dt / 0.01 > 1: os.system(
+						# 	"echo \"%d %d %.5f %.2e\" >> err.out" % (
+						# 		i, j, yvals[-1], vgas[j]))
 					else:
 						yvals.append(0)
 				gas_matrix_elements.append(interp_scheme_1d(times, yvals))

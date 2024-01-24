@@ -37,7 +37,12 @@ class insideout(modified_exponential):
 	def __init__(self, radius, dt = 0.01, dr = 0.1):
 		super().__init__(timescale = insideout.timescale(radius),
 			rise = _TAU_RISE_)
+		# floor falls exponentially with radius
+		self.floor = 3.e-3 * m.exp(-radius / 2)
 		self.norm *= normalize(self, gradient, radius, dt = dt, dr = dr)
+
+	def __call__(self, time):
+		return self.floor + super().__call__(time)
 
 	@staticmethod
 	def timescale(radius, Re = 5):

@@ -46,12 +46,13 @@ class outerburst(modified_exponential, skewnormal):
 		skewnormal.__init__(self, mean = 7, amplitude = burst_amplitude(radius),
 			# std = 1, skewness = 2)
 			std = 1.5, skewness = 3)
+		self.floor = 3.e-3 * m.exp(-radius / 2)
 		self._prefactor = 1
 		self._prefactor = normalize(self, gradient, radius, dt = dt, dr = dr)
 
 	def __call__(self, time):
-		return self._prefactor * modified_exponential.__call__(self, time) * (
-			1 + skewnormal.__call__(self, time))
+		return self.floor + self._prefactor * modified_exponential.__call__(
+			self, time) * (1 + skewnormal.__call__(self, time))
 
 
 
