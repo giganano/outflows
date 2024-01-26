@@ -18,8 +18,9 @@ else: pass
 from . import yields
 from .sfe import sfe, sfe_oscil
 from .gasflows import radial_gas_velocity_profile
+from .gasflows import inward_flow_driver, outward_flow_driver
 from vice.toolkit import hydrodisk
-from vice.toolkit.interpolation import interp_scheme_1d
+# from vice.toolkit.interpolation import interp_scheme_1d
 # vice.yields.sneia.settings['fe'] *= 10**0.1
 from .._globals import END_TIME, MAX_SF_RADIUS, ZONE_WIDTH
 from . import migration
@@ -147,14 +148,15 @@ class diskmodel(vice.milkyway):
 
 		if radial_gas_flows:
 			vgas_engine = radial_gas_velocity_profile(
-				self.evolution, eta_function, lambda r: 0.7, sfe_function,
-				plaw_index)
+				self.evolution, eta_function, sfe_function, plaw_index,
+				lambda r: 0.7, lambda r: 0.0)
 			vgas_all = []
 			times = [self.dt * i for i in range(int(END_TIME / self.dt) + 10)]
 			for i in range(len(times)):
 				radii, vgas = vgas_engine(i * self.dt) # in kpc/Gyr
 				vgas_all.append(vgas)
-			gas_matrix_elements = []
+			matrix_elements_inward = []
+			matrix_elements_outward = []
 			for i in range(self.n_zones):
 				yvals = []
 				vgas = [row[i] for row in vgas_all]
@@ -181,13 +183,22 @@ timestep sizes to assess the impact of numerical artifacts.""")
 						# 		i, j, yvals[-1], vgas[j]))
 					else:
 						yvals.append(0)
-				gas_matrix_elements.append(interp_scheme_1d(times, yvals))
+				matrix_elements_inward.append(inward_flow_driver(times, yvals))
+				matrix_elements_outward.append(outward_flow_driver(times, yvals))
 			for i in range(self.n_zones):
 				for j in range(self.n_zones):
 					if i - 1 == j:
-						self.migration.gas[i][j] = gas_matrix_elements[i]
+						# inward gas flows
+						self.migration.gas[i][j] = matrix_elements_inward[i]
+					elif i + 1 == j:
+						# outward gas flows
+						self.migration.gas[i][j] = matrix_elements_outward[i]
 					else:
 						self.migration.gas[i][j] = 0
+					# if i - 1 == j:
+					# 	self.migration.gas[i][j] = gas_matrix_elements[i]
+					# else:
+					# 	self.migration.gas[i][j] = 0
 		else:
 			for i in range(self.n_zones):
 				for j in range(self.n_zones):
