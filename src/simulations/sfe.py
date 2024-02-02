@@ -1,6 +1,7 @@
 
 from vice.toolkit import J21_sf_law
 from .models.utils import sinusoid
+from . import inputs
 
 class sfe(J21_sf_law):
 
@@ -28,6 +29,8 @@ class sfe(J21_sf_law):
 				self._CRITICAL_SURFACE_DENSITY_)**(1 / self._KS_PLAW_INDEX_ - 1)
 			return molecular * max(1, scaling)
 
+	def molecular(self, time):
+		return inputs.molecular_tau_star(time)
 
 class sfe_oscil(sfe, sinusoid):
 

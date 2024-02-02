@@ -15,7 +15,8 @@ if vice.version[:2] < (1, 2):
 Johnson et al. (2021) figures. Current: %s""" % (vice.__version__))
 else: pass
 # from vice.yields.presets import JW20
-from . import yields
+# from . import yields
+from . import inputs
 from .sfe import sfe, sfe_oscil
 from .gasflows import radial_gas_velocity_profile
 from .gasflows import inward_flow_driver, outward_flow_driver
@@ -36,26 +37,26 @@ _SECONDS_PER_GYR_ = 3.1536e16
 _KPC_PER_KM_ = 3.24e-17
 
 
-def eta_function(radius):
-	# etasun = vice.yields.ccsne.settings['o'] / vice.solar_z['o'] - 0.6
-	# return etasun * m.exp(0.062 * m.log(10) * (radius - 8))
-	# return 0
-	return 1
+# def eta_function(radius):
+# 	# etasun = vice.yields.ccsne.settings['o'] / vice.solar_z['o'] - 0.6
+# 	# return etasun * m.exp(0.062 * m.log(10) * (radius - 8))
+# 	# return 0
+# 	return 1
 
-def molecular_tau_star(time):
-	return 2 * ((0.5 + time) / 13.7)**0.5
+# def molecular_tau_star(time):
+# 	return 2 * ((0.5 + time) / 13.7)**0.5
 
-def sfe_function(time, sigma_sfr):
-	mol = molecular_tau_star(time)
-	N = plaw_index(time, sigma_sfr)
-	return mol * (sigma_sfr * mol / 1e8)**(1 / N - 1)
+# def sfe_function(time, sigma_sfr):
+# 	mol = molecular_tau_star(time)
+# 	N = plaw_index(time, sigma_sfr)
+# 	return mol * (sigma_sfr * mol / 1e8)**(1 / N - 1)
 
-def plaw_index(time, sigma_sfr):
-	mol = molecular_tau_star(time)
-	if sigma_sfr > 1e8 / mol:
-		return 1
-	else:
-		return 1.5
+# def plaw_index(time, sigma_sfr):
+# 	mol = molecular_tau_star(time)
+# 	if sigma_sfr > 1e8 / mol:
+# 		return 1
+# 	else:
+# 		return 1.5
 
 
 class diskmodel(vice.milkyway):
@@ -126,7 +127,12 @@ class diskmodel(vice.milkyway):
 			# else:
 			# 	self.zones[i].eta = 0
 		for i in range(self.n_zones):
-			self.zones[i].eta = eta_function(zone_width * (i + 0.5))
+			def eta(time, radius = zone_width * (i + 0.5)):
+				return inputs.eta_function(radius, time)
+			self.zones[i].eta = eta
+			self.zones[i].Zin = {}
+			for elem in self.zones[i].elements:
+				self.zones[i].Zin[elem] = vice.solar_z[elem] * 10**inputs.XH_CGM
 
 		for i in range(self.n_zones):
 			rmin = zone_width * i
@@ -148,8 +154,8 @@ class diskmodel(vice.milkyway):
 
 		if radial_gas_flows:
 			vgas_engine = radial_gas_velocity_profile(
-				self.evolution, eta_function, sfe_function, plaw_index,
-				lambda r: 0.7, lambda r: 0.0)
+				self.evolution, inputs.eta_function, inputs.sfe_function,
+				inputs.plaw_index, inputs.beta_phi_in, inputs.beta_phi_out)
 			vgas_all = []
 			times = [self.dt * i for i in range(int(END_TIME / self.dt) + 10)]
 			for i in range(len(times)):
@@ -162,11 +168,15 @@ class diskmodel(vice.milkyway):
 				vgas = [row[i] for row in vgas_all]
 				for j in range(len(times)):
 					# normalized to a 10 Myr time interval
-					# don't turn on the flow until this many timesteps have passed
+					# don't turn on the flow until 10 timesteps have passed
 					if j > 10:
 						radius = i * zone_width
-						numerator = vgas[j]**2 * 0.01**2
-						numerator -= 2 * radius * vgas[j] * 0.01
+						if vgas[j] > 0: # outward flow
+							numerator = 2 * (radius + zone_width) * vgas[j] * 0.01
+							numerator -= vgas[j]**2 * 0.01**2
+						else: # inward flow
+							numerator = vgas[j]**2 * 0.01**2
+							numerator -= 2 * radius * vgas[j] * 0.01
 						denominator = 2 * radius * zone_width + zone_width**2
 						areafrac = numerator / denominator
 						if areafrac * self.dt / 0.01 > 1:
