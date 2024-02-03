@@ -21,7 +21,7 @@ def plaw_index(time, sigma_sfr):
 	else:
 		return 1.5
 
-def eta_function(radius, time, scale = 4, rsun = 8):
+def eta_function(radius, time, scale = 2, rsun = 8):
 	etasun = YIELDFACTOR - 0.6
 	return etasun * m.exp((radius - rsun) / scale)
 	# return 0
@@ -32,8 +32,8 @@ def beta_phi_in(radius, time):
 	return 0.7
 
 def beta_phi_out(radius, time):
-	return 0
-	# return 1
+	# return 0
+	return 1
 
 
 ##### things that shouldn't need modified below this line
