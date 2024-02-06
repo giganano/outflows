@@ -3,6 +3,7 @@ import vice
 import math as m
 
 METDEPYIELDS = False
+R_ETA = 4
 YIELDFACTOR = 1
 XH_CGM = -0.7
 
@@ -21,8 +22,9 @@ def plaw_index(time, sigma_sfr):
 	else:
 		return 1.5
 
-def eta_function(radius, time, scale = 2, rsun = 8):
-	etasun = YIELDFACTOR - 0.6
+def eta_function(radius, time, scale = R_ETA, rsun = 8):
+	# etasun = YIELDFACTOR - 0.6
+	etasun = 1
 	return etasun * m.exp((radius - rsun) / scale)
 	# return 0
 	# return 1
