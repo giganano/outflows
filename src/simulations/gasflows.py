@@ -21,8 +21,8 @@ class radial_gas_velocity_profile:
 		vgas = len(radii) * [0.]
 		for i in range(1, len(radii)):
 			if radii[i] <= MAX_SF_RADIUS:
-				vgas[i] = vgas[i - 1] + dr * self.dvdr(time, radii[i], vgas[i - 1],
-					dr = dr, dt = dt)
+				vgas[i] = vgas[i - 1] + dr * self.dvdr(time, radii[i - 1],
+					vgas[i - 1], dr = dr, dt = dt)
 			else:
 				vgas[i] = 0
 		return [radii, vgas] # vgas in kpc/Gyr
@@ -37,11 +37,15 @@ class radial_gas_velocity_profile:
 		dvdr += self.eta(radius, time) / self.sfe(time, sfr) * (
 			self.beta_phi_out(radius, time) - self.beta_phi_in(radius, time)
 		) / (self.beta_phi_in(radius, time) - 1)
-		x = (self.beta_phi_in(radius, time) - 2)
-		x /= radius * (self.beta_phi_in(radius, time) - 1)
-		dsfr_dr = (1.e9 * self.sigma_sfh(radius + dr, time) - sfr) / dr
-		x += 1 / self.N(time, sfr) * dsfr_dr / sfr
-		dvdr -= vgas * x
+		if radius:
+			x = (self.beta_phi_in(radius, time) - 2)
+			x /= radius * (self.beta_phi_in(radius, time) - 1)
+			dsfr_dr = (1.e9 * self.sigma_sfh(radius + dr, time) - sfr) / dr
+			x += 1 / self.N(time, sfr) * dsfr_dr / sfr
+			dvdr -= vgas * x
+		else:
+			dvdr *= 1 - self.beta_phi_in(radius, time)
+			dvdr /= 3 - 2 * self.beta_phi_in(radius, time)
 		return dvdr
 
 
