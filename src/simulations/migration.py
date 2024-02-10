@@ -5,6 +5,15 @@ import math as m
 from .._globals import END_TIME, ZONE_WIDTH
 
 
+class no_migration(hydrodisk.hydrodiskstars):
+
+	def __call__(self, zone, tform, time):
+		return zone
+
+	def close_file(self):
+		pass
+
+
 class diskmigration(hydrodisk.hydrodiskstars):
 
 	r"""

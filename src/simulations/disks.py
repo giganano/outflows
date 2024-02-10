@@ -19,7 +19,7 @@ else: pass
 from . import inputs
 from .sfe import sfe, sfe_oscil
 from .gasflows import radial_gas_velocity_profile
-from .gasflows import inward_flow_driver, outward_flow_driver
+from .gasflows import radial_flow_driver
 from vice.toolkit import hydrodisk
 # from vice.toolkit.interpolation import interp_scheme_1d
 # vice.yields.sneia.settings['fe'] *= 10**0.1
@@ -148,6 +148,7 @@ class diskmodel(vice.milkyway):
 			zone_width = zone_width,
 			filename = "%s_analogdata.out" % (self.name),
 			post_process = self.simple)
+		# self.migration.stars = migration.no_migration(self.annuli)
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width, timestep = self.zones[0].dt)
 		self.mode = "sfr"
@@ -155,7 +156,8 @@ class diskmodel(vice.milkyway):
 		if radial_gas_flows:
 			vgas_engine = radial_gas_velocity_profile(
 				self.evolution, inputs.eta_function, inputs.sfe_function,
-				inputs.plaw_index, inputs.beta_phi_in, inputs.beta_phi_out)
+				inputs.plaw_index, inputs.beta_phi_in, inputs.beta_phi_out,
+				outfilename = "%s_gasvelocities.out" % (self.name))
 			vgas_all = []
 			times = [self.dt * i for i in range(int(END_TIME / self.dt) + 10)]
 			for i in range(len(times)):
@@ -164,7 +166,8 @@ class diskmodel(vice.milkyway):
 			matrix_elements_inward = []
 			matrix_elements_outward = []
 			for i in range(self.n_zones):
-				yvals = []
+				yvals_inward = []
+				yvals_outward = []
 				vgas = [row[i] for row in vgas_all]
 				for j in range(len(times)):
 					# normalized to a 10 Myr time interval
@@ -187,14 +190,22 @@ timestep sizes to assess the impact of numerical artifacts.""")
 						elif areafrac < 0:
 							areafrac = 1e-9
 						else: pass
-						yvals.append(areafrac)
+						if vgas[j] > 0:
+							yvals_outward.append(areafrac)
+							yvals_inward.append(1e-10)
+						else:
+							yvals_outward.append(1e-10)
+							yvals_inward.append(areafrac)
 						# if yvals[-1] * self.dt / 0.01 > 1: os.system(
 						# 	"echo \"%d %d %.5f %.2e\" >> err.out" % (
 						# 		i, j, yvals[-1], vgas[j]))
 					else:
-						yvals.append(0)
-				matrix_elements_inward.append(inward_flow_driver(times, yvals))
-				matrix_elements_outward.append(outward_flow_driver(times, yvals))
+						yvals_inward.append(1e-10)
+						yvals_outward.append(1e-10)
+				matrix_elements_inward.append(
+					radial_flow_driver(times, yvals_inward))
+				matrix_elements_outward.append(
+					radial_flow_driver(times, yvals_outward))
 			for i in range(self.n_zones):
 				for j in range(self.n_zones):
 					if i - 1 == j:
