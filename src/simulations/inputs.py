@@ -3,7 +3,7 @@ import vice
 import math as m
 
 METDEPYIELDS = False
-R_ETA = 4
+R_ETA = 3
 YIELDFACTOR = 1
 # XH_CGM = -float("inf")
 XH_CGM = -0.7
@@ -35,8 +35,8 @@ def beta_phi_in(radius, time):
 	return 0.7
 
 def beta_phi_out(radius, time):
-	# return 0
-	return 1
+	return 0
+	# return 1
 
 
 ##### things that shouldn't need modified below this line
