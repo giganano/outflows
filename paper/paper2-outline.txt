@@ -1,0 +1,124 @@
+
+1. 	Radial flow schematic
+
+2.	Top row of panels: velocity profiles as functions of radius
+		Left: \beta_\phi,out = 0 with \eta ~ e^R, \eta = 1, \eta = 0
+		Middle: \beta_\phi,out = 1 with \eta ~ e^R, \eta = 1, \eta = 0
+		Right: \eta = 0 with \beta_\phi,out varying with radius
+
+	Bottom row of panels:
+		Left: Different rotational velocity assumptions for accreting material
+		Right: Observed velocity distribution from Di Teodoro & Peek (2021).
+
+	Take-away: Choice of \eta and \beta_\phi,out significantly more important
+		than choice of \beta_\phi,in, because \eta determines the speed of the
+		baryon cycle overall, which in turns sets the rate of angular momentum
+		exchange.
+
+	Use fiducial SFH at the present day to compute velocity profiles, simply
+	forward referencing that discussion in a subsequent section. This figure
+	should appear probably in section 2.2, which describes the radial flow
+	coefficients -- go ahead and plug in v_r from 2.1 and show differential
+	equation for v_r as function of radius in 2.2.
+
+3. Fiducial GCE model mosaic
+
+	- SFR as function of time at 3 radii
+	- IFR as function of time at same radii
+	- [O/H] vs. time at same radii
+	- [O/H] vs. radius at snapshots
+	- radial velocity profiles at snapshots
+	- \eta, \mu_g, \mu_x vs. radius at snapshots
+
+	Take-away: point is to show-case the evolution of the fiducial model.
+
+4. [O/H] vs. radius at present-day for different choices of R_\eta.
+
+	Take-away: To first order, R_\eta sets the slope of the gradient.
+
+5. [O/H] vs. time at R = 8 kpc and [O/H] vs. radius at snapshots for the
+	fiducial model and one choice of lower yields and \eta.
+
+	Extras to add onto the left-panel:
+		- A variant where the infall metallicity is zero.
+		- A variant where all SN yields rise toward low metallicity -> hasten
+			the approach to equilibrium?
+		- Overlay [O/H] vs. age at 8 kpc from linear regressions to APOGEE
+			sample in paper 1 (transparent background line)
+
+	Take-away: Models with long depletion times have slow baryon cycles and a
+	slow approach to equilibrium, whereas models with short depletion times
+	have fast baryon cycles and a quick approach to equilibrium. Sinks are required in order for the approach to equilibrium to happen within the
+	first ~few Gyr of the disk lifetime.
+
+	Combined with Fig. 4: The slope of the equlibrium gradient and the
+	timescale on which it is reached are dictated by R_\eta and \eta_\odot.
+	Our results indicate that R_\eta ~ 3-4 kpc with \eta > ~0.6 is required to
+	explain the gradient in the MW.
+
+	Discuss how similar effects arise when we force the CGM metallicity to
+	zero (but does having it grow with time mean that the approach to
+	equilibrium is too slow and we need higher yields and \eta's?)
+
+6. [O/H] vs. radius at snapshots. Put population-averaged gradient measurements
+	from APOGEE as transparent points in the background
+
+	Top-row of panels has \beta_\phi,out = 0
+	Bottom-row of panels has \beta_\phi,out = 1
+
+	- Left: \eta ~ e^R with R_\eta = 3 kpc and \eta_\odot = 0.6 (fiducial)
+	- Mid-left: \eta = 1 at all radii
+	- Right: \eta = 0 at all radii
+
+	Take-away: some models work, some don't. The ones that do have \eta ~ e^R.
+
+7. \Gamma decomposition for each model in the previous figure at the final
+	timestep.
+
+	Take-away: the detailed physics of what drives the gradient differs based
+	on the details of the angular momentum exchange. We selected the fiducial
+	model parameters because they seem the most phyiscal for reasons.
+
+8. \eta and \mu_O vs. radius for \beta_\phi,out = 0 and 1.
+
+	Take-away: Even in the \beta_\phi,out = 0 case, the outflow still plays
+	an extremely key role in setting the equilibrium abundance. \Gamma becomes
+	determined entirely by \Gamma_\star, but it is ultimately \eta which makes
+	the velocities fast enough to have substantial \Gamma_\star in the first
+	place.
+
+9. Outer-burst GCE model mosaic
+
+	- Same panels as fiducial model mosaic, but for snapshots in the lower
+	panels, choose those that occur near the burst. Swap out \eta, \mu_x, and
+	\mu_g as a function of radius for gradient slope as a function of radius.
+
+	Take-away: point is to show-case the evolution of the outer-burst model.
+
+10. [O/H]_burst - [O/H]_risefall at R = 4 (left), 8 (middle), 12 (right) kpc
+	vs. time.
+
+	- Look at models with \eta ~ e^R, \eta = 1, and \eta = 0, each with and
+		without radial gas flows. Show-case the ones that are interesting.
+
+	Take-away: In the equilibrium model, a major merger induces an accretion
+		driven starburst, which acts as a perturbation from the equilibrium
+		state that relaxes on ~Gyr timescales.
+
+11. Show models in which R_\eta mildly increases (left) and decreases (right)
+	with time.
+
+	Take-away: this choice causes the gradient to steepen (left) or flatten
+	(right) with time, which could coincide with time-evolution in the galaxy's
+	properties with age, but at fixed gradient normalization.
+
+
+
+
+
+
+**Note**: Copy the outerburst model with the fiducial parameter choice and one
+	of the time-evolving R_\eta models over to the comparison to Lu et al.
+	(2022) in paper 1.
+
+

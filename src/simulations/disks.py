@@ -26,7 +26,8 @@ from vice.toolkit import hydrodisk
 from .._globals import END_TIME, MAX_SF_RADIUS, ZONE_WIDTH
 from . import migration
 from . import models
-from .models.utils import get_bin_number, interpolate, gaussian, skewnormal
+from .models.utils import (get_bin_number, interpolate, gaussian, skewnormal,
+	modified_exponential)
 from .models.gradient import gradient
 import warnings
 import math as m
@@ -130,9 +131,6 @@ class diskmodel(vice.milkyway):
 			def eta(time, radius = zone_width * (i + 0.5)):
 				return inputs.eta_function(radius, time)
 			self.zones[i].eta = eta
-			self.zones[i].Zin = {}
-			for elem in self.zones[i].elements:
-				self.zones[i].Zin[elem] = vice.solar_z[elem] * 10**inputs.XH_CGM
 
 		for i in range(self.n_zones):
 			rmin = zone_width * i
@@ -152,6 +150,17 @@ class diskmodel(vice.milkyway):
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width, timestep = self.zones[0].dt)
 		self.mode = "sfr"
+
+		for i in range(self.n_zones):
+			self.zones[i].Zin = {}
+			for elem in self.zones[i].elements:
+				# self.zones[i].Zin[elem] = vice.solar_z[elem] * 10**inputs.XH_CGM
+				self.zones[i].Zin[elem] = modified_exponential(
+					norm = vice.solar_z[elem] * 10**inputs.XH_CGM,
+					rise = inputs.sfe_function(self.dt,
+						self.evolution(8, self.dt)) / (
+						0.6 + self.zones[i].eta(0)),
+					timescale = float("inf"))
 
 		if radial_gas_flows:
 			vgas_engine = radial_gas_velocity_profile(

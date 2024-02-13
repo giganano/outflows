@@ -4,6 +4,7 @@ import math as m
 
 METDEPYIELDS = False
 R_ETA = 3
+ETA_SUN = 0.6
 YIELDFACTOR = 1
 # XH_CGM = -float("inf")
 XH_CGM = -0.7
@@ -24,9 +25,7 @@ def plaw_index(time, sigma_sfr):
 		return 1.5
 
 def eta_function(radius, time, scale = R_ETA, rsun = 8):
-	# etasun = YIELDFACTOR - 0.6
-	etasun = 0.6
-	return etasun * m.exp((radius - rsun) / scale)
+	return ETA_SUN * m.exp((radius - rsun) / scale)
 	# return 0
 	# return 1
 	# return 0.3
