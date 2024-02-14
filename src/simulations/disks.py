@@ -146,7 +146,6 @@ class diskmodel(vice.milkyway):
 			zone_width = zone_width,
 			filename = "%s_analogdata.out" % (self.name),
 			post_process = self.simple)
-		# self.migration.stars = migration.no_migration(self.annuli)
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width, timestep = self.zones[0].dt)
 		self.mode = "sfr"
@@ -158,7 +157,7 @@ class diskmodel(vice.milkyway):
 				self.zones[i].Zin[elem] = modified_exponential(
 					norm = vice.solar_z[elem] * 10**inputs.XH_CGM,
 					rise = inputs.sfe_function(self.dt,
-						self.evolution(8, self.dt)) / (
+						1e9 * self.evolution(8, self.dt)) / ( # yr^-1 -> Gyr^-1
 						0.6 + self.zones[i].eta(0)),
 					timescale = float("inf"))
 

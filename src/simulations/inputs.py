@@ -3,8 +3,8 @@ import vice
 import math as m
 
 METDEPYIELDS = False
-R_ETA = 3
-ETA_SUN = 0.6
+R_ETA = 6
+ETA_SUN = 0.4
 YIELDFACTOR = 1
 # XH_CGM = -float("inf")
 XH_CGM = -0.7
@@ -13,11 +13,13 @@ def molecular_tau_star(time, value_today = 2):
 	return value_today * ((0.5 + time) / 13.7)**0.5
 
 def sfe_function(time, sigma_sfr):
+	# called by gasflows.py, sigma_sfr already has Gyr^-1 time units
 	mol = molecular_tau_star(time)
 	N = plaw_index(time, sigma_sfr)
 	return mol * (sigma_sfr * mol / 1e8)**(1 / N - 1)
 
 def plaw_index(time, sigma_sfr):
+	# called by gasflows.py, sigma_sfr already has Gyr^-1 time units
 	mol = molecular_tau_star(time)
 	if sigma_sfr > 1e8 / mol:
 		return 1
@@ -28,7 +30,7 @@ def eta_function(radius, time, scale = R_ETA, rsun = 8):
 	return ETA_SUN * m.exp((radius - rsun) / scale)
 	# return 0
 	# return 1
-	# return 0.3
+	# return 0.4
 
 def beta_phi_in(radius, time):
 	return 0.7
