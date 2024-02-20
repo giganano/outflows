@@ -16,7 +16,10 @@ class radial_gas_velocity_profile:
 		self.N = N # function of sigma_sfh and time
 		self.beta_phi_in = beta_phi_in # function of radius and time
 		self.beta_phi_out = beta_phi_out # function of radius and time
-		self.outfile = open(outfilename, 'w')
+		if outfilename is not None:
+			self.outfile = open(outfilename, 'w')
+		else:
+			self.outfile = None
 
 	# def __call__(self, time, dr = 0.1, dt = 0.01):
 	# 	dense_radii, dense_vgas = self.__call_sub__(time, dr = dr / 10,
@@ -36,8 +39,11 @@ class radial_gas_velocity_profile:
 					vgas[i - 1], dr = dr, dt = dt)
 			else:
 				vgas[i] = 0
-		for i in range(len(radii)):
-			self.outfile.write("%.2e\t%.2e\t%.2e\n" % (radii[i], time, vgas[i]))
+		if self.outfile is not None:
+			for i in range(len(radii)):
+				self.outfile.write("%.2e\t%.2e\t%.2e\n" % (
+					radii[i], time, vgas[i]))
+		else: pass
 		return [radii, vgas] # vgas in kpc/Gyr
 
 	def dvdr(self, time, radius, vgas, dr = 0.1, dt = 0.01):

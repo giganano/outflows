@@ -4,7 +4,7 @@
 2.	Top row of panels: velocity profiles as functions of radius
 		Left: \beta_\phi,out = 0 with \eta ~ e^R, \eta = 1, \eta = 0
 		Middle: \beta_\phi,out = 1 with \eta ~ e^R, \eta = 1, \eta = 0
-		Right: \eta = 0 with \beta_\phi,out varying with radius
+		Right: \eta = 0 with variations in \beta_\phi,in
 
 	Bottom row of panels:
 		Left: Different rotational velocity assumptions for accreting material

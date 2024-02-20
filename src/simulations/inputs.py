@@ -3,7 +3,7 @@ import vice
 import math as m
 
 METDEPYIELDS = False
-R_ETA = 6
+R_ETA = 4
 ETA_SUN = 0.4
 YIELDFACTOR = 1
 # XH_CGM = -float("inf")
