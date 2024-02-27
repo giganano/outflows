@@ -1,7 +1,7 @@
 
 from vice.toolkit import J21_sf_law
 from .models.utils import sinusoid
-from . import inputs
+# from . import inputs
 
 class sfe(J21_sf_law):
 

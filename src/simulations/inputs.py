@@ -6,8 +6,8 @@ METDEPYIELDS = False
 R_ETA = 3
 ETA_SUN = 0.4
 YIELDFACTOR = 1
-# XH_CGM = -float("inf")
-XH_CGM = -0.7
+XH_CGM = -float("inf")
+# XH_CGM = -0.7
 
 def molecular_tau_star(time, value_today = 2):
 	return value_today * ((0.5 + time) / 13.7)**0.5

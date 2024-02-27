@@ -1,5 +1,11 @@
 
-# import vice
+import vice
+from vice.yields.presets import JW20
+vice.yields.sneia.settings['fe'] *= 10**0.1
+
+for elem in ["o", "fe"]:
+	vice.yields.ccsne.settings[elem] /= 3
+	vice.yields.sneia.settings[elem] /= 3
 
 # vice.yields.ccsne.settings['o'] = 0.015
 # vice.yields.sneia.settings['o'] = 0

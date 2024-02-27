@@ -13,7 +13,7 @@ class subequilibrium(modified_exponential):
 		radii = [_[0] for _ in raw]
 		diff = [abs(_ - radius) for _ in radii]
 		idx = diff.index(min(diff))
-		super().__init__(radius, timescale = raw[idx][1], rise = raw[idx][2])
+		super().__init__(radius, rise = raw[idx][1], timescale = raw[idx][2])
 		self.norm = normalize(self, gradient, radius, dt = dt, dr = dr)
 		# tausfh = [_[1] for _ in raw]
 		# taurise = [_[2] for _ in raw]

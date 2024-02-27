@@ -15,9 +15,9 @@ if vice.version[:2] < (1, 2):
 Johnson et al. (2021) figures. Current: %s""" % (vice.__version__))
 else: pass
 # from vice.yields.presets import JW20
-# from . import yields
-from . import inputs
-from .sfe import sfe, sfe_oscil
+from . import yields
+# from . import inputs
+# from .sfe import sfe, sfe_oscil
 from .gasflows import radial_gas_velocity_profile
 from .gasflows import radial_flow_driver
 from vice.toolkit import hydrodisk
@@ -127,20 +127,30 @@ class diskmodel(vice.milkyway):
 			# 	self.zones[i].eta = eta
 			# else:
 			# 	self.zones[i].eta = 0
-		for i in range(self.n_zones):
-			def eta(time, radius = zone_width * (i + 0.5)):
-				return inputs.eta_function(radius, time)
-			self.zones[i].eta = eta
 
-		for i in range(self.n_zones):
-			rmin = zone_width * i
-			area = m.pi * ((rmin + zone_width)**2 - rmin**2)
-			if spec == "SFEoscil":
-				spec = "insideout"
-				self.zones[i].tau_star = sfe_oscil(area, mode = "sfr",
-					amplitude = 0.5, period = 2)
-			else:
-				self.zones[i].tau_star = sfe(area, mode = "sfr")
+		if spec == "subequilibrium":
+			for i in range(self.n_zones): self.zones[i].eta = 0
+		else: pass
+
+		for i in range(self.n_zones): self.zones[i].eta /= 3
+
+		# for i in range(self.n_zones):
+		# 	if spec == "subequilibrium":
+		# 		self.zones[i].eta = 0
+		# 	else:
+		# 		def eta(time, radius = zone_width * (i + 0.5)):
+		# 			return inputs.eta_function(radius, time)
+		# 		self.zones[i].eta = eta
+
+		# for i in range(self.n_zones):
+		# 	rmin = zone_width * i
+		# 	area = m.pi * ((rmin + zone_width)**2 - rmin**2)
+		# 	if spec == "SFEoscil":
+		# 		spec = "insideout"
+		# 		self.zones[i].tau_star = sfe_oscil(area, mode = "sfr",
+		# 			amplitude = 0.5, period = 2)
+		# 	else:
+		# 		self.zones[i].tau_star = sfe(area, mode = "sfr")
 
 		self.migration.stars = migration.gaussian_migration(self.annuli,
 			zone_width = zone_width,
@@ -150,16 +160,16 @@ class diskmodel(vice.milkyway):
 			zone_width = zone_width, timestep = self.zones[0].dt)
 		self.mode = "sfr"
 
-		for i in range(self.n_zones):
-			self.zones[i].Zin = {}
-			for elem in self.zones[i].elements:
-				# self.zones[i].Zin[elem] = vice.solar_z[elem] * 10**inputs.XH_CGM
-				self.zones[i].Zin[elem] = modified_exponential(
-					norm = vice.solar_z[elem] * 10**inputs.XH_CGM,
-					rise = inputs.sfe_function(self.dt,
-						1e9 * self.evolution(8, self.dt)) / ( # yr^-1 -> Gyr^-1
-						0.6 + self.zones[i].eta(0)),
-					timescale = float("inf"))
+		# for i in range(self.n_zones):
+		# 	self.zones[i].Zin = {}
+		# 	for elem in self.zones[i].elements:
+		# 		# self.zones[i].Zin[elem] = vice.solar_z[elem] * 10**inputs.XH_CGM
+		# 		self.zones[i].Zin[elem] = modified_exponential(
+		# 			norm = vice.solar_z[elem] * 10**inputs.XH_CGM,
+		# 			rise = inputs.sfe_function(self.dt,
+		# 				1e9 * self.evolution(8, self.dt)) / ( # yr^-1 -> Gyr^-1
+		# 				0.6 + self.zones[i].eta(0)),
+		# 			timescale = float("inf"))
 
 		if radial_gas_flows:
 			vgas_engine = radial_gas_velocity_profile(
