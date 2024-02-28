@@ -29,7 +29,7 @@ from . import models
 from .models.utils import (get_bin_number, interpolate, gaussian, skewnormal,
 	modified_exponential)
 from .models.gradient import gradient
-from .models.subequilibrium import calibrate_subequilibrium
+# from .models.subequilibrium import calibrate_subequilibrium
 import warnings
 import math as m
 import sys
@@ -129,18 +129,6 @@ class diskmodel(vice.milkyway):
 			# else:
 			# 	self.zones[i].eta = 0
 
-		if spec == "subequilibrium":
-			for i in range(self.n_zones):
-				area = m.pi * ((ZONE_WIDTH * (i + 1))**2 - (ZONE_WIDTH * i)**2)
-				self.zones[i].tau_star = sfe(area)
-			calibrate_subequilibrium(eta = 0, yieldsolar = yields.YIELDSOLAR)
-			for i in range(self.n_zones): self.zones[i].eta = 0
-			# calibrate_subequilibrium(eta = 1, yieldsolar = yields.YIELDSOLAR)
-			# for i in range(self.n_zones): self.zones[i].eta = 1
-		else: pass
-
-		# for i in range(self.n_zones): self.zones[i].eta /= 2
-
 		# for i in range(self.n_zones):
 		# 	if spec == "subequilibrium":
 		# 		self.zones[i].eta = 0
@@ -159,12 +147,30 @@ class diskmodel(vice.milkyway):
 		# 	else:
 		# 		self.zones[i].tau_star = sfe(area, mode = "sfr")
 
+		sfh_kwargs = {}
+		if spec == "subequilibrium":
+			for i in range(self.n_zones):
+				area = m.pi * ((ZONE_WIDTH * (i + 1))**2 - (ZONE_WIDTH * i)**2)
+				self.zones[i].tau_star = sfe(area, mode = "sfr")
+			for i in range(self.n_zones): self.zones[i].eta = 0
+			sfh_kwargs["eta"] = self.zones[0].eta
+			sfh_kwargs["yieldsolar"] = yields.YIELDSOLAR
+			sfh_kwargs["N"] = 1.
+		else:
+			etasun = yields.YIELDSOLAR - 0.6
+			reta = 1 / (0.062 * m.log(10))
+			for i in range(self.n_zones):
+				radius = ZONE_WIDTH * (i + 0.5)
+				self.zones[i].eta = etasun * m.exp((radius - 8) / reta)
+
+		# for i in range(self.n_zones): self.zones[i].eta /= 2
+
 		self.migration.stars = migration.gaussian_migration(self.annuli,
 			zone_width = zone_width,
 			filename = "%s_analogdata.out" % (self.name),
 			post_process = self.simple)
 		self.evolution = star_formation_history(spec = spec,
-			zone_width = zone_width, timestep = self.zones[0].dt)
+			zone_width = zone_width, timestep = self.zones[0].dt, **sfh_kwargs)
 		self.mode = "sfr"
 
 		# for i in range(self.n_zones):
@@ -389,7 +395,8 @@ class star_formation_history:
 			Simulation time in Gyr.
 	"""
 
-	def __init__(self, spec = "static", zone_width = 0.1, timestep = 0.01):
+	def __init__(self, spec = "static", zone_width = 0.1, timestep = 0.01,
+		**kwargs):
 		self._radii = []
 		self._evol = []
 		i = 0
@@ -405,7 +412,7 @@ class star_formation_history:
 					"subequilibrium":		models.subequilibrium,
 					"simple-exponential":	models.simple_exponential
 				}[spec.lower()]((i + 0.5) * zone_width, dr = zone_width,
-					dt = timestep))
+					dt = timestep, **kwargs))
 			i += 1
 
 	def __call__(self, radius, time):
