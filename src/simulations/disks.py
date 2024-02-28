@@ -17,7 +17,7 @@ else: pass
 # from vice.yields.presets import JW20
 from . import yields
 # from . import inputs
-# from .sfe import sfe, sfe_oscil
+from .sfe import sfe
 from .gasflows import radial_gas_velocity_profile
 from .gasflows import radial_flow_driver
 from vice.toolkit import hydrodisk
@@ -29,6 +29,7 @@ from . import models
 from .models.utils import (get_bin_number, interpolate, gaussian, skewnormal,
 	modified_exponential)
 from .models.gradient import gradient
+from .models.subequilibrium import calibrate_subequilibrium
 import warnings
 import math as m
 import sys
@@ -129,10 +130,16 @@ class diskmodel(vice.milkyway):
 			# 	self.zones[i].eta = 0
 
 		if spec == "subequilibrium":
+			for i in range(self.n_zones):
+				area = m.pi * ((ZONE_WIDTH * (i + 1))**2 - (ZONE_WIDTH * i)**2)
+				self.zones[i].tau_star = sfe(area)
+			calibrate_subequilibrium(eta = 0, yieldsolar = yields.YIELDSOLAR)
 			for i in range(self.n_zones): self.zones[i].eta = 0
+			# calibrate_subequilibrium(eta = 1, yieldsolar = yields.YIELDSOLAR)
+			# for i in range(self.n_zones): self.zones[i].eta = 1
 		else: pass
 
-		for i in range(self.n_zones): self.zones[i].eta /= 3
+		# for i in range(self.n_zones): self.zones[i].eta /= 2
 
 		# for i in range(self.n_zones):
 		# 	if spec == "subequilibrium":
