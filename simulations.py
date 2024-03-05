@@ -11,7 +11,7 @@ import sys
 
 _MIGRATION_MODELS_ = ["diffusion", "linear", "post-process", "sudden"]
 _EVOLUTION_MODELS_ = ["static", "insideout", "lateburst", "outerburst",
-	"subequilibrium", "simple-exponential", "SFEoscil", "SFRoscil"]
+	"subequilibrium", "subeq-burst", "simple-exponential", "SFEoscil", "SFRoscil"]
 
 def parse():
 	r"""

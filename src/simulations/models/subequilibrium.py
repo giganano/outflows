@@ -20,24 +20,6 @@ class subequilibrium(modified_exponential):
 		if np.isnan(taurise): taurise = TAURISEMAX
 		super().__init__(radius, rise = taurise, timescale = tausfh)
 		self.norm *= normalize(self, gradient, radius, dt = dt, dr = dr)
-		# raw = np.genfromtxt("subequilibrium-input.out")
-		# radii = [_[0] for _ in raw]
-		# diff = [abs(_ - radius) for _ in radii]
-		# idx = diff.index(min(diff))
-		# super().__init__(radius, rise = raw[idx][1], timescale = raw[idx][2])
-		# self.norm *= normalize(self, gradient, radius, dt = dt, dr = dr)
-
-# def calibrate_subequilibrium(**kwargs):
-# 	radii = [ZONE_WIDTH * (i + 0.5) for i in range(200)]
-# 	with open("subequilibrium-input.out", "w") as out:
-# 		out.write("# radius [kpc]    tau_rise [Gyr]    tau_fall [Gyr]\n")
-# 		for r in radii:
-# 			tau_sfh, tau_rise = find_tausfh_taurise(r, eta = 1)
-# 			if np.isnan(tau_sfh): tau_sfh = TAUSFHMAX
-# 			if np.isnan(tau_rise): tau_rise = TAURISEMAX
-# 			out.write("%.3e\t%.3e\t%.3e\n" % (r, tau_rise, tau_sfh))
-# 		out.close()
-
 
 def harmonic(*args):
 	if len(args) > 0:
@@ -89,18 +71,6 @@ class risefall_zalpha:
 		return vice.solar_z["o"] * 10**oh
 		# ralpha = -(np.log(10) * slope)**(-1)
 		# return vice.solar_z["o"] * np.exp(-(radius - 8) / ralpha)
-
-# _DEFAULT_KWARGS_ = {
-# 	"yieldsolar": 1,
-# 	"gradient": -0.062,
-# 	"eta": 0,
-# 	"recycling": 0.4,
-# 	# "taustar": 1.5
-# 	"taustar0": 2,
-# 	"N": 1.5,
-# 	"Rg": 3.75
-# }
-# _KWARGS_ = _DEFAULT_KWARGS_.copy()
 
 class driver:
 

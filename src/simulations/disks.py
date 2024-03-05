@@ -110,6 +110,9 @@ class diskmodel(vice.milkyway):
 		else:
 			Nstars = 2 * int(MAX_SF_RADIUS / zone_width * END_TIME / self.dt *
 				self.n_stars)
+		for i in range(self.n_zones):
+			area = m.pi * ((ZONE_WIDTH * (i + 1))**2 - (ZONE_WIDTH * i)**2)
+			self.zones[i].tau_star = sfe(area, mode = "sfr")
 
 		# self.migration.stars = migration.diskmigration(self.annuli,
 		# 	N = Nstars, mode = migration_mode,
@@ -148,11 +151,11 @@ class diskmodel(vice.milkyway):
 		# 		self.zones[i].tau_star = sfe(area, mode = "sfr")
 
 		sfh_kwargs = {}
-		if spec == "subequilibrium":
-			for i in range(self.n_zones):
-				area = m.pi * ((ZONE_WIDTH * (i + 1))**2 - (ZONE_WIDTH * i)**2)
-				self.zones[i].tau_star = sfe(area, mode = "sfr")
-			for i in range(self.n_zones): self.zones[i].eta = 0
+		if spec in ["subequilibrium", "subeq-burst"]:
+			# for i in range(self.n_zones):
+			# 	area = m.pi * ((ZONE_WIDTH * (i + 1))**2 - (ZONE_WIDTH * i)**2)
+			# 	self.zones[i].tau_star = sfe(area, mode = "sfr")
+			for i in range(self.n_zones): self.zones[i].eta = 0.4
 			sfh_kwargs["eta"] = self.zones[0].eta
 			sfh_kwargs["yieldsolar"] = yields.YIELDSOLAR
 			sfh_kwargs["N"] = 1.
@@ -410,6 +413,7 @@ class star_formation_history:
 					"lateburst": 			models.lateburst,
 					"outerburst": 			models.outerburst,
 					"subequilibrium":		models.subequilibrium,
+					"subeq-burst": 			models.subeq_burst,
 					"simple-exponential":	models.simple_exponential
 				}[spec.lower()]((i + 0.5) * zone_width, dr = zone_width,
 					dt = timestep, **kwargs))

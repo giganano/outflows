@@ -1,7 +1,7 @@
 
 import vice
 
-YIELDSOLAR = 1
+YIELDSOLAR = 3
 FE_CC_FRAC = 0.35
 
 vice.yields.ccsne.settings["o"] = YIELDSOLAR * vice.solar_z["o"]

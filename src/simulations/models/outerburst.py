@@ -15,44 +15,31 @@ _RADIUS_ = 6 # radius in kpc beyond which there is a late starburst
 
 def burst_amplitude(radius):
 	if radius > 4:
-		testval = m.exp((radius - 4) / 6) - 1
-		# if testval > 2: testval = 2
-		if testval > 3: testval = 3
+		testval = m.exp((radius - 4) / 3) - 1
+		if testval > 6: testval = 6
+		print(radius, testval)
 		return testval
 	else:
 		return 0
 
-# class outerburst(modified_exponential, gaussian):
-
-# 	def __init__(self, radius, dt = 0.01, dr = 0.1):
-# 		modified_exponential.__init__(self,
-# 			timescale = insideout.timescale(radius),
-# 			rise = 2)
-# 		gaussian.__init__(self, mean = 8, amplitude = burst_amplitude(radius),
-# 			std = 0.75)
-# 		self._prefactor = 1
-# 		self._prefactor = normalize(self, gradient, radius, dt = dt, dr = dr)
-
-# 	def __call__(self, time):
-# 		return self._prefactor * modified_exponential.__call__(self, time) * (
-# 			1 + gaussian.__call__(self, time))
-
 class outerburst(modified_exponential, skewnormal):
+# class outerburst(modified_exponential, gaussian):
 
 	def __init__(self, radius, dt = 0.01, dr = 0.1):
 		modified_exponential.__init__(self,
 			timescale = insideout.timescale(radius),
 			rise = 2)
-		skewnormal.__init__(self, mean = 7, amplitude = burst_amplitude(radius),
-			# std = 1, skewness = 2)
+		skewnormal.__init__(self, mean = 9, amplitude = burst_amplitude(radius),
 			std = 1.5, skewness = 3)
-		# self.floor = 3.e-3 * m.exp(-radius / 2)
+		# gaussian.__init__(self, mean = 9, amplitude = burst_amplitude(radius),
+		# 	std = 1.5)
 		self._prefactor = 1
 		self._prefactor = normalize(self, gradient, radius, dt = dt, dr = dr)
 
 	def __call__(self, time):
 		return self._prefactor * modified_exponential.__call__(
 			self, time) * (1 + skewnormal.__call__(self, time))
+			# self, time) * (1 + gaussian.__call__(self, time))
 
 
 
