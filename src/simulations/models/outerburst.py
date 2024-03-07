@@ -15,9 +15,8 @@ _RADIUS_ = 6 # radius in kpc beyond which there is a late starburst
 
 def burst_amplitude(radius):
 	if radius > 4:
-		testval = m.exp((radius - 4) / 3) - 1
-		if testval > 6: testval = 6
-		print(radius, testval)
+		testval = m.exp((radius - 4) / 5) - 1
+		if testval > 2: testval = 2
 		return testval
 	else:
 		return 0
@@ -29,8 +28,8 @@ class outerburst(modified_exponential, skewnormal):
 		modified_exponential.__init__(self,
 			timescale = insideout.timescale(radius),
 			rise = 2)
-		skewnormal.__init__(self, mean = 9, amplitude = burst_amplitude(radius),
-			std = 1.5, skewness = 3)
+		skewnormal.__init__(self, mean = 7, amplitude = burst_amplitude(radius),
+			std = 1., skewness = 3)
 		# gaussian.__init__(self, mean = 9, amplitude = burst_amplitude(radius),
 		# 	std = 1.5)
 		self._prefactor = 1
