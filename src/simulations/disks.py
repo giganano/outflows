@@ -176,6 +176,34 @@ class diskmodel(vice.milkyway):
 			zone_width = zone_width, timestep = self.zones[0].dt, **sfh_kwargs)
 		self.mode = "sfr"
 
+		if not m.isinf(yields.XH_CGM):
+			for i in range(self.n_zones):
+				self.zones[i].Zin = {}
+				for e in self.zones[i].elements:
+					self.zones[i].Zin[e] = modified_exponential(
+						norm = vice.solar_z[e] * 10**yields.XH_CGM,
+						rise = 1,
+						timescale = float("inf"))
+		else: pass
+
+		if yields.ETA_VARY:
+			etasun = yields.YIELDSOLAR - 0.6
+			def reta(t):
+				if t < 8:
+					slope = -0.062
+				else:
+					slope = -0.02
+				return -1 / (slope * m.log(10))
+			for i in range(self.n_zones):
+				radius = ZONE_WIDTH * (i + 0.5)
+				def eta(t, r = radius):
+					_reta = reta(t)
+					return etasun * m.exp((r - 8) / _reta)
+				self.zones[i].eta = eta
+		else: pass
+
+
+
 		# for i in range(self.n_zones):
 		# 	self.zones[i].Zin = {}
 		# 	for elem in self.zones[i].elements:
