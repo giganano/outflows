@@ -161,10 +161,14 @@ class diskmodel(vice.milkyway):
 			sfh_kwargs["N"] = 1.
 		else:
 			etasun = yields.YIELDSOLAR - 0.6
+			# reta = 1 / (0.04 * m.log(10))
 			reta = 1 / (0.062 * m.log(10))
+			# reta = 1 / (0.1 * m.log(10))
 			for i in range(self.n_zones):
 				radius = ZONE_WIDTH * (i + 0.5)
+				area = m.pi * ((radius + ZONE_WIDTH)**2 - radius**2)
 				self.zones[i].eta = etasun * m.exp((radius - 8) / reta)
+				self.zones[i].tau_star = sfe(area, mode = "sfr")
 
 		# for i in range(self.n_zones): self.zones[i].eta /= 2
 
