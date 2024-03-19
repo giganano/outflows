@@ -155,7 +155,7 @@ class diskmodel(vice.milkyway):
 			# for i in range(self.n_zones):
 			# 	area = m.pi * ((ZONE_WIDTH * (i + 1))**2 - (ZONE_WIDTH * i)**2)
 			# 	self.zones[i].tau_star = sfe(area, mode = "sfr")
-			for i in range(self.n_zones): self.zones[i].eta = 0.4
+			for i in range(self.n_zones): self.zones[i].eta = 0
 			sfh_kwargs["eta"] = self.zones[0].eta
 			sfh_kwargs["yieldsolar"] = yields.YIELDSOLAR
 			sfh_kwargs["N"] = 1.
