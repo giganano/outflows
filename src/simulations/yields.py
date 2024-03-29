@@ -4,7 +4,7 @@ import vice
 YIELDSOLAR = 3
 FE_CC_FRAC = 0.35
 XH_CGM = -float("inf")
-ETA_VARY = True
+ETA_VARY = False
 METDEPYIELDS = False
 
 vice.yields.ccsne.settings["o"] = YIELDSOLAR * vice.solar_z["o"]
