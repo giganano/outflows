@@ -256,6 +256,7 @@ class gaussian_migration:
 		"""
 		tfrac = (time - tform) / (self.end_time - tform)
 		return Rform + (Rfinal - Rform) * (tfrac**0.33)
+		# return Rform + (Rfinal - Rform) * (tfrac**0.5)
 
 	@staticmethod
 	def migr_scale(age, Rform):
@@ -279,6 +280,8 @@ class gaussian_migration:
 			Scale factor for radial migration $\sigma_{\Delta R}$.
 		"""
 		return 1.35 * (age ** 0.33) * (Rform / 8) ** 0.61
+		# return 1.82 * (age ** 0.33) * (Rform / 8) ** 0.61
+		# return 1.82 * age**0.33
 	
 	@staticmethod
 	def scale_height(age, Rfinal):

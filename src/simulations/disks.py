@@ -168,7 +168,6 @@ class diskmodel(vice.milkyway):
 				radius = ZONE_WIDTH * (i + 0.5)
 				area = m.pi * ((radius + ZONE_WIDTH)**2 - radius**2)
 				self.zones[i].eta = etasun * m.exp((radius - 8) / reta)
-				self.zones[i].tau_star = sfe(area, mode = "sfr")
 
 		# for i in range(self.n_zones): self.zones[i].eta /= 2
 
@@ -176,6 +175,8 @@ class diskmodel(vice.milkyway):
 			zone_width = zone_width,
 			filename = "%s_analogdata.out" % (self.name),
 			post_process = self.simple)
+		# self.migration.stars = migration.diskmigration(self.annuli,
+		# 	filename = "%s_analogdata.out" % (self.name))
 		self.evolution = star_formation_history(spec = spec,
 			zone_width = zone_width, timestep = self.zones[0].dt, **sfh_kwargs)
 		self.mode = "sfr"

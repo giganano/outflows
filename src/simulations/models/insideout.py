@@ -38,14 +38,14 @@ class insideout(modified_exponential):
 	"""
 
 	def __init__(self, radius, dt = 0.01, dr = 0.1):
-		super().__init__(timescale = insideout.timescale(radius),
-			rise = _TAU_RISE_)
-		self.norm *= normalize(self, gradient, radius, dt = dt, dr = dr)
-		# tausfh, taurise = find_tausfh_taurise(radius)
-		# if m.isnan(tausfh): tausfh = TAUSFHMAX
-		# if m.isnan(taurise): taurise = TAURISEMAX
-		# super().__init__(timescale = tausfh, rise = taurise)
+		# super().__init__(timescale = insideout.timescale(radius),
+		# 	rise = _TAU_RISE_)
 		# self.norm *= normalize(self, gradient, radius, dt = dt, dr = dr)
+		tausfh, taurise = find_tausfh_taurise(radius)
+		if m.isnan(tausfh): tausfh = TAUSFHMAX
+		if m.isnan(taurise): taurise = TAURISEMAX
+		super().__init__(timescale = tausfh, rise = taurise)
+		self.norm *= normalize(self, gradient, radius, dt = dt, dr = dr)
 
 	def __call__(self, time):
 		return super().__call__(time)
