@@ -76,7 +76,7 @@ class driver:
 
 	_DEFAULTS_ = {
 		"yieldsolar": 1,
-		"slope": -0.059,
+		"slope": -0.062,
 		"intercept": 0.53,
 		"eta": 0,
 		"recycling": 0.4,

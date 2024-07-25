@@ -280,6 +280,10 @@ class gaussian_migration:
 			Scale factor for radial migration $\sigma_{\Delta R}$.
 		"""
 		return 1.35 * (age ** 0.33) * (Rform / 8) ** 0.61
+		# return 1.81 * (age ** 0.33) * (Rform / 8) ** 0.61 # faster
+		# return 1.00 * (age ** 0.33) * (Rform / 8) ** 0.61 # slower
+
+
 		# return 1.82 * (age ** 0.33) * (Rform / 8) ** 0.61
 		# return 1.82 * age**0.33
 	

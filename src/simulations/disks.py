@@ -158,7 +158,7 @@ class diskmodel(vice.milkyway):
 			for i in range(self.n_zones): self.zones[i].eta = 0
 			sfh_kwargs["eta"] = self.zones[0].eta
 			sfh_kwargs["yieldsolar"] = yields.YIELDSOLAR
-			sfh_kwargs["N"] = 1.
+			sfh_kwargs["N"] = 1.5
 		else:
 			etasun = yields.YIELDSOLAR - 0.6
 			# reta = 1 / (0.04 * m.log(10))
