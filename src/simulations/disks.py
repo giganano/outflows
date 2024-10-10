@@ -187,7 +187,8 @@ class diskmodel(vice.milkyway):
 				for e in self.zones[i].elements:
 					self.zones[i].Zin[e] = modified_exponential(
 						norm = vice.solar_z[e] * 10**yields.XH_CGM,
-						rise = 1,
+						# rise = 1,
+						rise = 3,
 						timescale = float("inf"))
 		else: pass
 
