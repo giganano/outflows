@@ -3,7 +3,7 @@ import vice
 
 YIELDSOLAR = 1
 FE_CC_FRAC = 0.35
-XH_CGM = -0.7
+XH_CGM = -float("inf")
 ETA_VARY = False
 METDEPYIELDS = False
 

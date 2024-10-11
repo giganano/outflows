@@ -6,6 +6,7 @@ from .models.utils import sinusoid
 class sfe(J21_sf_law):
 
 	_CRITICAL_SURFACE_DENSITY_ = 1e8 # Msun/kpc^2
+	# _CRITICAL_SURFACE_DENSITY_ = 1e6 # Msun/kpc^2
 
 	_KS_PLAW_INDEX_ = 1.5 # Kennicutt-Schmidt power-law index
 

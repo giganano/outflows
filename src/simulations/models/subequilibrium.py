@@ -83,6 +83,7 @@ class driver:
 		"taustar0": 2,
 		"N": 1.5,
 		"Rg": 3.75
+		# "Rg": float("inf")
 	}
 
 	def __init__(self, **kwargs):
