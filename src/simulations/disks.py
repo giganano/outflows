@@ -16,6 +16,7 @@ Johnson et al. (2021) figures. Current: %s""" % (vice.__version__))
 else: pass
 # from vice.yields.presets import JW20
 from . import yields
+from . import nonmetalyields
 # from . import inputs
 from .sfe import sfe
 from .gasflows import radial_gas_velocity_profile

@@ -1,7 +1,7 @@
 
 import vice
 
-YIELDSOLAR = 1
+YIELDSOLAR = 2
 FE_CC_FRAC = 0.35
 XH_CGM = -float("inf")
 ETA_VARY = False
