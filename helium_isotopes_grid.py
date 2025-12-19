@@ -1,9 +1,10 @@
 
 import numpy as np
+import sys
 import os
 
-# OUTPUT_DIRECTORY = "./outputs-helium-grid"
-OUTPUT_DIRECTORY = "/Volumes/Elements/helium-grid"
+OUTPUT_DIRECTORY = "./outputs-helium-grid"
+# OUTPUT_DIRECTORY = "/Volumes/Elements/helium-grid"
 
 Yp = 0.24719 + 2.341e-05
 primordial_he_ratios = np.arange(0.1e-4, 2.001e-4, 0.05e-4) # by number -- 39 choices
@@ -30,10 +31,17 @@ for i in range(len(primordial_he_ratios)):
 			f.write("PRIMORDIAL_HE3 = %.5e\n" % (Yp - primordial_he4))
 			f.write("YIELDSOLAR = %.5e\n" % (yieldsolars[j]))
 			f.close()
-		os.system("""\
+		cmd = """\
 python simulations.py -f --name=%s/%s/%s/output \
---dt=0.05 --nstars=1 --elements=fe_o_he_au
-""" % (OUTPUT_DIRECTORY, subdir, subsubdir))
+--dt=0.05 --nstars=1 --elements=fe_o_he_au \
+""" % (OUTPUT_DIRECTORY, subdir, subsubdir)
+		if len(sys.argv) > 1: cmd += "--seed=%s" % (sys.argv[1])
+		os.system(cmd)
+
+# 		os.system("""\
+# python simulations.py -f --name=%s/%s/%s/output \
+# --dt=0.05 --nstars=1 --elements=fe_o_he_au --seed=%s
+# """ % (OUTPUT_DIRECTORY, subdir, subsubdir, sys.argv[1]))
 
 
 

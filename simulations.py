@@ -5,6 +5,7 @@ Run ``python simulations.py --help`` for more info.
 """
 
 import argparse
+import random
 import src
 from vice import milkyway
 import sys
@@ -75,6 +76,11 @@ underscores. (Default: \"fe_o\")""",
 		help = "Includes radial gas flows in the model.",
 		action = "store_true")
 
+	parser.add_argument("--seed",
+		help = "a random number seed",
+		type = int,
+		default = 0)
+
 # 	parser.add_argument("--radial-gas-velocity",
 # 		help = """The velocity of radially flowing gas in km/s, negative for \
 # an inawrd flow. (Default: 0)""",
@@ -107,6 +113,8 @@ def model(args):
 		spec = args.evolution,
 		radial_gas_flows = args.radial_gas_flows
 	)
+	print("SEED: ", args.seed)
+	random.seed(a = args.seed)
 	if args.migration == "post-process":
 		kwargs["simple"] = True
 	else:
