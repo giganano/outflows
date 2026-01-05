@@ -1,7 +1,9 @@
 
 import vice
 
-YIELDSOLAR = 2
+# YIELDSOLAR = 2
+from .nonmetal_inputs import YIELDSOLAR
+
 FE_CC_FRAC = 0.35
 XH_CGM = -float("inf")
 ETA_VARY = False

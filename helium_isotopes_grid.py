@@ -3,15 +3,15 @@ import numpy as np
 import sys
 import os
 
-OUTPUT_DIRECTORY = "./outputs-helium-grid"
-# OUTPUT_DIRECTORY = "/Volumes/Elements/helium-grid"
+# OUTPUT_DIRECTORY = "./outputs-helium-grid"
+OUTPUT_DIRECTORY = "/Volumes/Elements/helium-grid"
 
 Yp = 0.24719 + 2.341e-05
 primordial_he_ratios = np.arange(0.1e-4, 2.001e-4, 0.05e-4) # by number -- 39 choices
-yieldsolars = np.arange(0.5, 2.6, 0.1) # 21 choices
+yieldsolars = np.arange(0.7, 2.6, 0.1) # 21 choices
 
-if os.path.exists(OUTPUT_DIRECTORY): os.system("rm -rf %s" % (OUTPUT_DIRECTORY))
-os.system("mkdir %s" % (OUTPUT_DIRECTORY))
+# if os.path.exists(OUTPUT_DIRECTORY): os.system("rm -rf %s" % (OUTPUT_DIRECTORY))
+# os.system("mkdir %s" % (OUTPUT_DIRECTORY))
 
 for i in range(len(primordial_he_ratios)):
 	subdir = ("%.2e" % (primordial_he_ratios[i])).replace('.', 'p')

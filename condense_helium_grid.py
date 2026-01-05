@@ -3,13 +3,13 @@ import numpy as np
 import vice
 import sys
 
-output_file = "helium_grid_present_4p6Gyrago.npy"
+output_file = "helium_grid_presentday.npy"
 output_directory = "/Volumes/Elements/helium-grid"
 zone_width = 0.1
-lookback = 4.6
+lookback = 0
 
 primordial_he_ratios = np.arange(0.1e-4, 2.001e-4, 0.05e-4) # by number -- 39 choices
-yieldsolars = np.arange(0.5, 2.6, 0.1) # 21 choices
+yieldsolars = np.arange(0.7, 2.6, 0.1) # 19 choices
 rgal = [zone_width * (i + 0.5) for i in range(int(20 / zone_width))]
 
 results = np.zeros((
